@@ -1,0 +1,53 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: vault
+spec:
+  serviceName: vault
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      containers:
+        - name: vault
+          image: "vault:0.9.3"
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+          command: ["vault", "server"]
+          args:
+            - "-config=/vault/config/vault.hcl"
+          volumeMounts:
+            - name: data
+              mountPath: /vault/data
+            - name: config
+              mountPath: /vault/config
+            - name: logs
+              mountPath: /vault/logs
+          ports:
+            - containerPort: 8200
+              name: server
+      volumes:
+        - name: config
+          configMap:
+            name: vault-hcl
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+    - metadata:
+        name: logs
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
