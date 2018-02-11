@@ -5,6 +5,7 @@ metadata:
   labels:
     app: docker-registry
 spec:
+  clusterIP: None
   ports:
   - name: http
     port: 5000
