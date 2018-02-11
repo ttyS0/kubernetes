@@ -8,6 +8,8 @@ data:
     log:
       fields:
         service: registry
+      level: info
+      formatter: text
     storage:
       cache:
         blobdescriptor: inmemory
@@ -15,6 +17,7 @@ data:
         rootdirectory: /var/lib/registry
     http:
       addr: :5000
+      host: https://docker.ttys0.net
       headers:
         X-Content-Type-Options: [nosniff]
     health:
