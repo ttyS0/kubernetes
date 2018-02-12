@@ -6,4 +6,4 @@ I'm using HAProxy on an external pfSense box to handle the DNS, load balancing t
 
 For the auth secret, save to a file named `registry.htpasswd`, and create a secret via `kubectl create secret generic registry-auth --from-file=registry.htpasswd`.
 
-
+The images directory has Docker configs for images being stored in the private repository.
