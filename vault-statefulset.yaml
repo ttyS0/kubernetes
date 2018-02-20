@@ -14,7 +14,7 @@ spec:
         beta.kubernetes.io/arch: arm64
       containers:
         - name: vault
-          image: "docker.ttys0.net/vault:0.9.3"
+          image: "docker.ttys0.net/vault:0.9.4"
           securityContext:
             capabilities:
               add:
