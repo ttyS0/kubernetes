@@ -1,0 +1,27 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mariadb-int
+spec:
+  clusterIP: None
+  selector:
+    app: mariadb
+  ports:
+  - name: mariadb
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mariadb-ext
+spec:
+  type: NodePort
+  selector:
+    app: mariadb
+  ports:
+  - name: mariadb
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
