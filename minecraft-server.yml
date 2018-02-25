@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft-server
+  template:
+    metadata:
+      labels:
+        app: minecraft-server
+    spec:
+      containers:
+        - name: minecraft-server
+          image: ttys0/spigot:1.12.2
+          ports:
+            - containerPort: 25565
+          volumeMounts:
+            - name: server-files
+              mountPath: /minecraft/server
+          env:
+            - name: JVM_OPTS
+              value: "-Xms2G -Xmx2G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalPacing -XX:+AggressiveOpts"
+      volumes:
+        - name: server-files
+          cephfs:
+            monitors:
+              - 10.0.1.50:6789
+              - 10.0.1.51:6789
+              - 10.0.1.52:6789
+            user: minecraft-server
+            secretRef:
+              name: ceph-minecraft-server
+            path: "/minecraft-server"
+
