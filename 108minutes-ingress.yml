@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: website-108minutes
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: "108minutes.net"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: website-108minutes
+              servicePort: 80
