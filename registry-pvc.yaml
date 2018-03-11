@@ -1,7 +1,8 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: images-docker-registry-0
+  name: docker-registry-data
+  namespace: ingress-nginx
 spec:
   storageClassName: rbd
   accessModes:

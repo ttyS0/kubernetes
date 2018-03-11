@@ -1,10 +1,9 @@
 apiVersion: apps/v1beta1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: docker-registry
-  namespace: default
+  namespace: ingress-nginx
 spec:
-  serviceName: docker-registry
   replicas: 1
   selector:
     matchLabels:
@@ -14,6 +13,8 @@ spec:
       labels:
         app: docker-registry
     spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
       containers:
         - name: docker-registry
           image: registry:2.6.2
@@ -39,14 +40,9 @@ spec:
         - name: registry-auth
           secret:
             secretName: registry-auth
-  volumeClaimTemplates:
-    - metadata:
-        name: images
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 50Gi
+        - name: images
+          persistentVolumeClaim:
+            claimName: docker-registry-data
+
 
 
