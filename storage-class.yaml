@@ -14,4 +14,4 @@ parameters:
   userSecretName: ceph-rbd-kube
   imageFormat: "2"
   imageFeatures: layering
-
+reclaimPolicy: Retain
