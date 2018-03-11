@@ -1,23 +1,25 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: data-vault-0
+  name: vault-data
+  namespace: ingress-nginx
 spec:
   storageClassName: rbd
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 5Gi
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: logs-vault-0
+  name: vault-logs
+  namespace: ingress-nginx
 spec:
   storageClassName: rbd
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 5Gi
