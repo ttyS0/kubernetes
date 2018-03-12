@@ -1,0 +1,27 @@
+{
+  "url": "http://beezuscomplex.com",
+  "server": {
+    "port": 2368,
+    "host": "0.0.0.0"
+  },
+  "database": {
+    "client": "mysql",
+    "connection": {
+      "host": "mariadb-ingress",
+      "port": 3306,
+      "database": "ghost_beezuscomplex"
+    }
+  },
+  "mail": {
+    "transport": "Direct"
+  },
+  "logging": {
+    "transports": [
+      "stdout"
+    ]
+  },
+  "process": "systemd",
+  "paths": {
+    "contentPath": "/var/lib/ghost/content"
+  }
+}

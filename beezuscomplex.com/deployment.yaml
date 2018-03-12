@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: website-beezuscomplex
+  namespace: ingress-nginx
+spec:
+  selector:
+    matchLabels:
+      app: website-beezuscomplex
+  replicas : 2
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: website-beezuscomplex
+    spec:
+      containers:
+      - image: ghost:latest
+        name: ghost-beezuscomplex
+        env:
+          # kubectl create secret generic beezuscomplex-dbuser --from-literal=dbuser=DBUSER
+        - name: database__connection__user
+          valueFrom:
+            secretKeyRef:
+              name: beezuscomplex-dbuser
+              key: dbuser
+          # kubectl create secret generic beezuscomplex-dbpass --from-literal=dbpass=DBPASS
+        - name: database__connection__password
+          valueFrom:
+            secretKeyRef:
+              name: beezuscomplex-dbpass
+              key: dbpass
+        ports:
+        - containerPort: 2368
+        volumeMounts:
+        - name: beezuscomplex-content
+          mountPath: /var/lib/ghost/content
+        - name: beezuscomplex-config
+          mountPath: /var/lib/ghost/config.production.json
+          subPath: config.production.json
+      volumes:
+      - name: beezuscomplex-content
+        persistentVolumeClaim:
+          claimName: beezuscomplex-content
+      # kubectl create configmap beezuscomplex-config --from-file=108minutes-config.json
+      - name: beezuscomplex-config
+        configMap:
+          name: beezuscomplex-config
+          items:
+          - key: beezuscomplex-config.json
+            path: config.production.json
