@@ -1,0 +1,47 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: vault
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64
+      containers:
+        - name: vault
+          image: "docker.ttys0.net/vault-arm64:0.9.5"
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+          command: ["vault", "server"]
+          args:
+            - "-config=/vault/config/vault.hcl"
+          volumeMounts:
+            - name: data
+              mountPath: /vault/data
+            - name: config
+              mountPath: /vault/config
+            - name: logs
+              mountPath: /vault/logs
+          ports:
+            - containerPort: 8200
+              name: server
+      volumes:
+        - name: config
+          configMap:
+            name: vault-hcl
+        - name: data
+          persistentVolumeClaim:
+            claimName: vault-data
+        - name: logs
+          persistentVolumeClaim:
+            claimName: vault-logs
+      imagePullSecrets:
+        - name: docker-reg-secret
+
