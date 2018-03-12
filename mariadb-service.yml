@@ -1,9 +1,9 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: mariadb-int
+  name: mariadb-internal
+  namespace: mariadb
 spec:
-  clusterIP: None
   selector:
     app: mariadb
   ports:
@@ -15,7 +15,8 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: mariadb-ext
+  name: mariadb-external
+  namespace: mariadb
 spec:
   type: NodePort
   selector:
@@ -25,3 +26,14 @@ spec:
     protocol: TCP
     port: 3306
     targetPort: 3306
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mariadb-ingress
+  namespace: ingress-nginx
+spec:
+  type: ExternalName
+  externalName: mariadb-internal.mariadb.svc.cluster.local
+  ports:
+    - port: 3306

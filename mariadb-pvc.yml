@@ -2,11 +2,12 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: mariadb-storage
+  namespace: mariadb
 spec:
   storageClassName: rbd
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 30Gi
+      storage: 50Gi
 
