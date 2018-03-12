@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: minecraft-server
+  namespace: minecraft
 spec:
   replicas: 1
   selector:
@@ -12,9 +13,11 @@ spec:
       labels:
         app: minecraft-server
     spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
       containers:
         - name: minecraft-server
-          image: ttys0/spigot:1.12.2
+          image: "docker.ttys0.net/spigot-server:1.12.2"
           ports:
             - containerPort: 25565
           volumeMounts:
@@ -22,7 +25,7 @@ spec:
               mountPath: /minecraft/server
           env:
             - name: JVM_OPTS
-              value: "-Xms2G -Xmx2G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalPacing -XX:+AggressiveOpts"
+              value: "-Xms3G -Xmx3G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalPacing -XX:+AggressiveOpts"
       volumes:
         - name: server-files
           cephfs:
@@ -34,4 +37,5 @@ spec:
             secretRef:
               name: ceph-minecraft-server
             path: "/minecraft-server"
-
+      imagePullSecrets:
+        - name: docker-reg-secret

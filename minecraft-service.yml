@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: minecraft-server
+  namespace: minecraft
 spec:
   type: NodePort
   selector:
