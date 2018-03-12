@@ -1,0 +1,33 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: 108minutes-ceph
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  cephfs:
+    monitors:
+     - 10.0.1.50:6789
+     - 10.0.1.51:6789
+     - 10.0.1.52:6789
+    user: ghost-websites
+    # kubectl create secret generic ceph-ghost-websites -n ingress-nginx --from-literal=key='XXXXX'
+    secretRef:
+     name: ceph-ghost-websites
+    path: "/ghost/108minutes"
+    readOnly: false
+  persistentVolumeReclaimPolicy: Recycle
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: 108minutes-content
+  namespace: ingress-nginx
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi

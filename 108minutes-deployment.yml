@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: website-108minutes
+  namespace: ingress-nginx
+spec:
+  selector:
+    matchLabels:
+      app: website-108minutes
+  replicas : 2
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: website-108minutes
+    spec:
+      containers:
+      - image: ghost:latest
+        name: ghost-108minutes
+        env:
+          # kubectl create secret generic 108minutes-dbuser --from-literal=dbuser=DBUSER
+        - name: database__connection__user
+          valueFrom:
+            secretKeyRef:
+              name: 108minutes-dbuser
+              key: dbuser
+          # kubectl create secret generic 108minutes-dbpass --from-literal=dbpass=DBPASS
+        - name: database__connection__password
+          valueFrom:
+            secretKeyRef:
+              name: 108minutes-dbpass
+              key: dbpass
+        ports:
+        - containerPort: 2368
+        volumeMounts:
+        - name: 108minutes-content
+          mountPath: /var/lib/ghost/content
+        - name: 108minutes-config
+          mountPath: /var/lib/ghost/config.production.json
+          subPath: config.production.json
+      volumes:
+      - name: 108minutes-content
+        persistentVolumeClaim:
+          claimName: 108minutes-content
+      # kubectl create configmap 108minutes-config --from-file=108minutes-config.json
+      - name: 108minutes-config
+        configMap:
+          name: 108minutes-config
+          items:
+          - key: 108minutes-config.json
+            path: config.production.json
