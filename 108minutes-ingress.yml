@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: website-108minutes
-  namespace: default
+  namespace: ingress-nginx
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
