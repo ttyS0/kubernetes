@@ -1,0 +1,48 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: docker-registry
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-registry
+  template:
+    metadata:
+      labels:
+        app: docker-registry
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      containers:
+        - name: docker-registry
+          image: registry:2.6.2
+          env:
+            - name: "REGISTRY_HTTP_ADDR"
+              value: ":5000"
+            - name: "REGISTRY_HTTP_SECRET"
+              value: "12345676780987"
+          ports:
+          - name: http
+            containerPort: 5000
+          volumeMounts:
+          - name: images
+            mountPath: "/var/lib/registry"
+          - name: registry-config
+            mountPath: "/etc/docker/registry"
+          - name: registry-auth
+            mountPath: "/etc/docker/secret"
+      volumes:
+        - name: registry-config
+          configMap:
+            name: registry-config
+        - name: registry-auth
+          secret:
+            secretName: registry-auth
+        - name: images
+          persistentVolumeClaim:
+            claimName: docker-registry-data
+
+
+

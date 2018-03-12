@@ -1,2 +1,4 @@
 *.pem
 *.csr
+*.htpasswd
+*.jar
