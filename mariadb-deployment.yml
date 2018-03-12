@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: mariadb
+  labels:
+    app: mariadb
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      containers:
+      - image: mariadb:latest
+        name: mariadb
+        env:
+          # kubectl create secret generic mysql-root-passwd --from-literal=passwd=ROOT_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-root-passwd
+              key: passwd
+        ports:
+        - containerPort: 3306
+          name: mariadb
+        volumeMounts:
+        - name: mariadb-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: custom-config
+          mountPath: "/etc/mysql/conf.d/custom.cnf"
+          subPath: "custom.cnf"
+      volumes:
+      - name: mariadb-persistent-storage
+        persistentVolumeClaim:
+          claimName: mariadb-storage
+      - name: custom-config
+        configMap:
+          name: "mariadb-custom-config"
