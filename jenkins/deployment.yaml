@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      serviceAccountName: jenkins
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      containers:
+        - name: jenkins
+          image: docker.ttys0.net/jenkins:4
+          ports:
+            - name: http-port
+              containerPort: 8080
+            - name: jnlp-port
+              containerPort: 50000
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+      volumes:
+        - name: jenkins-home
+          persistentVolumeClaim:
+            claimName: jenkins-data
+      securityContext:
+        fsGroup: 1000
+      imagePullSecrets:
+        - name: docker-reg-secret
+
+

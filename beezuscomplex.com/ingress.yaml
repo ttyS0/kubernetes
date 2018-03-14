@@ -10,7 +10,11 @@ spec:
     - host: "beezuscomplex.com"
       http:
         paths:
-          - path: /
-            backend:
+          - backend:
               serviceName: website-beezuscomplex
               servicePort: 80
+            path: /
+          - backend:
+              serviceName: static-web
+              servicePort: 80
+            path: /static
