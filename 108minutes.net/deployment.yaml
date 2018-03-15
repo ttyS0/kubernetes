@@ -16,7 +16,7 @@ spec:
         app: website-108minutes
     spec:
       containers:
-      - image: ghost:latest
+      - image: ghost:1.21.5-alpine
         name: ghost-108minutes
         env:
           # kubectl create secret generic 108minutes-dbuser --from-literal=dbuser=DBUSER
@@ -43,10 +43,10 @@ spec:
       - name: 108minutes-content
         persistentVolumeClaim:
           claimName: 108minutes-content
-      # kubectl create configmap 108minutes-config --from-file=108minutes-config.json
+      # kubectl create configmap 108minutes-config --from-file=config.json
       - name: 108minutes-config
         configMap:
           name: 108minutes-config
           items:
-          - key: 108minutes-config.json
+          - key: config.json
             path: config.production.json

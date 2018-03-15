@@ -1,5 +1,5 @@
 {
-  "url": "http://beezuscomplex.com",
+  "url": "https://beezuscomplex.com",
   "server": {
     "port": 2368,
     "host": "0.0.0.0"
@@ -13,7 +13,12 @@
     }
   },
   "mail": {
-    "transport": "Direct"
+    "from": "ghost@ttys0.net",
+    "transport": "SMTP",
+    "options": {
+      "host": "smtp-relay.gmail.com",
+      "port": 587
+    }
   },
   "logging": {
     "transports": [

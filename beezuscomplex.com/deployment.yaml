@@ -3,11 +3,13 @@ kind: Deployment
 metadata:
   name: website-beezuscomplex
   namespace: ingress-nginx
+  labels:
+    version: beezuscomplex-1
 spec:
   selector:
     matchLabels:
       app: website-beezuscomplex
-  replicas : 2
+  replicas : 1
   strategy:
     type: Recreate
   template:
@@ -15,17 +17,19 @@ spec:
       labels:
         app: website-beezuscomplex
     spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
       containers:
-      - image: ghost:latest
+      - image: ghost:1.21.5-alpine
         name: ghost-beezuscomplex
         env:
-          # kubectl create secret generic beezuscomplex-dbuser --from-literal=dbuser=DBUSER
+          # kubectl create secret generic beezuscomplex-dbuser -n ingress-nginx --from-literal=dbuser=DBUSER
         - name: database__connection__user
           valueFrom:
             secretKeyRef:
               name: beezuscomplex-dbuser
               key: dbuser
-          # kubectl create secret generic beezuscomplex-dbpass --from-literal=dbpass=DBPASS
+          # kubectl create secret generic beezuscomplex-dbpass -n ingress-nginx --from-literal=dbpass=DBPASS
         - name: database__connection__password
           valueFrom:
             secretKeyRef:
@@ -43,10 +47,10 @@ spec:
       - name: beezuscomplex-content
         persistentVolumeClaim:
           claimName: beezuscomplex-content
-      # kubectl create configmap beezuscomplex-config --from-file=108minutes-config.json
+      # kubectl create configmap beezuscomplex-config -n ingress-nginx --from-file=config.json
       - name: beezuscomplex-config
         configMap:
           name: beezuscomplex-config
           items:
-          - key: beezuscomplex-config.json
+          - key: config.json
             path: config.production.json
