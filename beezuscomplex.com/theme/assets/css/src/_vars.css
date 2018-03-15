@@ -1,0 +1,75 @@
+/* Media queries */
+@custom-media --breakpoint-xs (min-width: 30em);
+@custom-media --breakpoint-sm (min-width: 40em);
+@custom-media --breakpoint-md (min-width: 52em);
+@custom-media --breakpoint-lg (min-width: 64em);
+@custom-media --breakpoint-xl (min-width: 72em);
+@custom-media --breakpoint-xxl (min-width: 120em);
+@custom-media --breakpoint-lg-h (min-width: 64em) and (min-height: 38em);
+
+:root {
+
+  --font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  --line-height: 1.5;
+  --heading-font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  --heading-font-weight: 700;
+  --heading-line-height: 1.25;
+  --monospace-font-family: monospace;
+  --h1: 2rem;
+  --h2: 1.5rem;
+  --h3: 1.25rem;
+  --h4: 1rem;
+  --h5: .875rem;
+  --h6: .75rem;
+  --bold-font-weight: bold;
+  --space-1: .5rem;
+  --space-2: 1rem;
+  --space-3: 2rem;
+  --space-4: 4rem;
+  --form-field-font-size: 1rem;
+  --form-field-height: 2.25rem;
+  --form-field-padding-y: .5rem;
+  --form-field-padding-x: .5rem;
+  --button-font-size: inherit;
+  --button-font-weight: bold;
+  --button-line-height: 1.125rem;
+  --button-padding-y: .5rem;
+  --button-padding-x: 1rem;
+  --container-width: 64em;
+
+  --darken-1: rgba(0,0,0,.0625);
+  --darken-2: rgba(0,0,0,.125);
+  --darken-3: rgba(0,0,0,.25);
+  --darken-4: rgba(0,0,0,.5);
+
+  --lighten-1: rgba(255,255,255,.0625);
+  --lighten-2: rgba(255,255,255,.125);
+  --lighten-3: rgba(255,255,255,.25);
+  --lighten-4: rgba(255,255,255,.5);
+
+  --border-width: 1px;
+  --border-radius: 3px;
+  --border-color: var(--darken-2);
+
+  --body-color: #222;
+
+  --link-color: #B30A0A;
+  --link-hover-text-decoration: none;
+
+  --heading-margin-bottom: 1rem;
+
+  --paragraph-margin-bottom: var(--space-3);
+  --list-margin-bottom: var(--space-3);
+
+  --field-focus-color: var(--link-color);
+  --button-background-color: var(--link-color);
+
+  /* Colors */
+  --blue: #1A5D88;
+  --gray: #999;
+  --teal: #18B5B5;
+  --blue-light: #f2f4f5;
+  --blue-maroon: #6c719e;
+  --yellow-light: #f5f4f2;
+
+}

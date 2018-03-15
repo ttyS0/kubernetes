@@ -1,0 +1,36 @@
+{{!< default}}
+{{! The tag above means - insert everything in this file into the {body} of the default.hbs template }}
+
+{{! The big featured header }}
+
+{{! Everything inside the #author tags pulls data from the author }}
+{{#author}}
+
+    <section class="author-profile clearfix">
+        {{#if profile_image}}
+        <div class="author-image right ml3 mb3">
+            <img class="img circle border" src="{{img_url profile_image}}" alt="{{name}}'s Picture">
+        </div>
+        {{/if}}
+        <h1 class="author-title mt0">{{name}}</h1>
+        <div class="author-meta mb2 h3 gray light">
+            {{#if location}}<span class="author-location mr2">{{location}}</span>{{/if}}
+            {{#if website}}<span class="author-link mr2"><a href="{{website}}">{{website}}</a></span>{{/if}}
+            <span class="author-stats">{{plural ../pagination.total empty='No posts' singular='% post' plural='% posts'}}</span>
+        </div>
+        {{#if bio}}
+            <p class="author-bio h4 mb3 light">{{bio}}</p>
+        {{/if}}
+    </section>
+{{/author}}
+
+{{! The main content area on the homepage }}
+<main class="content mxn2 js-grid">
+
+    {{! The tag below includes the post loop - partials/loop.hbs }}
+    {{> "loop"}}
+
+</main>
+
+{{! Previous/next page links - displayed on every page }}
+{{pagination}}
