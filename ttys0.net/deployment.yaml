@@ -14,23 +14,11 @@ spec:
         app: website-ttys0.net
     spec:
       nodeSelector:
-        beta.kubernetes.io/arch: arm64
+        beta.kubernetes.io/arch: amd64
       containers:
-      - name: nginx
-        image: nginx:latest
+      - name: hugo-ttys0
+        image: docker.ttys0.net/hugo-ttys0:1
         ports:
         - containerPort: 80
-        volumeMounts:
-          - name: webroot
-            mountPath: /usr/share/nginx/html
-      volumes:
-        - name: webroot
-          cephfs:
-            monitors:
-              - 10.0.1.50:6789
-              - 10.0.1.51:6789
-              - 10.0.1.52:6789
-            user: website-ttys0.net
-            secretRef:
-              name: ceph-website-ttys0.net
-            path: "/websites/ttys0.net"
+      imagePullSecrets:
+        - name: docker-reg-secret
