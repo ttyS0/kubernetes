@@ -14,10 +14,10 @@ spec:
         app: website-ttys0.net
     spec:
       nodeSelector:
-        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/arch: arm64
       containers:
       - name: hugo-ttys0
-        image: docker.ttys0.net/hugo-ttys0:1
+        image: docker.ttys0.net/hugo-ttys0-arm64:1
         ports:
         - containerPort: 80
       imagePullSecrets:
