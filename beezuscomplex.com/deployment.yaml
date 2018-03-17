@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: website-beezuscomplex
-  replicas : 1
+  replicas : 2
   strategy:
     type: Recreate
   template:
