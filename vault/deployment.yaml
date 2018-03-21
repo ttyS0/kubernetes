@@ -14,7 +14,7 @@ spec:
         beta.kubernetes.io/arch: arm64
       containers:
         - name: vault
-          image: "docker.ttys0.net/vault-arm64:0.9.5"
+          image: "docker.ttys0.net/vault-arm64:0.9.6"
           securityContext:
             capabilities:
               add:
@@ -23,8 +23,6 @@ spec:
           args:
             - "-config=/vault/config/vault.hcl"
           volumeMounts:
-            - name: data
-              mountPath: /vault/data
             - name: config
               mountPath: /vault/config
             - name: logs
@@ -36,9 +34,6 @@ spec:
         - name: config
           configMap:
             name: vault-hcl
-        - name: data
-          persistentVolumeClaim:
-            claimName: vault-data
         - name: logs
           persistentVolumeClaim:
             claimName: vault-logs

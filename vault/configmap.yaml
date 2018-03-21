@@ -10,6 +10,10 @@ data:
       address = "0.0.0.0:8200"
       tls_disable = 1
     }
-    storage "file" {
-      path = "/vault/data"
+    storage "dynamodb" {
+      region = "us-east-1"
+      table = "vault"
+      endpoint = "https://dynamodb.ttys0.net"
+      access_key = "notional"
+      secret_key = "notional"
     }
