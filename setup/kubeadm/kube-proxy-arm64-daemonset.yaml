@@ -21,7 +21,7 @@ spec:
       - command:
         - /usr/local/bin/kube-proxy
         - --config=/var/lib/kube-proxy/config.conf
-        image: gcr.io/google_containers/kube-proxy-arm64:v1.9.3
+        image: gcr.io/google_containers/kube-proxy-arm64:v1.9.6
         imagePullPolicy: IfNotPresent
         name: kube-proxy
         resources: {}
