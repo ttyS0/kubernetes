@@ -15,7 +15,7 @@ spec:
         beta.kubernetes.io/arch: amd64
       containers:
         - name: jenkins
-          image: docker.ttys0.net/jenkins:4
+          image: docker.ttys0.net/jenkins:5
           ports:
             - name: http-port
               containerPort: 8080
