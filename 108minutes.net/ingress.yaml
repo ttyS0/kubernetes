@@ -15,7 +15,11 @@ spec:
             backend:
               serviceName: website-108minutes
               servicePort: 80
-          - backend:
+          - path: /static
+            backend:
               serviceName: static-web
               servicePort: 80
-            path: /static
+          - path: /.well-known
+            backend:
+              serviceName: static-web
+              servicePort: 80
