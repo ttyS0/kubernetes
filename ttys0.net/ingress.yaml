@@ -23,4 +23,24 @@ spec:
               serviceName: static-web
               servicePort: 80
             path: /static
-
+    - host: "home.ttys0.net"
+      http:
+        paths:
+          - backend:
+              serviceName: website-ttys0net
+              servicePort: 80
+          - backend:
+              serviceName: webdav
+              servicePort: 80
+            path: /webdav
+          - backend:
+              serviceName: static-web
+              servicePort: 80
+            path: /static
+    - host: "dav.ttys0.net"
+      http:
+        paths:
+          - backend:
+              serviceName: webdav
+              servicePort: 80
+            path: /webdav

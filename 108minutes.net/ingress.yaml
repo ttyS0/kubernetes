@@ -23,3 +23,18 @@ spec:
             backend:
               serviceName: static-web
               servicePort: 80
+    - host: "home.108minutes.net"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: website-108minutes
+              servicePort: 80
+          - path: /static
+            backend:
+              serviceName: static-web
+              servicePort: 80
+          - path: /.well-known
+            backend:
+              serviceName: static-web
+              servicePort: 80
