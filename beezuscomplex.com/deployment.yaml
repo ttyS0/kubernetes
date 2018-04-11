@@ -18,9 +18,9 @@ spec:
         app: website-beezuscomplex
     spec:
       nodeSelector:
-        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/arch: arm64
       containers:
-      - image: ghost:1.22.1-alpine
+      - image: arm64v8/ghost:1.22.1
         name: ghost-beezuscomplex
         env:
           # kubectl create secret generic beezuscomplex-dbuser -n ingress-nginx --from-literal=dbuser=DBUSER
