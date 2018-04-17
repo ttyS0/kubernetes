@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: website-108minutes
-  replicas : 2
+  replicas : 1
   strategy:
     type: Recreate
   template:
