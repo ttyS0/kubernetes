@@ -1,0 +1,29 @@
+<a class="toggle-nav hop5 lg-hide js-toggle-nav" href="#">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</a>
+<div class="nav mt2 lg-mt0 js-nav">
+    <ul class="list-reset mb3 border-top">
+        {{#foreach navigation}}
+            <li class="nav-{{slug}}{{#if current}} nav-current{{/if}} border-bottom" role="presentation"><a class="py1 block caps black" href="{{url absolute="true"}}">{{label}}</a></li>
+        {{/foreach}}
+    </ul>
+    <div class="sidebar-search mb3">
+        <form role="search" method="get" class="search-form" action="#">
+            <label>
+              <span class="screen-reader-text">Search for:</span>
+              <input type="search" class="search-field" placeholder="Search …" value="" name="s" title="Search for:">
+            </label>
+            <input type="submit" class="search-submit" value="Search">
+          </form>
+    </div>
+    <a class="inline-block hop5 pl1" href="{{@blog.url}}/rss/" title="Subscribe to RSS feed"><span class="hide">Subscribe</span><img class="align-middle" src="{{asset 'images/feed.svg'}}" alt="Feed icon"></a>
+    {{#if @blog.facebook}}
+      <a class="inline-block hop5 pl1" href="{{facebook_url @blog.facebook}}" title="Facebook page"><span class="hide">Facebook page</span><img class="align-middle" src="{{asset 'images/facebook-square.svg'}}" alt="Facebook icon"></a>
+    {{/if}}
+    {{#if @blog.twitter}}
+      <a class="inline-block hop5 pl1" href="{{twitter_url @blog.twitter}}" title="Twitter page"><span class="hide">Twitter page</span><img class="align-middle" src="{{asset 'images/twitter.svg'}}" alt="Twitter icon"></a>
+    {{/if}}
+</div>

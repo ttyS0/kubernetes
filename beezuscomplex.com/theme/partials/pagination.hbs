@@ -1,0 +1,9 @@
+<nav class="pagination mt3 center gray light h6 clearfix">
+    {{#if prev}}
+        <a class="newer-posts hop5 left" href="{{page_url prev}}"><img class="align-middle" src="{{asset 'images/chevron-left.svg'}}" alt="Arrow left icon"></a>
+    {{/if}}
+    {{#if next}}
+        <a class="older-posts hop5 right" href="{{page_url next}}"><img class="align-middle" src="{{asset 'images/chevron-right.svg'}}" alt="Arrow right icon"></a>
+    {{/if}}
+    <span class="page-number block mx-auto caps">Page {{page}} of {{pages}}</span>
+</nav>

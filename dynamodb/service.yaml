@@ -1,0 +1,39 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dynamodb-internal
+  namespace: dynamodb
+spec:
+  selector:
+    app: dynamodb
+  ports:
+  - name: dynamodb
+    protocol: TCP
+    port: 8000
+    targetPort: 8000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: dynamodb-external
+  namespace: dynamodb
+spec:
+  type: NodePort
+  selector:
+    app: dynamodb
+  ports:
+  - name: dynamodb
+    protocol: TCP
+    port: 8000
+    targetPort: 8000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: dynamodb-ingress
+  namespace: ingress-nginx
+spec:
+  type: ExternalName
+  externalName: dynamodb-internal.dynamodb.svc.cluster.local
+  ports:
+    - port: 8000

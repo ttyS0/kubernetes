@@ -6,6 +6,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    nginx.ingress.kubernetes.io/affinity: cookie
 spec:
   rules:
     - host: "108minutes.net"
@@ -15,7 +16,26 @@ spec:
             backend:
               serviceName: website-108minutes
               servicePort: 80
-          - backend:
+          - path: /static
+            backend:
               serviceName: static-web
               servicePort: 80
-            path: /static
+          - path: /.well-known
+            backend:
+              serviceName: static-web
+              servicePort: 80
+    - host: "home.108minutes.net"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: website-108minutes
+              servicePort: 80
+          - path: /static
+            backend:
+              serviceName: static-web
+              servicePort: 80
+          - path: /.well-known
+            backend:
+              serviceName: static-web
+              servicePort: 80

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{! Document Settings }}
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    {{! Page Meta }}
+    <title>{{meta_title}}</title>
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="{{asset "favicon.ico"}}">
+
+    {{! Styles'n'Scripts }}
+    <link rel="stylesheet" type="text/css" href="{{asset "css/dist/main.min.css"}}" />
+    {{!-- <link rel="stylesheet" type="text/css" href="{{asset "css/dist/custom.css"}}" /> --}}
+
+    {{! Ghost outputs important style and meta data with this tag }}
+    {{ghost_head}}
+</head>
+<body class="bg-yellow-light">
+
+    <div class="loader js-loader fixed z4 bg-white">
+        <div class="loader-status"></div>
+    </div>
+
+    {{> sidebar}}
+
+    <div class="content-area p3 lg-p4">
+
+        {{! Everything else gets inserted here }}
+        {{{body}}}
+
+    </div>
+
+    <footer class="p3 center h6 clearfix gray light border-box lg-hide">
+        <div class="copyright"><a href="{{@blog.url}}">{{@blog.title}}</a> &copy; {{date format="YYYY"}}</div>
+        <div class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a><br>and Paperleaf theme by <a href="http://www.nvslbs.com">NvsLbs</a></div>
+    </footer>
+
+    {{!-- jQuery needs to come before `{{ghost_foot}}` so that jQuery can be used in code injection --}}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    {{! Ghost outputs important scripts and data with this tag }}
+    {{ghost_foot}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+    {{! The main JavaScript file for Paperleaf }}
+    <script type="text/javascript" src="{{asset "js/dist/all.min.js"}}"></script>
+    {{!-- <script type="text/javascript" src="{{asset "js/dist/custom.js"}}"></script> --}}
+
+</body>
+</html>

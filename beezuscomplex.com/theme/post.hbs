@@ -1,0 +1,83 @@
+{{!< default}}
+
+{{! The comment above "< default" means - insert everything in this file into
+    the {body} of the default.hbs template, which contains our header/footer. }}
+
+{{! Everything inside the #post tags pulls data from the post }}
+{{#post}}
+
+<main class="content">
+    <article class="{{post_class}} p3 sm-p4 mb4 mx-auto bg-white box-shadow">
+
+        <header class="post-header center">
+            <h1 class="post-title mt0">{{title}}</h1>
+            <div class="post-meta mb3 h5 gray light">
+              <span class="inline-block px1">
+                {{#if author.profile_image}}
+                  <img class="circle align-middle border" width="24" src="{{img_url author.profile_image}}" alt="{{author.name}}">
+                {{/if}}
+                {{author}}
+              </span>
+              <time class="post-date px1" datetime="{{date format='YYYY-MM-DD'}}">{{date format="Do MMM YYYY"}} {{tags prefix=" on "}}</time>
+            </div>
+        </header>
+
+        <div class="post-content light mb3 sm-mb4">
+            {{content}}
+        </div>
+
+        <footer class="post-footer">
+
+            <div class="share center">
+                <h4 class="h5 caps mt0">Share this post</h4>
+                <a class="inline-block hop5 px1" href="https://twitter.com/intent/tweet?text={{encode title}}&amp;url={{url absolute="true"}}"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <img class="align-middle" src="{{asset 'images/twitter.svg'}}" alt="Twitter icon">
+                    <span class="hide">Twitter</span>
+                </a>
+                <a class="inline-block hop5 px1" href="https://www.facebook.com/sharer/sharer.php?u={{url absolute="true"}}"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <img class="align-middle" src="{{asset 'images/facebook-square.svg'}}" alt="Facebook icon">
+                    <span class="hide">Facebook</span>
+                </a>
+                <a class="inline-block hop5 px1" href="https://plus.google.com/share?url={{url absolute="true"}}"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <img class="align-middle" src="{{asset 'images/google-plus.svg'}}" alt="Google Plus icon">
+                    <span class="hide">Google+</span>
+                </a>
+            </div>
+
+            {{#if @labs.subscribers}}
+            <div class="subscribe light p3 mt3 sm-mt4 bg-yellow-light clearfix">
+                <h3 class="h2 mt0">Subscribe to {{@blog.title}}</h3>
+                <p class="gray">Get the latest posts delivered right to your inbox.</p>
+                {{subscribe_form placeholder="Your email address"}}
+            </div>
+            {{/if}}
+
+        </footer>
+
+    </article>
+
+</main>
+
+<aside class="read-next mx-auto clearfix">
+    {{#next_post}}
+    <div class="sm-col-6 right mb3 sm-mb0 read-next-story right-align">
+        <a class="block px4" href="{{url}}">
+            <h2 class="h4 mb1">{{title}}</h2>
+            <p class="h6 light mb0">{{excerpt words="19"}}&hellip;</p>
+        </a>
+    </div>
+    {{/next_post}}
+    {{#prev_post}}
+    <div class="sm-col-6 left read-next-story prev">
+        <a class="block px4" href="{{url}}">
+            <h2 class="h4 mb1">{{title}}</h2>
+            <p class="h6 light mb0">{{excerpt words="19"}}&hellip;</p>
+        </a>
+    </div>
+    {{/prev_post}}
+</aside>
+
+{{/post}}

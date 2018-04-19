@@ -1,0 +1,27 @@
+<div class="sidebar z1 p3 lg-py4 border-box bg-white box-shadow overflow-auto"{{#if @blog.cover_image}} style="background-image: url({{@blog.cover_image}});"{{/if}}>
+
+    <div class="sidebar-inner js-sidebar-inner lg-mb3">
+
+        {{! The big featured header }}
+        <header class="main-header">
+            {{#if @blog.logo}}
+                <a class="blog-logo mt0 hop5" href="{{@blog.url}}"><img src="{{@blog.logo}}" alt="{{@blog.title}}" /></a>
+            {{else}}
+                {{#is "home"}}
+                    <h1 class="page-title h1 mt0"><a class="black" href="{{@blog.url}}">{{@blog.title}}</a></h1>
+                {{else}}
+                    <h2 class="page-title h1 mt0"><a class="black" href="{{@blog.url}}">{{@blog.title}}</a></h2>
+                {{/is}}
+            {{/if}}
+            <h2 class="page-description h3 light gray mb3">{{@blog.description}}</h2>
+        </header>
+        {{navigation}}
+
+    </div>
+
+    <footer class="sidebar-footer h6 clearfix gray light border-box lg-show js-sidebar-footer">
+        <div class="copyright"><a href="{{@blog.url}}">{{@blog.title}}</a> &copy; {{date format="YYYY"}}</div>
+        <div class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a><br>and Paperleaf theme by <a href="http://www.nvslbs.com">NvsLbs</a></div>
+    </footer>
+
+</div>

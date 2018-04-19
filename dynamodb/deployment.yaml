@@ -1,0 +1,31 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: dynamodb
+  namespace: dynamodb
+  labels:
+    app: dynamodb
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: dynamodb
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      containers:
+      - image: cnadiminti/dynamodb-local:2017-04-22_beta
+        name: dynamodb
+        ports:
+        - containerPort: 8000
+          name: dynamodb
+        volumeMounts:
+        - name: dynamodb-data
+          mountPath: /dynamodb_local_db
+      volumes:
+      - name: dynamodb-data
+        persistentVolumeClaim:
+          claimName: dynamodb-data
+

@@ -1,0 +1,45 @@
+{{!< default}}
+
+{{! This is a page template. A page outputs content just like any other post, and has all the same
+    attributes by default, but you can also customise it to behave differently if you prefer. }}
+
+{{! Everything inside the #post tags pulls data from the page }}
+{{#post}}
+
+<main class="content">
+    <article class="{{post_class}} p3 sm-p4 mx-auto bg-white box-shadow">
+
+        <header class="post-header center">
+            <h1 class="post-title mt0 mb3">{{title}}</h1>
+        </header>
+
+        <div class="post-content light mb4">
+            {{content}}
+        </div>
+
+        <footer class="post-footer">
+
+            <div class="share center">
+                <h4 class="h5 caps">Share this page</h4>
+                <a class="inline-block hop5 px1" href="https://twitter.com/intent/tweet?text={{encode title}}&amp;url={{url absolute="true"}}"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <img class="align-middle" src="{{asset 'images/twitter.svg'}}" alt="Twitter icon">
+                    <span class="hide">Twitter</span>
+                </a>
+                <a class="inline-block hop5 px1" href="https://www.facebook.com/sharer/sharer.php?u={{url absolute="true"}}"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <img class="align-middle" src="{{asset 'images/facebook-square.svg'}}" alt="Facebook icon">
+                    <span class="hide">Facebook</span>
+                </a>
+                <a class="inline-block hop5 px1" href="https://plus.google.com/share?url={{url absolute="true"}}"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <img class="align-middle" src="{{asset 'images/google-plus.svg'}}" alt="Google Plus icon">
+                    <span class="hide">Google+</span>
+                </a>
+            </div>
+
+        </footer>
+
+    </article>
+</main>
+{{/post}}
