@@ -18,7 +18,7 @@ spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
       containers:
-      - image: arm64v8/ghost:1.22.1
+      - image: arm64v8/ghost:1.22.3
         name: ghost-108minutes
         env:
           # kubectl create secret generic 108minutes-dbuser --from-literal=dbuser=DBUSER

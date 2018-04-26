@@ -13,9 +13,11 @@ spec:
       labels:
         app: webdav
     spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64
       containers:
       - name: webdav
-        image: httpd:alpine
+        image: arm64v8/httpd:2.4.33-alpine
         ports:
         - containerPort: 80
         volumeMounts:
