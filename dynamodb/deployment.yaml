@@ -13,10 +13,16 @@ spec:
       labels:
         app: dynamodb
     spec:
+#      As of this writing, sqlite4java-linux-aarch64 isn't included in the arm64 jdk, which
+#        is required for dynamodb to function.
+#      nodeSelector:
+#        beta.kubernetes.io/arch: arm64
+#      containers:
+#      - image: docker.ttys0.net/dynamodb-arm:2018-04-11
       nodeSelector:
-        beta.kubernetes.io/arch: arm64
+        beta.kubernetes.io/arch: amd64
       containers:
-      - image: docker.ttys0.net/dynamodb-arm:2018-04-11
+      - image: docker.ttys0.net/dynamodb-amd64:2018-04-11
         name: dynamodb
         ports:
         - containerPort: 8000
