@@ -14,9 +14,9 @@ spec:
         app: dynamodb
     spec:
       nodeSelector:
-        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/arch: arm64
       containers:
-      - image: cnadiminti/dynamodb-local:2017-04-22_beta
+      - image: docker.ttys0.net/dynamodb-arm:2018-04-11
         name: dynamodb
         ports:
         - containerPort: 8000
@@ -28,4 +28,5 @@ spec:
       - name: dynamodb-data
         persistentVolumeClaim:
           claimName: dynamodb-data
-
+      imagePullSecrets:
+        - name: docker-reg-secret
