@@ -44,3 +44,9 @@ spec:
               serviceName: webdav
               servicePort: 80
             path: /webdav
+    - host: "kibana.ttys0.net"
+      http:
+        paths:
+          - backend:
+              serviceName: kibana
+              servicePort: 80
