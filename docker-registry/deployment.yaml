@@ -5,6 +5,8 @@ metadata:
   namespace: ingress-nginx
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: docker-registry
@@ -23,6 +25,8 @@ spec:
               value: ":5000"
             - name: "REGISTRY_HTTP_SECRET"
               value: "12345676780987"
+            - name: "REGISTRY_STORAGE_DELETE_ENABLED"
+              value: "true"
           ports:
           - name: http
             containerPort: 5000

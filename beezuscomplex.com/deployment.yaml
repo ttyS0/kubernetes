@@ -20,7 +20,7 @@ spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
       containers:
-      - image: arm64v8/ghost:1.22.3
+      - image: docker.ttys0.net/ghost-arm64:1.23.1-2
         name: ghost-beezuscomplex
         env:
           # kubectl create secret generic beezuscomplex-dbuser -n ingress-nginx --from-literal=dbuser=DBUSER
@@ -54,3 +54,5 @@ spec:
           items:
           - key: config.json
             path: config.production.json
+      imagePullSecrets:
+        - name: docker-reg-secret
