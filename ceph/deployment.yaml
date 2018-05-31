@@ -14,14 +14,17 @@ spec:
     spec:
       containers:
       - name: rbd-provisioner
-        # Currently outdated, hence use inofficial version
-        # built from https://github.com/kubernetes-incubator/external-storage
-        # (in ceph/rbd subdir)
-        # cf. https://github.com/kubernetes-incubator/external-storage/issues/608
-        #image: "quay.io/external_storage/rbd-provisioner:latest"
-        image: anatolyrugalev/rbd-provisioner:latest
+        # echo $GOPATH
+        #/go
+        # mkdir -p /go/src/github.com/kubernetes-incubator/external-storage
+        # cd /go/src/github.com/kubernetes-incubator/external-storage
+        # git clone https://github.com/kubernetes-incubator/external-storage .
+        # cd ceph/rbd
+        # make build
+        image: docker.ttys0.net/rbd-provisioner:12.2.5-1
         env:
         - name: PROVISIONER_NAME
           value: ceph.com/rbd
       serviceAccount: rbd-provisioner
-
+      imagePullSecrets:
+        - name: docker-reg-secret
