@@ -1,54 +1,56 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: website-108minutes
-  namespace: ingress-nginx
+  name: gitea
+  namespace: gitea
+  labels:
+    version: gitea
 spec:
   selector:
     matchLabels:
-      app: website-108minutes
+      app: gitea
   replicas : 1
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: website-108minutes
+        app: website-beezuscomplex
     spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
       containers:
-      - image: arm64v8/ghost:1.24.2
-        name: ghost-108minutes
+      - image: docker.ttys0.net/ghost-arm64:1.23.1-2
+        name: ghost-beezuscomplex
         env:
-          # kubectl create secret generic 108minutes-dbuser --from-literal=dbuser=DBUSER
+          # kubectl create secret generic beezuscomplex-dbuser -n ingress-nginx --from-literal=dbuser=DBUSER
         - name: database__connection__user
           valueFrom:
             secretKeyRef:
-              name: 108minutes-dbuser
+              name: beezuscomplex-dbuser
               key: dbuser
-          # kubectl create secret generic 108minutes-dbpass --from-literal=dbpass=DBPASS
+          # kubectl create secret generic beezuscomplex-dbpass -n ingress-nginx --from-literal=dbpass=DBPASS
         - name: database__connection__password
           valueFrom:
             secretKeyRef:
-              name: 108minutes-dbpass
+              name: beezuscomplex-dbpass
               key: dbpass
         ports:
         - containerPort: 2368
         volumeMounts:
-        - name: 108minutes-content
+        - name: beezuscomplex-content
           mountPath: /var/lib/ghost/content
-        - name: 108minutes-config
+        - name: beezuscomplex-config
           mountPath: /var/lib/ghost/config.production.json
           subPath: config.production.json
       volumes:
-      - name: 108minutes-content
+      - name: beezuscomplex-content
         persistentVolumeClaim:
-          claimName: 108minutes-content
-      # kubectl create configmap 108minutes-config --from-file=config.json
-      - name: 108minutes-config
+          claimName: beezuscomplex-content
+      # kubectl create configmap beezuscomplex-config -n ingress-nginx --from-file=config.json
+      - name: beezuscomplex-config
         configMap:
-          name: 108minutes-config
+          name: beezuscomplex-config
           items:
           - key: config.json
             path: config.production.json

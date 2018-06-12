@@ -37,3 +37,14 @@ spec:
   externalName: mariadb-internal.mariadb.svc.cluster.local
   ports:
     - port: 3306
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mariadb-gitea
+  namespace: gitea
+spec:
+  type: ExternalName
+  externalName: mariadb-internal.mariadb.svc.cluster.local
+  ports:
+    - port: 3306
