@@ -4,6 +4,8 @@ metadata:
   name: vault
   namespace: ingress-nginx
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   template:
     metadata:
@@ -11,10 +13,10 @@ spec:
         app: vault
     spec:
       nodeSelector:
-        beta.kubernetes.io/arch: arm64
+        beta.kubernetes.io/arch: amd64
       containers:
         - name: vault
-          image: "docker.ttys0.net/vault-arm64:0.9.6"
+          image: "vault:0.10.1"
           securityContext:
             capabilities:
               add:
@@ -25,8 +27,6 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /vault/config
-            - name: logs
-              mountPath: /vault/logs
           ports:
             - containerPort: 8200
               name: server
@@ -34,9 +34,5 @@ spec:
         - name: config
           configMap:
             name: vault-hcl
-        - name: logs
-          persistentVolumeClaim:
-            claimName: vault-logs
-      imagePullSecrets:
-        - name: docker-reg-secret
+
 

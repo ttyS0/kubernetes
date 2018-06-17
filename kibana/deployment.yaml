@@ -1,0 +1,25 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: ingress-nginx
+  labels:
+    component: kibana
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:6.3.0
+        env:
+        - name: ELASTICSEARCH_URL
+          value: "http://elasticsearch-ingress:9200/"
+        ports:
+        - containerPort: 5601
+          name: http

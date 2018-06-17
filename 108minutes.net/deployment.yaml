@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: website-108minutes
@@ -36,15 +36,15 @@ spec:
         ports:
         - containerPort: 2368
         volumeMounts:
-        - name: 108minutes-content
+        - name: 108minutes-data
           mountPath: /var/lib/ghost/content
         - name: 108minutes-config
           mountPath: /var/lib/ghost/config.production.json
           subPath: config.production.json
       volumes:
-      - name: 108minutes-content
+      - name: 108minutes-data
         persistentVolumeClaim:
-          claimName: 108minutes-content
+          claimName: 108minutes-data
       # kubectl create configmap 108minutes-config --from-file=config.json
       - name: 108minutes-config
         configMap:
@@ -54,3 +54,16 @@ spec:
             path: config.production.json
       imagePullSecrets:
         - name: docker-reg-secret
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: 108minutes-data
+  namespace: ingress-nginx
+spec:
+  storageClassName: rbd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

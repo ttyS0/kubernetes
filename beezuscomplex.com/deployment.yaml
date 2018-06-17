@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: website-beezuscomplex
@@ -38,15 +38,15 @@ spec:
         ports:
         - containerPort: 2368
         volumeMounts:
-        - name: beezuscomplex-content
+        - name: beezuscomplex-data
           mountPath: /var/lib/ghost/content
         - name: beezuscomplex-config
           mountPath: /var/lib/ghost/config.production.json
           subPath: config.production.json
       volumes:
-      - name: beezuscomplex-content
+      - name: beezuscomplex-data
         persistentVolumeClaim:
-          claimName: beezuscomplex-content
+          claimName: beezuscomplex-data
       # kubectl create configmap beezuscomplex-config -n ingress-nginx --from-file=config.json
       - name: beezuscomplex-config
         configMap:
@@ -56,3 +56,16 @@ spec:
             path: config.production.json
       imagePullSecrets:
         - name: docker-reg-secret
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: beezuscomplex-data
+  namespace: ingress-nginx
+spec:
+  storageClassName: rbd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

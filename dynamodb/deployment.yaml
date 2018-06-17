@@ -1,5 +1,5 @@
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: dynamodb
   namespace: dynamodb
@@ -36,3 +36,16 @@ spec:
           claimName: dynamodb-data
       imagePullSecrets:
         - name: docker-reg-secret
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: dynamodb-data
+  namespace: dynamodb
+spec:
+  storageClassName: rbd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
