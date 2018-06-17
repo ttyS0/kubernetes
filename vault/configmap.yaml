@@ -11,10 +11,7 @@ data:
       address = "0.0.0.0:8200"
       tls_disable = 1
     }
-    storage "dynamodb" {
-      region = "us-east-1"
-      table = "vault"
-      endpoint = "http://dynamodb-ingress:8000"
-      access_key = "notional"
-      secret_key = "notional"
+    storage "file" {
+      path = "/vault/data"
     }
+  

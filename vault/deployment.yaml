@@ -13,10 +13,10 @@ spec:
         app: vault
     spec:
       nodeSelector:
-        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/arch: arm64
       containers:
         - name: vault
-          image: "vault:0.10.1"
+          image: "vault:0.10.2"
           securityContext:
             capabilities:
               add:
@@ -27,6 +27,10 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /vault/config
+            - name: data
+              mountPath: /vault/data
+            - name: log
+              mountPath: /vault/log
           ports:
             - containerPort: 8200
               name: server
@@ -34,5 +38,35 @@ spec:
         - name: config
           configMap:
             name: vault-hcl
-
-
+        - name: data
+          persistentVolumeClaim:
+            claimName: vault-data
+        - name: log
+          persistentVolumeClaim:
+            claimName: vault-log
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: vault-data
+  namespace: ingress-nginx
+spec:
+  storageClassName: rbd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: vault-log
+  namespace: ingress-nginx
+spec:
+  storageClassName: rbd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
