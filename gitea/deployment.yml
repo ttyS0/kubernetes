@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-        app: website-beezuscomplex
+        app: gitea
     spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64

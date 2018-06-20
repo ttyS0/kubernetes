@@ -13,5 +13,5 @@ parameters:
   userSecretNamespace: ceph
   userSecretName: ceph-rbd-kube
   imageFormat: "2"
-  imageFeatures: layering
+  imageFeatures: layering,exclusive-lock,object-map,fast-diff
 reclaimPolicy: Retain

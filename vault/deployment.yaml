@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vault
@@ -14,9 +14,11 @@ spec:
     spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
+      imagePullSecrets:
+        - name: docker-reg-secret
       containers:
         - name: vault
-          image: "vault:0.10.2"
+          image: "docker.ttys0.net/vault-arm64:0.10.3"
           securityContext:
             capabilities:
               add:
@@ -44,6 +46,7 @@ spec:
         - name: log
           persistentVolumeClaim:
             claimName: vault-log
+
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1

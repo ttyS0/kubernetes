@@ -21,7 +21,7 @@ spec:
         # git clone https://github.com/kubernetes-incubator/external-storage .
         # cd ceph/rbd
         # make build
-        image: docker.ttys0.net/rbd-provisioner:12.2.5-1
+        image: docker.ttys0.net/rbd-provisioner:12.2.5-3
         env:
         - name: PROVISIONER_NAME
           value: ceph.com/rbd

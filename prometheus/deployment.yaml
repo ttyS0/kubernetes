@@ -1,34 +1,63 @@
-apiVersion: extensions/v1beta1
+# -*- mode: yaml; coding: utf-8 -*-
+
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: prometheus
-  namespace: prometheus
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: prometheus
+        k8s-app: prometheus
     spec:
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.2.1
+          image: quay.io/prometheus/prometheus:v2.3.0
           args:
-            - "--config.file=/etc/prometheus/prometheus.yml"
-            - "--storage.tsdb.path=/prometheus/"
+            - --config.file=/prometheus/etc/config.yaml
+            - --storage.tsdb.path=/prometheus/data
+            - --web.enable-lifecycle
+            - --web.enable-admin-api
+            - --web.external-url=https://www.example.org/prometheus
           ports:
-            - containerPort: 9090
+            - name: http
+              containerPort: 9090
+              protocol: TCP
           volumeMounts:
-            - name: prometheus-config
-              mountPath: /etc/prometheus/
-            - name: prometheus-data
-              mountPath: /prometheus/
+            - name: prometheus
+              subPath: data
+              mountPath: /prometheus/data
+              readOnly: false
+            - name: prometheus
+              subPath: etc
+              mountPath: /prometheus/etc
+              readOnly: true
+            - name: etc-etcd
+              mountPath: /etc/etcd
+              readOnly: true
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - curl
+                  - -X
+                  - POST
+                  - http://localhost:9090/prometheus/-/quit
       volumes:
-        - name: prometheus-config
-          configMap:
-            defaultMode: 420
-            name: prometheus-server-conf
+        - name: prometheus
+          hostPath:
+            path: /mnt/prometheus
+        - name: etc-etcd
+          hostPath:
+            path: /etc/etcd
+      terminationGracePeriodSeconds: 300
 
-        - name: prometheus-data
-          persistentVolumeClaim:
-            claimName: prometheus-data
+# Local Variables:
+# indent-tabs-mode: nil
+# End:
+
