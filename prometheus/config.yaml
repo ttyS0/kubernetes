@@ -1,0 +1,201 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'example.org'
+
+rule_files:
+  - /prometheus/etc/alerts.yaml
+
+alerting:
+  alertmanagers:
+    - kubernetes_sd_configs:
+        - role: pod
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      path_prefix: '/alertmanager'
+      relabel_configs:
+        - source_labels:
+            - __meta_kubernetes_pod_label_k8s_app
+          regex: alertmanager
+          action: keep
+        - source_labels:
+            - __meta_kubernetes_namespace
+          regex: default
+          action: keep
+        - source_labels:
+            - __meta_kubernetes_pod_container_port_number
+          regex:
+          action: drop
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    metrics_path: '/prometheus/metrics'
+    static_configs:
+      - targets:
+        - '127.0.0.1:9090'
+
+  - job_name: 'alertmanager'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    metrics_path: '/alertmanager/metrics'
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_k8s_app]
+        regex: alertmanager
+        action: keep
+      - source_labels: [__meta_kubernetes_namespace]
+        regex: default
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_container_port_number]
+        regex:
+        action: drop
+
+  - job_name: 'snmp'
+    scrape_interval: 15s
+    scrape_timeout: 5s
+    metrics_path: /snmp
+    params:
+      module: [default]
+    file_sd_configs:
+      - files:
+        - /prometheus/etc/snmp.yaml
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: snmp-exporter.default.svc:9116
+
+  - job_name: 'snmpmeta'
+    scrape_interval: 15s
+    scrape_timeout: 5s
+    static_configs:
+      - targets:
+        - snmp-exporter.default.svc:9116
+
+  - job_name: 'kubernetes-apiservers'
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    kubernetes_sd_configs:
+      - role: endpoints
+    relabel_configs:
+      - source_labels:
+          - __meta_kubernetes_namespace
+          - __meta_kubernetes_service_name
+          - __meta_kubernetes_endpoint_port_name
+        action: keep
+        regex: default;kubernetes;https
+
+  - job_name: 'kubernetes-nodes'
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    kubernetes_sd_configs:
+      - role: node
+    relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        target_label: __metrics_path__
+        replacement: /api/v1/nodes/${1}/proxy/metrics
+
+  - job_name: 'kubernetes-service-endpoints'
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    kubernetes_sd_configs:
+      - role: endpoints
+    relabel_configs:
+      - source_labels:
+          - __meta_kubernetes_service_annotation_prometheus_io_scrape
+        action: keep
+        regex: true
+      - source_labels:
+          - __meta_kubernetes_service_annotation_prometheus_io_scheme
+        action: replace
+        target_label: __scheme__
+        regex: (https?)
+      - source_labels:
+          - __meta_kubernetes_service_annotation_prometheus_io_path
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels:
+          - __address__
+          - __meta_kubernetes_service_annotation_prometheus_io_port
+        action: replace
+        target_label: __address__
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels:
+          __meta_kubernetes_namespace
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels:
+          - __meta_kubernetes_service_name
+        action: replace
+        target_label: kubernetes_name
+
+  - job_name: 'another-example-app'
+    scrape_interval: 5m
+    scrape_timeout: 60s
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels:
+          - __meta_kubernetes_pod_label_k8s_app
+        regex: another-example-app
+        action: keep
+      - source_labels:
+          - __meta_kubernetes_namespace
+        regex: default
+        action: keep
+      - source_labels:
+          - __meta_kubernetes_pod_container_port_name
+        regex: metrics
+        action: keep
+    metric_relabel_configs:
+      - regex: instance
+        action: labeldrop
+
+  - job_name: 'coredns'
+    scrape_interval: 30s
+    scrape_timeout: 5s
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels:
+          - __meta_kubernetes_pod_label_k8s_app
+        regex: coredns
+        action: keep
+      - source_labels:
+          - __meta_kubernetes_namespace
+        regex: kube-system
+        action: keep
+      - source_labels:
+          - __meta_kubernetes_pod_container_port_name
+        regex: metrics
+        action: keep
+
+# Local Variables:
+# indent-tabs-mode: nil
+# End:
+
