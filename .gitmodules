@@ -1,0 +1,6 @@
+[submodule "ingress-nginx"]
+	path = ingress-nginx
+	url = git@github.com:ttyS0/ingress-nginx.git
+[submodule "faas-netes"]
+	path = faas-netes
+	url = git@github.com:ttyS0/faas-netes.git
