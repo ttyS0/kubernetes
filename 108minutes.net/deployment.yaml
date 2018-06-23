@@ -1,5 +1,5 @@
-apiVersion: extensions/v1beta1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
   name: website-108minutes
   namespace: ingress-nginx
@@ -18,7 +18,7 @@ spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
       containers:
-      - image: arm64v8/ghost:1.24.2
+      - image: arm64v8/ghost:1.24.5
         name: ghost-108minutes
         env:
           # kubectl create secret generic 108minutes-dbuser --from-literal=dbuser=DBUSER
@@ -54,16 +54,3 @@ spec:
             path: config.production.json
       imagePullSecrets:
         - name: docker-reg-secret
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: 108minutes-data
-  namespace: ingress-nginx
-spec:
-  storageClassName: rbd
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi

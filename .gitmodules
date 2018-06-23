@@ -4,3 +4,6 @@
 [submodule "faas-netes"]
 	path = faas-netes
 	url = git@github.com:ttyS0/faas-netes.git
+[submodule "prometheus-operator"]
+	path = prometheus-operator
+	url = git@github.com:ttyS0/prometheus-operator.git
