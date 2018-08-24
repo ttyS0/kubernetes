@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-custom-config
+  namespace: mariadb
+data:
+  custom.cnf: |
+    [mysqld]
+    bind-address = 0.0.0.0
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mariadb-storage
+  namespace: mariadb
+spec:
+  storageClassName: rbd
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+
+---
