@@ -1,3 +1,18 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgresql-data
+  namespace: postgresql
+spec:
+  storageClassName: rbd
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -6,6 +21,9 @@ metadata:
   labels:
     app: postgresql
 spec:
+  selector:
+    matchLabels:
+      app: postgresql
   strategy:
     type: Recreate
   template:
@@ -16,10 +34,10 @@ spec:
       nodeSelector:
         beta.kubernetes.io/arch: amd64
       containers:
-      - image: postgres:10.4
+      - image: postgres:10.5
         name: postgresql
         env:
-          # kubectl create secret generic postgres-passwd --from-literal=passwd=ROOT_PASSWORD
+        # kubectl create secret generic postgres-passwd --from-literal=passwd=ROOT_PASSWORD
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -37,16 +55,32 @@ spec:
           claimName: postgresql-data
 
 ---
-kind: PersistentVolumeClaim
+kind: Service
 apiVersion: v1
 metadata:
-  name: postgresql-data
+  name: postgresql-internal
   namespace: postgresql
 spec:
-  storageClassName: rbd
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 50Gi
+  selector:
+    app: postgresql
+  ports:
+  - name: postgresql
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
 
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgresql-external
+  namespace: postgresql
+spec:
+  type: NodePort
+  selector:
+    app: postgresql
+  ports:
+  - name: postgresql
+    protocol: TCP
+    port: 5432
+    targetPort: 5432

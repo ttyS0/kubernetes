@@ -62,7 +62,7 @@ spec:
   selector:
     matchLabels:
       app: static-web
-  replicas: 1
+  replicas: 2
   strategy:
     type: Recreate
   template:

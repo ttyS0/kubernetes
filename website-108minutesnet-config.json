@@ -7,7 +7,7 @@
   "database": {
     "client": "mysql",
     "connection": {
-      "host": "mariadb-ingress",
+      "host": "mariadb-internal.mariadb.svc.cluster.local",
       "port": 3306,
       "database": "ghost_108minutes"
     }
