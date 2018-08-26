@@ -1,3 +1,0 @@
-[submodule "faas-netes"]
-	path = faas-netes
-	url = git@github.com:ttyS0/faas-netes.git
