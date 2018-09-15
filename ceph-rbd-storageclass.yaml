@@ -1,0 +1,42 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+  name: rbd-persist
+parameters:
+  adminId: admin
+  adminSecretName: ceph-admin
+  adminSecretNamespace: ceph
+  imageFeatures: layering
+  imageFormat: "2"
+  monitors: gandalf.ttys0.net:6789,saruman.ttys0.net:6789,radagast.ttys0.net:6789
+  pool: rbd_k8s
+  userId: rbd_k8s
+  userSecretName: ceph-rbd
+  userSecretNamespace: ceph
+provisioner: ceph.com/rbd
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+  name: rbd-transient
+parameters:
+  adminId: admin
+  adminSecretName: ceph-admin
+  adminSecretNamespace: ceph
+  imageFeatures: layering
+  imageFormat: "2"
+  monitors: gandalf.ttys0.net:6789,saruman.ttys0.net:6789,radagast.ttys0.net:6789
+  pool: rbd_k8s
+  userId: rbd_k8s
+  userSecretName: ceph-rbd
+  userSecretNamespace: ceph
+provisioner: ceph.com/rbd
+reclaimPolicy: Delete
+volumeBindingMode: Immediate

@@ -1,40 +1,43 @@
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ceph
+# Namespace must be manually created so the ceph secret can be configured.
+## kubectl create ns ceph
+## kubectl create secret generic ceph-admin --type="kubernetes.io/rbd" --namespace=ceph --from-literal=key='ABC123'
+## kubectl create secret generic ceph-rbd --type="kubernetes.io/rbd" --namespace=ceph --from-literal=key='DEF456'
+---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: rbd-provisioner
-  namespace: ceph
 rules:
-- apiGroups: [""]
-  resources: ["persistentvolumes"]
-  verbs: ["get", "list", "watch", "create", "delete"]
-- apiGroups: [""]
-  resources: ["persistentvolumeclaims"]
-  verbs: ["get", "list", "watch", "update"]
-- apiGroups: ["storage.k8s.io"]
-  resources: ["storageclasses"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: [""]
-  resources: ["events"]
-  verbs: ["create", "update", "patch"]
-- apiGroups: [""]
-  resources: ["endpoints"]
-  verbs: ["get", "list", "watch", "create", "update", "patch"]
-- apiGroups: [""]
-  resources: ["services"]
-  resourceNames: ["coredns"]
-  verbs: ["list", "get"]
-
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "update"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["services"]
+    resourceNames: ["kube-dns","coredns"]
+    verbs: ["list", "get"]
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: rbd-provisioner
-  namespace: ceph
 subjects:
-- kind: ServiceAccount
-  name: rbd-provisioner
-  namespace: ceph
+  - kind: ServiceAccount
+    name: rbd-provisioner
+    namespace: ceph
 roleRef:
   kind: ClusterRole
   name: rbd-provisioner
@@ -50,6 +53,9 @@ rules:
 - apiGroups: [""]
   resources: ["secrets"]
   verbs: ["get"]
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -91,15 +97,11 @@ spec:
       labels:
         app: rbd-provisioner
     spec:
-      nodeSelector:
-        beta.kubernetes.io/arch: amd64
       containers:
       - name: rbd-provisioner
-        image: quay.io/external_storage/rbd-provisioner:latest
+        image: quay.io/external_storage/rbd-provisioner:v2.1.1-k8s1.11
         env:
         - name: PROVISIONER_NAME
           value: ceph.com/rbd
       serviceAccountName: rbd-provisioner
-
-
 
