@@ -1,0 +1,86 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: vault
+  name: vault
+  namespace: vault
+spec:
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app: vault
+  serviceName: "vault"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      containers:
+      - name: vault
+        image: "vault:0.11.1"
+        imagePullPolicy: Always
+        args:
+        - server
+        ports:
+        - containerPort: 8200
+          name: vault
+        livenessProbe:
+          httpGet:
+            path: /v1/sys/health?&sealedcode=200&uninitcode=200&standbycode=200
+            port: vault
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /v1/sys/health
+            port: vault
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        securityContext:
+          capabilities:
+            add:
+            - IPC_LOCK
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: VAULT_LOCAL_CONFIG
+          value: '{"storage": {"consul": {"address": "$(NODE_NAME):8500"}}, "listener": { "tcp": { "address": "0.0.0.0:8200", "tls_disable": 1 } }, "ui": "true", "cluster_name": "home", "cluster_addr": "http://vault:8201", "api_addr": "https://vault.ttys0.net"}'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vault
+  name: vault
+  namespace: vault
+spec:
+  ports:
+  - name: vault-api
+    port: 8200
+  - name: vault-clustering
+    port: 8201
+  clusterIP: None
+  selector:
+    app: vault
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vault
+  name: vault-ext
+  namespace: vault
+spec:
+  type: NodePort
+  selector:
+    app: vault
+  ports:
+  - name: vault
+    port: 8200
+    nodePort: 30082
+    protocol: TCP
