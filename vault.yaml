@@ -27,6 +27,11 @@ spec:
         ports:
         - containerPort: 8200
           name: vault
+        - containerPort: 8202
+          name: vault-tls
+        volumeMounts:
+          - mountPath: /etc/certs
+            name: ttys0-certs
         livenessProbe:
           httpGet:
             path: /v1/sys/health?&sealedcode=200&uninitcode=200&standbycode=200
@@ -48,8 +53,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+        - name: VAULT_SKIP_VERIFY
+          value: "1"
         - name: VAULT_LOCAL_CONFIG
-          value: '{"storage": {"consul": {"address": "$(NODE_NAME):8500"}}, "listener": { "tcp": { "address": "0.0.0.0:8200", "tls_disable": 1 } }, "ui": "true", "cluster_name": "home", "cluster_addr": "http://vault:8201", "api_addr": "https://vault.ttys0.net"}'
+          value: '{"storage": {"consul": {"address": "$(NODE_NAME):8500"}}, "listener": { "tcp": { "address": "0.0.0.0:8200", "tls_disable": 1 }}, "listener": { "tcp": { "address": "0.0.0.0:8202", "tls_cert_file": "/etc/certs/ttys0.net.fullchain.pem", "tls_key_file": "/etc/certs/ttys0.net.privkey.pem"}}, "ui": "true", "cluster_name": "home", "cluster_addr": "http://vault:8201", "api_addr": "https://vault.ttys0.net"}'
         resources:
           limits:
             cpu: "1"
@@ -57,6 +64,10 @@ spec:
           requests:
             cpu: "500m"
             memory: "256Mi"
+      volumes:
+        - name: ttys0-certs
+          secret:
+            secretName: ttys0-net-ssl
 ---
 apiVersion: v1
 kind: Service
@@ -83,11 +94,12 @@ metadata:
   name: vault-ext
   namespace: vault
 spec:
-  type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 10.0.1.202
   selector:
     app: vault
   ports:
   - name: vault
-    port: 8200
-    nodePort: 30082
-    protocol: TCP
+    port: 443
+    targetPort: 8202
+

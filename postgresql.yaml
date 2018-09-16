@@ -2,10 +2,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: postgresql-data
+  name: postgresql-storage
   namespace: postgresql
 spec:
-  storageClassName: rbd
   accessModes:
   - ReadWriteOnce
   resources:
@@ -31,8 +30,6 @@ spec:
       labels:
         app: postgresql
     spec:
-      nodeSelector:
-        beta.kubernetes.io/arch: amd64
       containers:
       - image: postgres:10.5
         name: postgresql
@@ -47,36 +44,22 @@ spec:
         - containerPort: 5432
           name: postgresql
         volumeMounts:
-        - name: postgresql-data
+        - name: postgresql-storage
           mountPath: /var/lib/postgresql
       volumes:
-      - name: postgresql-data
+      - name: postgresql-storage
         persistentVolumeClaim:
-          claimName: postgresql-data
+          claimName: postgresql-storage
 
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: postgresql-internal
+  name: postgresql
   namespace: postgresql
 spec:
-  selector:
-    app: postgresql
-  ports:
-  - name: postgresql
-    protocol: TCP
-    port: 5432
-    targetPort: 5432
-
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: postgresql-external
-  namespace: postgresql
-spec:
-  type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 10.0.1.203
   selector:
     app: postgresql
   ports:
