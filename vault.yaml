@@ -50,6 +50,13 @@ spec:
               fieldPath: spec.nodeName
         - name: VAULT_LOCAL_CONFIG
           value: '{"storage": {"consul": {"address": "$(NODE_NAME):8500"}}, "listener": { "tcp": { "address": "0.0.0.0:8200", "tls_disable": 1 } }, "ui": "true", "cluster_name": "home", "cluster_addr": "http://vault:8201", "api_addr": "https://vault.ttys0.net"}'
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "500m"
+            memory: "256Mi"
 ---
 apiVersion: v1
 kind: Service
