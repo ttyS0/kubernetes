@@ -1,0 +1,101 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: unifi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: unifi-data
+  namespace: unifi
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unifi-controller
+  namespace: unifi
+spec:
+  selector:
+    matchLabels:
+      app: unifi-controller
+  replicas : 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: unifi-controller
+    spec:
+      containers:
+      - image: jacobalberty/unifi:latest
+        name: unifi-controller
+        ports:
+        - containerPort: 8080
+        - containerPort: 8081
+        - containerPort: 8443
+        - containerPort: 8880
+        - containerPort: 8843
+        - containerPort: 3478
+          protocol: UDP
+        - containerPort: 6789
+        - containerPort: 10001
+          protocol: UDP
+        volumeMounts:
+        - name: unifi-data
+          mountPath: /usr/lib/unifi/data
+      volumes:
+      - name: unifi-data
+        persistentVolumeClaim:
+          claimName: unifi-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi-controller-tcp
+  namespace: unifi
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "unifi-controller"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.0.0.12
+  selector:
+    app: unifi-controller
+  ports:
+  - name: unifi-device-inform
+    protocol: TCP
+    port: 8080
+  - name: unifi-controller-ui
+    port: 8443
+  - name: unifi-http
+    port: 8880
+  - name: unifi-https
+    port: 8843
+  - name: unifi-speed-test
+    port: 6789
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi-controller-udp
+  namespace: unifi
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "unifi-controller"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.0.0.12
+  selector:
+    app: unifi-controller
+  ports:
+  - name: unifi-discovery
+    port: 10001
+    protocol: UDP
+  - name: unifi-stun
+    port: 3478
+    protocol: UDP
