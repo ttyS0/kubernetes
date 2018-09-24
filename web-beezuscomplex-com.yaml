@@ -3,9 +3,8 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: beezuscomplex-data
-  namespace: ingress-nginx
+  namespace: web
 spec:
-  storageClassName: rbd
   accessModes:
   - ReadWriteOnce
   resources:
@@ -16,35 +15,31 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: website-beezuscomplex
-  namespace: ingress-nginx
-  labels:
-    version: beezuscomplex-1
+  name: web-beezuscomplex
+  namespace: web
 spec:
   selector:
     matchLabels:
-      app: website-beezuscomplex
+      app: web-beezuscomplex
   replicas : 1
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: website-beezuscomplex
+        app: web-beezuscomplex
     spec:
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64
       containers:
-      - image: arm64v8/ghost:1.24.5
+      - image: ghost:1.24.5
         name: ghost-beezuscomplex
         env:
-        # kubectl create secret generic beezuscomplex-dbuser -n ingress-nginx --from-literal=dbuser=DBUSER
+        # kubectl create secret generic beezuscomplex-dbuser -n web --from-literal=dbuser=DBUSER
         - name: database__connection__user
           valueFrom:
             secretKeyRef:
               name: beezuscomplex-dbuser
               key: dbuser
-          # kubectl create secret generic beezuscomplex-dbpass -n ingress-nginx --from-literal=dbpass=DBPASS
+          # kubectl create secret generic beezuscomplex-dbpass -n web --from-literal=dbpass=DBPASS
         - name: database__connection__password
           valueFrom:
             secretKeyRef:
@@ -62,48 +57,48 @@ spec:
       - name: beezuscomplex-data
         persistentVolumeClaim:
           claimName: beezuscomplex-data
-      # kubectl create configmap beezuscomplex-config -n ingress-nginx --from-file=config.json
+      # kubectl create configmap beezuscomplex-config -n web --from-file=config.json
       - name: beezuscomplex-config
         configMap:
           name: beezuscomplex-config
           items:
-          - key: website-beezuscomplexcom-config.json
+          - key: config.production.json
             path: config.production.json
-      imagePullSecrets:
-      - name: docker-reg-secret
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: website-beezuscomplex
-  namespace: ingress-nginx
+  name: web-beezuscomplex
+  namespace: web
   labels:
-    app: website-beezuscomplex
+    app: web-beezuscomplex
 spec:
   ports:
   - name: server
     port: 80
     targetPort: 2368
   selector:
-    app: website-beezuscomplex
+    app: web-beezuscomplex
 
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: website-beezuscomplex
-  namespace: ingress-nginx
+  name: web-beezuscomplex
+  namespace: web
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: 50m
 spec:
+  tls:
+    - secretName: beezuscomplex-com-tls
   rules:
   - host: "beezuscomplex.com"
     http:
       paths:
       - backend:
-          serviceName: website-beezuscomplex
+          serviceName: web-beezuscomplex
           servicePort: 80
         path: /
       - backend:
@@ -114,7 +109,7 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: website-beezuscomplex
+          serviceName: web-beezuscomplex
           servicePort: 80
         path: /
       - backend:

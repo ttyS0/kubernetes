@@ -5,8 +5,13 @@ metadata:
   name: config
 data:
   config: |
+    peers:
+    - peer-address: 10.0.1.1
+      peer-asn: 64501
+      my-asn: 64500
     address-pools:
     - name: default
-      protocol: layer2
+      protocol: bgp
+      avoid-buggy-ips: true
       addresses:
-      - 10.0.1.201-10.0.1.251
+      - 10.0.0.0/24

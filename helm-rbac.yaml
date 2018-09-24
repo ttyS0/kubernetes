@@ -1,10 +1,11 @@
 ---
+## Namespace restricted helm
+# This is the helm instance that should be used for most applications
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: tiller
   namespace: helm
-## kubectl create namespace helm
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -29,3 +30,25 @@ roleRef:
   kind: Role
   name: tiller-manager
   apiGroup: rbac.authorization.k8s.io
+---
+## Cluster wide helm
+# This is the helm instance used for globally scoped charts
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tiller
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: tiller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: tiller
+  namespace: kube-system
+---

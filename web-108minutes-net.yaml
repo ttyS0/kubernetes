@@ -3,9 +3,8 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: 108minutes-data
-  namespace: ingress-nginx
+  namespace: web
 spec:
-  storageClassName: rbd
   accessModes:
   - ReadWriteOnce
   resources:
@@ -16,24 +15,22 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: website-108minutes
-  namespace: ingress-nginx
+  name: web-108minutes
+  namespace: web
 spec:
   selector:
     matchLabels:
-      app: website-108minutes
+      app: web-108minutes
   replicas : 1
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: website-108minutes
+        app: web-108minutes
     spec:
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64
       containers:
-      - image: arm64v8/ghost:1.24.5
+      - image: ghost:1.24.5
         name: ghost-108minutes
         env:
         # kubectl create secret generic 108minutes-dbuser --from-literal=dbuser=DBUSER
@@ -60,49 +57,50 @@ spec:
       - name: 108minutes-data
         persistentVolumeClaim:
           claimName: 108minutes-data
-      # kubectl create configmap 108minutes-config --from-file=website-108minutesnet-config.json
+      # kubectl create configmap 108minutes-config --from-file=108minutesnet-config.json
       - name: 108minutes-config
         configMap:
           name: 108minutes-config
           items:
-          - key: website-108minutesnet-config.json
+          - key: config.production.json
             path: config.production.json
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: website-108minutes
-  namespace: ingress-nginx
+  name: web-108minutes
+  namespace: web
   labels:
-    app: website-108minutes
+    app: webs-108minutes
 spec:
-  clusterIP: None
   ports:
   - name: server
     port: 80
     targetPort: 2368
   selector:
-    app: website-108minutes
+    app: web-108minutes
 
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: website-108minutes
-  namespace: ingress-nginx
+  name: web-108minutes
+  namespace: web
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: 50m
     nginx.ingress.kubernetes.io/affinity: cookie
 spec:
+  tls:
+  - secretName: 108minutes-net-tls
   rules:
   - host: "108minutes.net"
     http:
       paths:
       - path: /
         backend:
-          serviceName: website-108minutes
+          serviceName: web-108minutes
           servicePort: 80
       - path: /static
         backend:
@@ -117,7 +115,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: website-108minutes
+          serviceName: web-108minutes
           servicePort: 80
       - path: /static
         backend:

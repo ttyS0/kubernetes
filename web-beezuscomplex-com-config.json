@@ -1,5 +1,5 @@
 {
-  "url": "http://108minutes.net",
+  "url": "http://beezuscomplex.com",
   "server": {
     "port": 2368,
     "host": "0.0.0.0"
@@ -7,9 +7,9 @@
   "database": {
     "client": "mysql",
     "connection": {
-      "host": "mariadb-internal.mariadb.svc.cluster.local",
+      "host": "mariadb.mariadb.svc.cluster.local",
       "port": 3306,
-      "database": "ghost_108minutes"
+      "database": "ghost_beezuscomplex"
     }
   },
   "mail": {

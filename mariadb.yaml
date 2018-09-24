@@ -76,7 +76,7 @@ metadata:
   namespace: mariadb
 spec:
   type: LoadBalancer
-  loadBalancerIP: 10.0.1.201
+  loadBalancerIP: 10.0.0.10
   selector:
     app: mariadb
   ports:

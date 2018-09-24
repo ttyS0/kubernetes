@@ -5,9 +5,8 @@ metadata:
   labels:
     app: vault
   name: vault
-  namespace: vault
+  namespace: web
 spec:
-  podManagementPolicy: Parallel
   selector:
     matchLabels:
       app: vault
@@ -18,32 +17,29 @@ spec:
       labels:
         app: vault
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values: ['vault']
+            topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 10
       containers:
       - name: vault
-        image: "vault:0.11.1"
+        image: vault:0.11.1
         imagePullPolicy: Always
         args:
         - server
         ports:
         - containerPort: 8200
-          name: vault
-        - containerPort: 8202
-          name: vault-tls
-        volumeMounts:
-          - mountPath: /etc/certs
-            name: ttys0-certs
-        livenessProbe:
-          httpGet:
-            path: /v1/sys/health?&sealedcode=200&uninitcode=200&standbycode=200
-            port: vault
-          initialDelaySeconds: 10
-          periodSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /v1/sys/health
-            port: vault
-          initialDelaySeconds: 10
-          periodSeconds: 5
+          name: vault-port
+          protocol: TCP
+        - containerPort: 8201
+          name: cluster-port
+          protocol: TCP
         securityContext:
           capabilities:
             add:
@@ -53,10 +49,19 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: VAULT_SKIP_VERIFY
-          value: "1"
         - name: VAULT_LOCAL_CONFIG
-          value: '{"storage": {"consul": {"address": "$(NODE_NAME):8500"}}, "listener": { "tcp": { "address": "0.0.0.0:8200", "tls_disable": 1 }}, "listener": { "tcp": { "address": "0.0.0.0:8202", "tls_cert_file": "/etc/certs/ttys0.net.fullchain.pem", "tls_key_file": "/etc/certs/ttys0.net.privkey.pem"}}, "ui": "true", "cluster_name": "home", "cluster_addr": "http://vault:8201", "api_addr": "https://vault.ttys0.net"}'
+          value: |
+            api_addr = "https://vault.ttys0.net"
+            cluster_addr = "http://vault:8201"
+            ui = true
+            cluster_name = "home"
+            storage "consul" {
+              address = "$(NODE_NAME):8500"
+            }
+            listener "tcp" {
+              address       = "0.0.0.0:8200"
+              tls_disable = 1
+            }
         resources:
           limits:
             cpu: "1"
@@ -64,10 +69,18 @@ spec:
           requests:
             cpu: "500m"
             memory: "256Mi"
-      volumes:
-        - name: ttys0-certs
-          secret:
-            secretName: ttys0-net-ssl
+        livenessProbe:
+          httpGet:
+            path: /v1/sys/health?&sealedcode=200&uninitcode=200&standbycode=200
+            port: vault-port
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /v1/sys/health
+            port: vault-port
+          initialDelaySeconds: 10
+          periodSeconds: 5
 ---
 apiVersion: v1
 kind: Service
@@ -75,31 +88,29 @@ metadata:
   labels:
     app: vault
   name: vault
-  namespace: vault
+  namespace: web
 spec:
+  selector:
+    app: vault
   ports:
   - name: vault-api
     port: 8200
-  - name: vault-clustering
-    port: 8201
-  clusterIP: None
-  selector:
-    app: vault
 ---
-apiVersion: v1
-kind: Service
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
-  labels:
-    app: vault
-  name: vault-ext
-  namespace: vault
+  name: web-vault
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 10.0.1.202
-  selector:
-    app: vault
-  ports:
-  - name: vault
-    port: 443
-    targetPort: 8202
-
+  tls:
+    - secretName: ttys0-net-tls
+  rules:
+  - host: "vault.ttys0.net"
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: vault
+          servicePort: 8200

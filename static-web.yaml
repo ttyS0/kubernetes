@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: static-web
-  namespace: ingress-nginx
+  namespace: web
   labels:
     app: static-web
 spec:
@@ -19,7 +19,7 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: static-web-data
-  namespace: ingress-nginx
+  namespace: web
 spec:
   storageClassName: cephfs-static-web
   capacity:
@@ -43,7 +43,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: static-web-data
-  namespace: ingress-nginx
+  namespace: web
 spec:
   storageClassName: cephfs-static-web
   accessModes:
@@ -57,7 +57,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: static-web
-  namespace: ingress-nginx
+  namespace: web
 spec:
   selector:
     matchLabels:
@@ -70,11 +70,9 @@ spec:
       labels:
         app: static-web
     spec:
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64
       containers:
       - name: static-web
-        image: docker.ttys0.net/static-web-arm64:3
+        image: docker.ttys0.net/web-static:1
         command: ["/home/auto-reload-nginx.sh"]
         ports:
         - containerPort: 80

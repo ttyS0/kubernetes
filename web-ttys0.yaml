@@ -2,23 +2,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: website-ttys0.net
-  namespace: ingress-nginx
+  name: web-ttys0-net
+  namespace: web
 spec:
   selector:
     matchLabels:
-      app: website-ttys0.net
+      app: web-ttys0-net
   replicas: 1
   template:
     metadata:
       labels:
-        app: website-ttys0.net
+        app: web-ttys0-net
     spec:
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64
       containers:
       - name: hugo-ttys0
-        image: docker.ttys0.net/website-ttys0.net-arm64:2
+        image: docker.ttys0.net/web-ttys0.net:2
         ports:
         - containerPort: 80
       imagePullSecrets:
@@ -28,36 +26,36 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: website-ttys0net
-  namespace: ingress-nginx
+  name: web-ttys0-net
+  namespace: web
   labels:
-    name: website-ttys0net
+    name: web-ttys0-net
 spec:
-  clusterIP: None
   ports:
   - name: http
     port: 80
     targetPort: 80
   selector:
-    app: website-ttys0.net
+    app: web-ttys0-net
 
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: website-ttys0.net
-  namespace: ingress-nginx
+  name: web-ttys0-net
+  namespace: web
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
-#    ingress.kubernetes.io/proxy-body-size: 500m
 spec:
+  tls:
+  - secretName: ttys0-net-tls
   rules:
   - host: "ttys0.net"
     http:
       paths:
       - backend:
-          serviceName: website-ttys0net
+          serviceName: web-ttys0-net
           servicePort: 80
       - backend:
           serviceName: static-web
@@ -67,7 +65,7 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: website-ttys0net
+          serviceName: web-ttys0-net
           servicePort: 80
       - backend:
           serviceName: static-web
