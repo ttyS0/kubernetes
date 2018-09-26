@@ -69,7 +69,6 @@ spec:
     app: unifi-controller
   ports:
   - name: unifi-device-inform
-    protocol: TCP
     port: 8080
   - name: unifi-controller-ui
     port: 8443
