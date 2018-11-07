@@ -30,7 +30,7 @@ spec:
         app: web-108minutes
     spec:
       containers:
-      - image: ghost:1.24.5
+      - image: ghost:2.2.0
         name: ghost-108minutes
         env:
         # kubectl create secret generic 108minutes-dbuser --from-literal=dbuser=DBUSER
