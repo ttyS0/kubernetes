@@ -1,0 +1,368 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: elastic
+---
+# https://www.elastic.co/guide/en/elasticsearch/reference/5.2/modules-discovery-zen.html#unicast
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: elastic
+  name: es-config
+data:
+  java.security: |
+    networkaddress.cache.ttl=60
+---
+# Elasticsearch Data Nodes
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: elastic
+  name: elasticsearch-data
+  labels:
+    app: elasticsearch
+    role: data
+spec:
+  serviceName: elasticsearch-data
+  # This is number of nodes that we want to run
+  replicas: 2
+  selector:
+    matchLabels:
+      app: elasticsearch
+      role: data
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+        role: data
+    spec:
+      affinity:
+        # Try to put each ES data node on a different node in the K8s cluster
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - elasticsearch
+                - key: role
+                  operator: In
+                  values:
+                  - data
+              topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 300
+
+      # spec.template.spec.initContainers
+      initContainers:
+      # Fix the permissions on the volume.
+      # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_notes_for_production_use_and_defaults
+      - name: fix-the-volume-permission
+        image: busybox
+        command: ['sh', '-c', 'chown -R 1000:1000 /usr/share/elasticsearch/data']
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+      # Increase the default vm.max_map_count to 262144
+      # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode
+      - name: increase-the-vm-max-map-count
+        image: busybox
+        command: ['sysctl', '-w', 'vm.max_map_count=262144']
+        securityContext:
+          privileged: true
+      # Increase the ulimit
+      # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_notes_for_production_use_and_defaults
+      - name: increase-the-ulimit
+        image: busybox
+        command: ['sh', '-c', 'ulimit -n 65536']
+        securityContext:
+          privileged: true
+
+      # spec.template.spec.containers
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.0
+        ports:
+        - containerPort: 9200
+          name: http
+        - containerPort: 9300
+          name: transport
+        livenessProbe:
+          tcpSocket:
+            port: transport
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /_cluster/health
+            port: http
+          initialDelaySeconds: 20
+          timeoutSeconds: 5
+        resources:
+          limits:
+            memory: 8Gi
+
+        # spec.template.spec.containers[elasticsearch].env
+        env:
+        - name: discovery.zen.ping.unicast.hosts
+          value: "elasticsearch-master.elastic.svc.cluster.local,elasticsearch.elastic.svc.cluster.local"
+        - name: ES_JAVA_OPTS
+          value: -Xms4g -Xmx4g
+
+        - name: node.master
+          value: "false"
+        - name: node.ingest
+          value: "true"
+        - name: node.data
+          value: "true"
+        - name: search.remote.connect
+          value: "true"
+
+        - name: cluster.name
+          value: home
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+
+        # spec.template.spec.containers[elasticsearch].volumeMounts
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+        - name: config
+          # This path seems likely to break, but $JAVA_HOME doesn't work
+          mountPath: /opt/jdk-10.0.2/lib/security/java.security
+          subPath: java.security
+
+      # spec.template.spec
+      volumes:
+      - name: config
+        configMap:
+          name: es-config
+
+  # spec.volumeClaimTemplates
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Gi
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  namespace: elastic
+  name: elasticsearch-data
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+      role: data
+---
+# Elasticsearch Master Nodes
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: elastic
+  name: elasticsearch-master
+  labels:
+    component: elasticsearch
+    role: master
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: elasticsearch
+      role: master
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+        role: master
+    spec:
+      affinity:
+        # Try to put each ES master node on a different node in the K8s cluster
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - elasticsearch
+                - key: role
+                  operator: In
+                  values:
+                  - master
+              topologyKey: kubernetes.io/hostname
+      # spec.template.spec.initContainers
+      initContainers:
+      # Increase the default vm.max_map_count to 262144
+      # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode
+      - name: increase-the-vm-max-map-count
+        image: busybox
+        command: ['sysctl', '-w', 'vm.max_map_count=262144']
+        securityContext:
+          privileged: true
+
+      # spec.template.spec.containers
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.0
+        ports:
+        - containerPort: 9200
+          name: http
+        - containerPort: 9300
+          name: transport
+        livenessProbe:
+          tcpSocket:
+            port: transport
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 0.25
+          limits:
+            cpu: 1
+            memory: 1Gi
+
+        # spec.template.spec.containers[elasticsearch].env
+        env:
+        - name: discovery.zen.ping.unicast.hosts
+          value: "elasticsearch-master.elastic.svc.cluster.local,elasticsearch.elastic.svc.cluster.local"
+        - name: ES_JAVA_OPTS
+          value: -Xms512m -Xmx512m
+
+        - name: discovery.zen.minimum_master_nodes
+          value: "2"
+        - name: node.master
+          value: "true"
+        - name: node.ingest
+          value: "false"
+        - name: node.data
+          value: "false"
+        - name: search.remote.connect
+          value: "false"
+
+        - name: cluster.name
+          value: home
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+
+        # spec.template.spec.containers[elasticsearch].volumeMounts
+        volumeMounts:
+        - name: storage
+          mountPath: /usr/share/elasticsearch/data
+        - name: config
+          # This path seems likely to break, but $JAVA_HOME doesn't work
+          mountPath: /opt/jdk-10.0.2/lib/security/java.security
+          subPath: java.security
+
+      # spec.template.spec
+      volumes:
+      - name: config
+        configMap:
+          name: es-config
+      - name: storage
+        emptyDir:
+          medium: ""
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  namespace: elastic
+  name: elasticsearch-master
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+      role: master
+---
+# Elasticsearch Services
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: elastic
+  name: elasticsearch-master
+  labels:
+    app: elasticsearch
+    role: master
+spec:
+  clusterIP: None
+  selector:
+    app: elasticsearch
+    role: master
+  ports:
+  - port: 9200
+    name: http
+  - port: 9300
+    name: node-to-node
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: elastic
+  name: elasticsearch
+  labels:
+    app: elasticsearch
+    role: data
+spec:
+  clusterIP: None
+  selector:
+    app: elasticsearch
+    role: data
+  ports:
+  - port: 9200
+    name: http
+  - port: 9300
+    name: node-to-node
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es0
+  namespace: elastic
+  labels:
+    app: elasticsearch
+    role: data
+spec:
+  type: LoadBalancer
+  selector:
+    app: elasticsearch
+    role: data
+    statefulset.kubernetes.io/pod-name: elasticsearch-data-0
+  ports:
+  - name: http
+    port: 9200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es1
+  namespace: elastic
+  labels:
+    app: elasticsearch
+    role: data
+spec:
+  type: LoadBalancer
+  selector:
+    app: elasticsearch
+    role: data
+    statefulset.kubernetes.io/pod-name: elasticsearch-data-1
+  ports:
+  - name: http
+    port: 9200

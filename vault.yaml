@@ -34,7 +34,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: vault
-        image: vault:0.11.3
+        image: vault:0.11.5
         imagePullPolicy: Always
         args:
         - server
@@ -59,7 +59,7 @@ spec:
             api_addr = "https://vault.ttys0.net"
             cluster_addr = "http://vault:8201"
             ui = true
-            cluster_name = "home"
+            cluster_name = "nucs"
             storage "consul" {
               address = "$(NODE_NAME):8500"
             }
@@ -104,7 +104,7 @@ spec:
 apiVersion: contour.heptio.com/v1beta1
 kind: IngressRoute
 metadata:
-  name: web-vault
+  name: vault
   namespace: web
 spec:
   virtualhost:

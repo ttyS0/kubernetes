@@ -1,0 +1,76 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: elastic
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:6.5.0
+        ports:
+        - containerPort: 5601
+        env:
+        - name: SERVER_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: SERVER_HOST
+          value: "0.0.0.0"
+        - name: ELASTICSEARCH_URL
+          value: http://elasticsearch.elastic.svc.cluster.local:9200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kibana
+  name: kibana
+  namespace: elastic
+spec:
+  type: ClusterIP
+  selector:
+    app: kibana
+  ports:
+  - name: http
+    port: 5601
+---
+apiVersion: contour.heptio.com/v1beta1
+kind: IngressRoute
+metadata:
+  name: kibana
+  namespace: elastic
+spec:
+  routes:
+  - match: /
+    services:
+    - name: kibana
+      port: 5601
+---
+apiVersion: contour.heptio.com/v1beta1
+kind: IngressRoute
+metadata:
+  name: kibana
+  namespace: web
+spec:
+  virtualhost:
+    fqdn: kibana.ttys0.net
+    tls:
+      secretName: ttys0-net-tls
+  routes:
+  - match: /
+    delegate:
+      name: kibana
+      namespace: elastic
+

@@ -34,7 +34,7 @@ spec:
         app: unifi-controller
     spec:
       containers:
-      - image: jacobalberty/unifi:latest
+      - image: jacobalberty/unifi:5.9.29
         name: unifi-controller
         ports:
         - containerPort: 8080
@@ -64,7 +64,6 @@ metadata:
     metallb.universe.tf/allow-shared-ip: "unifi-controller"
 spec:
   type: LoadBalancer
-  loadBalancerIP: 10.0.0.12
   selector:
     app: unifi-controller
   ports:
@@ -88,7 +87,6 @@ metadata:
     metallb.universe.tf/allow-shared-ip: "unifi-controller"
 spec:
   type: LoadBalancer
-  loadBalancerIP: 10.0.0.12
   selector:
     app: unifi-controller
   ports:
@@ -98,3 +96,4 @@ spec:
   - name: unifi-stun
     port: 3478
     protocol: UDP
+

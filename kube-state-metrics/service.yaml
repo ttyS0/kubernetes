@@ -9,7 +9,6 @@ metadata:
     prometheus.io/scrape: 'true'
 spec:
   type: LoadBalancer
-  loadBalancerIP: 10.0.0.15
   ports:
   - name: http-metrics
     port: 8080
