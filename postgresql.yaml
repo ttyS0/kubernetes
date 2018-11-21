@@ -2,21 +2,18 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: postgresql-storage
-  namespace: postgresql
+  name: postgresql
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
       storage: 50Gi
-
 ---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: postgresql
-  namespace: postgresql
   labels:
     app: postgresql
 spec:
@@ -31,7 +28,7 @@ spec:
         app: postgresql
     spec:
       containers:
-      - image: postgres:10.5
+      - image: postgres:11.1
         name: postgresql
         env:
         # kubectl create secret generic postgres-passwd --from-literal=passwd=ROOT_PASSWORD
@@ -44,19 +41,17 @@ spec:
         - containerPort: 5432
           name: postgresql
         volumeMounts:
-        - name: postgresql-storage
+        - name: postgresql
           mountPath: /var/lib/postgresql
       volumes:
-      - name: postgresql-storage
+      - name: postgresql
         persistentVolumeClaim:
-          claimName: postgresql-storage
-
+          claimName: postgresql
 ---
 kind: Service
 apiVersion: v1
 metadata:
   name: postgresql
-  namespace: postgresql
 spec:
   type: LoadBalancer
   selector:

@@ -2,8 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: docker-registry-data
-  namespace: web
+  name: docker-data
 spec:
   storageClassName: rbd-transient
   accessModes:
@@ -11,13 +10,11 @@ spec:
   resources:
     requests:
       storage: 100Gi
-
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: registry-config
-  namespace: web
+  name: docker-registry
 data:
   config.yml: |
     version: 0.1
@@ -63,7 +60,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: docker-registry
-  namespace: web
 spec:
   replicas: 1
   strategy:
@@ -88,31 +84,28 @@ spec:
         - name: http
           containerPort: 5000
         volumeMounts:
-        - name: images
+        - name: docker-data
           mountPath: "/var/lib/registry"
-        - name: registry-config
+        - name: docker-registry
           mountPath: "/etc/docker/registry"
-        - name: registry-auth
+        - name: docker-auth
           mountPath: "/etc/docker/secret"
       volumes:
-      - name: registry-config
+      - name: docker-registry
         configMap:
-          name: registry-config
-      - name: registry-auth
+          name: docker-registry
+      - name: docker-auth
         secret:
-          secretName: registry-auth
-      - name: images
+          secretName: docker-auth
+      - name: docker-data
         persistentVolumeClaim:
-          claimName: docker-registry-data
+          claimName: docker-data
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: docker-registry
-  namespace: web
-  labels:
-    app: docker-registry
 spec:
   ports:
   - name: http
@@ -124,7 +117,6 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: docker-registry
-  namespace: web
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: "500m"

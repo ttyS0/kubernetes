@@ -1,15 +1,10 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: elastic
+
 ---
 # https://www.elastic.co/guide/en/elasticsearch/reference/5.2/modules-discovery-zen.html#unicast
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: elastic
-  name: es-config
+  name: elasticsearch-config
 data:
   java.security: |
     networkaddress.cache.ttl=60
@@ -18,7 +13,6 @@ data:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  namespace: elastic
   name: elasticsearch-data
   labels:
     app: elasticsearch
@@ -86,7 +80,7 @@ spec:
       # spec.template.spec.containers
       containers:
       - name: elasticsearch
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.0
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.1
         ports:
         - containerPort: 9200
           name: http
@@ -110,7 +104,7 @@ spec:
         # spec.template.spec.containers[elasticsearch].env
         env:
         - name: discovery.zen.ping.unicast.hosts
-          value: "elasticsearch-master.elastic.svc.cluster.local,elasticsearch.elastic.svc.cluster.local"
+          value: "elasticsearch-master,elasticsearch-data"
         - name: ES_JAVA_OPTS
           value: -Xms4g -Xmx4g
 
@@ -143,7 +137,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: es-config
+          name: elasticsearch-config
 
   # spec.volumeClaimTemplates
   volumeClaimTemplates:
@@ -159,7 +153,6 @@ spec:
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  namespace: elastic
   name: elasticsearch-data
 spec:
   maxUnavailable: 1
@@ -172,7 +165,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: elastic
   name: elasticsearch-master
   labels:
     component: elasticsearch
@@ -219,7 +211,7 @@ spec:
       # spec.template.spec.containers
       containers:
       - name: elasticsearch
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.0
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.1
         ports:
         - containerPort: 9200
           name: http
@@ -240,7 +232,7 @@ spec:
         # spec.template.spec.containers[elasticsearch].env
         env:
         - name: discovery.zen.ping.unicast.hosts
-          value: "elasticsearch-master.elastic.svc.cluster.local,elasticsearch.elastic.svc.cluster.local"
+          value: "elasticsearch-master,elasticsearch-data"
         - name: ES_JAVA_OPTS
           value: -Xms512m -Xmx512m
 
@@ -275,7 +267,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: es-config
+          name: elasticsearch-config
       - name: storage
         emptyDir:
           medium: ""
@@ -283,7 +275,6 @@ spec:
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  namespace: elastic
   name: elasticsearch-master
 spec:
   maxUnavailable: 1
@@ -296,7 +287,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: elastic
   name: elasticsearch-master
   labels:
     app: elasticsearch
@@ -315,8 +305,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: elastic
-  name: elasticsearch
+  name: elasticsearch-data
   labels:
     app: elasticsearch
     role: data
@@ -334,35 +323,34 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: es0
-  namespace: elastic
+  name: elasticsearch-ingest
   labels:
     app: elasticsearch
     role: data
 spec:
-  type: LoadBalancer
   selector:
     app: elasticsearch
     role: data
     statefulset.kubernetes.io/pod-name: elasticsearch-data-0
   ports:
-  - name: http
-    port: 9200
+    - port: 9200
+      name: http
 ---
-apiVersion: v1
-kind: Service
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
-  name: es1
-  namespace: elastic
-  labels:
-    app: elasticsearch
-    role: data
+  name: elasticsearch
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-body-size: "500m"
 spec:
-  type: LoadBalancer
-  selector:
-    app: elasticsearch
-    role: data
-    statefulset.kubernetes.io/pod-name: elasticsearch-data-1
-  ports:
-  - name: http
-    port: 9200
+  tls:
+  - secretName: ttys0-net-tls
+  rules:
+  - host: es.ttys0.net
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: elasticsearch-ingest
+          servicePort: 9200

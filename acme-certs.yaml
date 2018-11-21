@@ -3,7 +3,6 @@ apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
   name: ttys0-net
-  namespace: web
 spec:
   secretName: ttys0-net-tls
   issuerRef:
@@ -24,7 +23,6 @@ apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
   name: 108minutes-net
-  namespace: web
 spec:
   secretName: 108minutes-net-tls
   issuerRef:
@@ -48,7 +46,6 @@ apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
   name: beezuscomplex-com
-  namespace: web
 spec:
   secretName: beezuscomplex-com-tls
   issuerRef:

@@ -2,8 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mariadb-config
-  namespace: mariadb
+  name: mariadb
 data:
   custom.cnf: |
     [mysqld]
@@ -13,21 +12,18 @@ data:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: mariadb-storage
-  namespace: mariadb
+  name: mariadb
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
       storage: 50Gi
-
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mariadb
-  namespace: mariadb
   labels:
     app: mariadb
 spec:
@@ -42,7 +38,7 @@ spec:
         app: mariadb
     spec:
       containers:
-      - image: mariadb:10.3.9
+      - image: mariadb:10.3.11
         name: mariadb
         env:
         # kubectl create secret generic mysql-root-passwd --from-literal=passwd=ROOT_PASSWORD
@@ -55,25 +51,23 @@ spec:
         - containerPort: 3306
           name: mariadb
         volumeMounts:
-        - name: mariadb-storage
+        - name: mariadb
           mountPath: /var/lib/mysql
-        - name: custom-config
+        - name: config
           mountPath: "/etc/mysql/conf.d/custom.cnf"
           subPath: "custom.cnf"
       volumes:
-      - name: mariadb-storage
+      - name: mariadb
         persistentVolumeClaim:
-          claimName: mariadb-storage
-      - name: custom-config
+          claimName: mariadb
+      - name: config
         configMap:
-          name: "mariadb-config"
-
+          name: mariadb
 ---
 kind: Service
 apiVersion: v1
 metadata:
   name: mariadb
-  namespace: mariadb
 spec:
   type: LoadBalancer
   selector:
