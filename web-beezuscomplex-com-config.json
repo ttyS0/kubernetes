@@ -7,7 +7,7 @@
   "database": {
     "client": "mysql",
     "connection": {
-      "host": "mariadb",
+      "host": "mariadb.db.svc.cluster.local",
       "port": 3306,
       "database": "ghost_beezuscomplex"
     }

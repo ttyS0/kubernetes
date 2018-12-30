@@ -113,7 +113,7 @@ metadata:
     #nginx.ingress.kubernetes.io/whitelist-source-range: '10.0.1.0/24, 10.0.8.0/24'
 spec:
   tls:
-  - secretName: ttys0-net-tls
+  - secretName: vault-tls
   rules:
   - host: vault.ttys0.net
     http:

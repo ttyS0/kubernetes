@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: postgresql
+  namespace: db
 spec:
   accessModes:
   - ReadWriteOnce
@@ -14,6 +15,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: postgresql
+  namespace: db
   labels:
     app: postgresql
 spec:
@@ -52,6 +54,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: postgresql
+  namespace: db
 spec:
   type: LoadBalancer
   selector:

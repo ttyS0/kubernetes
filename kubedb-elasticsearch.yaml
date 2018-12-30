@@ -1,0 +1,26 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch
+  namespace: elastic
+spec:
+  version: "6.4.0"
+  replicas: 3
+  authPlugin: "SearchGuard"
+  enableSSL: true
+  storageType: "Durable"
+  storage:
+    storageClassName: rbd-persist
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Gi
+  podTemplate:
+    spec:
+      env:
+        - name: ES_JAVA_OPTS
+          value: "-Xms4096m -Xmx4096m"
+  updateStrategy:
+    type: "RollingUpdate"
+  terminationPolicy: "DoNotTerminate"

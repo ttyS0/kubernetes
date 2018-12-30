@@ -27,7 +27,7 @@ spec:
         app: web-beezuscomplex
     spec:
       containers:
-      - image: ghost:2.6.1
+      - image: ghost:2.9.1
         name: ghost-beezuscomplex
         env:
         # kubectl create secret generic beezuscomplex-dbuser -n web --from-literal=dbuser=DBUSER
