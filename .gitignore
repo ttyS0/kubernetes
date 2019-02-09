@@ -1,6 +1,2 @@
-*.DS_Store
-*.pem
-*.csr
-*.htpasswd
-*.jar
-*.iml
+.DS_Store
+secrets/
