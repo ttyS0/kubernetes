@@ -4,7 +4,7 @@ metadata:
   name: elasticsearch
   namespace: elastic
 spec:
-  version: "6.4.0"
+  version: "6.3.0-v1"
   replicas: 3
   authPlugin: "SearchGuard"
   enableSSL: true

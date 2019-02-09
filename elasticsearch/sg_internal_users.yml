@@ -1,0 +1,16 @@
+# This is the internal user database
+# The hash value is a bcrypt hash and can be generated with plugin/tools/hash.sh
+
+#password is: admin@secret
+admin:
+  readonly: true
+  hash: $2y$12$AtObUHk8DnukzRGv9UZQYOiW6zgmNv8Jf8WZJBkJ7aiOJEJjrlqNG
+  roles:
+    - admin
+
+#password is: kibana@secret
+kibanauser:
+  readonly: true
+  hash: $2y$12$QUCsGYgQ8XuaddXm93gIp.XUT0CsKdKmcTHBasLagg18ewDfdOMbS
+  roles:
+    - kibanauser

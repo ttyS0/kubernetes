@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: elk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      containers:
+      - name: kibana
+        image: kubedb/kibana:6.3.0
+        volumeMounts:
+        - name:  kibana-config
+          mountPath: /usr/share/kibana/config
+      volumes:
+      - name:  kibana-config
+        configMap:
+          name: kibana-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kibana
+  name: kibana
+  namespace: elk
+spec:
+  selector:
+    app: kibana
+  ports:
+  - name: kibana
+    port: 5601
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  namespace: web
+spec:
+  type: ExternalName
+  externalName: kibana.elk.svc
+  ports:
+  - port: 5601
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kibana
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  tls:
+  - secretName: ttys0-tls
+  rules:
+  - host: kibana.ttys0.net
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kibana
+          servicePort: 5601
