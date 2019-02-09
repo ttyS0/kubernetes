@@ -20,7 +20,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 50Gi
+      storage: 100Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -40,8 +40,10 @@ spec:
       labels:
         app: mariadb
     spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
       containers:
-      - image: mariadb:10.4.1
+      - image: mariadb:10.4.2
         name: mariadb
         env:
         # kubectl create secret generic mysql-root-passwd --from-literal=passwd=ROOT_PASSWORD
@@ -80,4 +82,3 @@ spec:
   - name: mariadb
     protocol: TCP
     port: 3306
-

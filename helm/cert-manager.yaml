@@ -1,0 +1,45 @@
+# https://github.com/helm/charts/blob/master/stable/cert-manager/values.yaml
+# helm install --name cert-manager --namespace cert-manager --version v0.6.1 -f cert-manager.yaml stable/cert-manager
+replicaCount: 1
+
+image:
+  repository: quay.io/jetstack/cert-manager-controller
+  tag: v0.6.0
+  pullPolicy: IfNotPresent
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+extraEnv:
+- name: AWS_ACCESS_KEY_ID
+  valueFrom:
+    secretKeyRef:
+      key: aws_access_key_id
+      name: sean-aws-route53
+- name: AWS_SECRET_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      key: aws_secret_access_key
+      name: sean-aws-route53
+# - name: SOME_VAR
+#   value: 'some value'
+
+nodeSelector:
+  beta.kubernetes.io/arch: amd64
+
+ingressShim: {}
+  # defaultIssuerName: ""
+  # defaultIssuerKind: ""
+  # defaultACMEChallengeType: ""
+# defaultACMEDNS01ChallengeProvider: ""
+
+webhook:
+  enabled: true

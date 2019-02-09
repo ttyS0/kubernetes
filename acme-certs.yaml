@@ -3,8 +3,9 @@ apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
   name: ttys0-net
+  namespace: web
 spec:
-  secretName: ttys0-net-tls
+  secretName: ttys0-tls
   issuerRef:
     name: acme
     kind: ClusterIssuer
@@ -14,7 +15,7 @@ spec:
   acme:
     config:
     - dns01:
-        provider: route53
+        provider: r53-ttys0net
       domains:
       - '*.ttys0.net'
       - ttys0.net
@@ -22,52 +23,10 @@ spec:
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
-  name: vault-tls
-  namespace: vault
+  name: beezuscomplex-tls
+  namespace: web
 spec:
-  secretName: vault-tls
-  issuerRef:
-    name: acme
-    kind: ClusterIssuer
-  commonName: 'vault.ttys0.net'
-  dnsNames:
-    - vault.ttys0.net
-  acme:
-    config:
-      - dns01:
-          provider: route53
-        domains:
-          - 'vault.ttys0.net'
----
-apiVersion: certmanager.k8s.io/v1alpha1
-kind: Certificate
-metadata:
-  name: 108minutes-net
-spec:
-  secretName: 108minutes-net-tls
-  issuerRef:
-    name: acme
-    kind: ClusterIssuer
-  commonName: '108minutes.net'
-  dnsNames:
-  - 108minutes.net
-  - www.108minutes.net
-  - home.108minutes.net
-  acme:
-    config:
-    - dns01:
-        provider: route53-108minutes
-      domains:
-      - 108minutes.net
-      - www.108minutes.net
-      - home.108minutes.net
----
-apiVersion: certmanager.k8s.io/v1alpha1
-kind: Certificate
-metadata:
-  name: beezuscomplex-com
-spec:
-  secretName: beezuscomplex-com-tls
+  secretName: beezuscomplex-tls
   issuerRef:
     name: acme
     kind: ClusterIssuer
@@ -79,7 +38,7 @@ spec:
   acme:
     config:
     - dns01:
-        provider: route53-beezuscomplex
+        provider: r53-beezuscomplex
       domains:
       - beezuscomplex.com
       - www.beezuscomplex.com

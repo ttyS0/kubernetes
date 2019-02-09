@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: beezuscomplex-data
+  namespace: web
 spec:
   accessModes:
   - ReadWriteOnce
@@ -13,21 +14,24 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: web-beezuscomplex
+  name: beezuscomplex
+  namespace: web
 spec:
   selector:
     matchLabels:
-      app: web-beezuscomplex
+      app: beezuscomplex
   replicas : 1
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: web-beezuscomplex
+        app: beezuscomplex
     spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64
       containers:
-      - image: ghost:2.9.1
+      - image: ghost:2.13.2
         name: ghost-beezuscomplex
         env:
         # kubectl create secret generic beezuscomplex-dbuser -n web --from-literal=dbuser=DBUSER
@@ -66,49 +70,32 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-beezuscomplex
+  name: beezuscomplex
+  namespace: web
   labels:
-    app: web-beezuscomplex
+    app: beezuscomplex
 spec:
   ports:
   - name: server
     port: 80
     targetPort: 2368
   selector:
-    app: web-beezuscomplex
+    app: beezuscomplex
 
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: web-beezuscomplex
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+  name: beezuscomplex
+  namespace: web
 spec:
   tls:
-    - secretName: beezuscomplex-com-tls
+    - secretName: beezuscomplex-tls
   rules:
-  - host: "beezuscomplex.com"
-    http:
-      paths:
-      - backend:
-          serviceName: web-beezuscomplex
-          servicePort: 80
-        path: /
-      - backend:
-          serviceName: static-web
-          servicePort: 80
-        path: /static
   - host: "home.beezuscomplex.com"
     http:
       paths:
       - backend:
-          serviceName: web-beezuscomplex
+          serviceName: beezuscomplex
           servicePort: 80
         path: /
-      - backend:
-          serviceName: static-web
-          servicePort: 80
-        path: /static
-

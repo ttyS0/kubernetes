@@ -7,14 +7,14 @@ metadata:
   name: rbd-persist
 parameters:
   adminId: admin
-  adminSecretName: ceph-admin
+  adminSecretName: ceph-admin-secret
   adminSecretNamespace: ceph
   imageFeatures: layering
   imageFormat: "2"
   monitors: gandalf.ttys0.net:6789,saruman.ttys0.net:6789,radagast.ttys0.net:6789
-  pool: rbd_k8s
-  userId: rbd_k8s
-  userSecretName: ceph-rbd
+  pool: k8s
+  userId: k8s
+  userSecretName: ceph-secret
   userSecretNamespace: ceph
 provisioner: ceph.com/rbd
 reclaimPolicy: Retain
@@ -25,17 +25,17 @@ kind: StorageClass
 metadata:
   annotations:
     storageclass.kubernetes.io/is-default-class: "false"
-  name: rbd-transient
+  name: rbd-temp
 parameters:
   adminId: admin
-  adminSecretName: ceph-admin
+  adminSecretName: ceph-admin-secret
   adminSecretNamespace: ceph
   imageFeatures: layering
   imageFormat: "2"
   monitors: gandalf.ttys0.net:6789,saruman.ttys0.net:6789,radagast.ttys0.net:6789
-  pool: rbd_k8s
-  userId: rbd_k8s
-  userSecretName: ceph-rbd
+  pool: k8s
+  userId: k8s
+  userSecretName: ceph-secret
   userSecretNamespace: ceph
 provisioner: ceph.com/rbd
 reclaimPolicy: Delete
