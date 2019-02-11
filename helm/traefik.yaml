@@ -47,6 +47,7 @@ kubernetes:
   # endpoint:
   namespaces:
   - web
+  - openfaas
   # labelSelector:
   # ingressClass:
   # ingressEndpoint:

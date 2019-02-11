@@ -23,6 +23,27 @@ spec:
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
+  name: ttys0-tls
+  namespace: openfaas
+spec:
+  secretName: ttys0-tls
+  issuerRef:
+    name: acme
+    kind: ClusterIssuer
+  commonName: '*.ttys0.net'
+  dnsNames:
+  - ttys0.net
+  acme:
+    config:
+    - dns01:
+        provider: r53-ttys0net
+      domains:
+      - '*.ttys0.net'
+      - ttys0.net
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
   name: beezuscomplex-tls
   namespace: web
 spec:
