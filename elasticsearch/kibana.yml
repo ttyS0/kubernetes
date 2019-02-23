@@ -1,7 +1,7 @@
 xpack.security.enabled: false
 server.host: 0.0.0.0
 
-elasticsearch.url: "http://es.elk.svc:9200"
+elasticsearch.url: "http://es653.elk.svc:9200"
 elasticsearch.username: "kibanauser"
 elasticsearch.password: "XXXXXXXXXX"
 

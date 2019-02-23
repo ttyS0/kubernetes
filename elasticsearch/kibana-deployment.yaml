@@ -13,11 +13,13 @@ spec:
       labels:
         app: kibana
     spec:
+      imagePullSecrets:
+      - name: docker-reg-secret
       nodeSelector:
         beta.kubernetes.io/arch: amd64
       containers:
       - name: kibana
-        image: kubedb/kibana:6.3.0
+        image: docker.ttys0.net/kibana:6.5.3
         volumeMounts:
         - name:  kibana-config
           mountPath: /usr/share/kibana/config

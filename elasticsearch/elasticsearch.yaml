@@ -1,10 +1,10 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  name: es
+  name: es653
   namespace: elk
 spec:
-  version: "6.3.0-v1"
+  version: "6.5.3"
   replicas: 3
   databaseSecret:
     secretName: es-auth
@@ -12,7 +12,6 @@ spec:
     configMap:
       name: es-custom-config
   storage:
-    storageClassName: "rbd-persist"
     accessModes:
     - ReadWriteOnce
     resources:
@@ -27,3 +26,7 @@ spec:
     spec:
       type: "LoadBalancer"
   terminationPolicy: "Pause"
+  # init:
+  #   snapshotSource:
+  #     name: es-snapshot
+  #     namespace: elk

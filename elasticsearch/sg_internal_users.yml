@@ -14,3 +14,6 @@ kibanauser:
   hash: $2y$12$QUCsGYgQ8XuaddXm93gIp.XUT0CsKdKmcTHBasLagg18ewDfdOMbS
   roles:
     - kibanauser
+
+readall:
+  hash: $2y$12$CshAdGhmaT2MJpXGo5Pcu.1QOSOPSnCMf26OXb2CgxCTYBoTC20OC
