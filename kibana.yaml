@@ -16,6 +16,8 @@ spec:
       labels:
         app: kibana
     spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
       containers:
       - name: kibana
         image: docker.elastic.co/kibana/kibana:6.5.3
@@ -45,20 +47,27 @@ spec:
   selector:
     app: kibana
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  namespace: web
+spec:
+  type: ExternalName
+  externalName: kibana.elk.svc
+  ports:
+  - port: 5601
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: kibana
   namespace: elk
   annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/whitelist-source-range: '129.59.122.160/32, 68.53.57.162/32'
-    nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/auth-secret: kibana-auth
-    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - kibana'
+    kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: kibana.cloudservices.aws.vumc.cloud
+  - host: kibana.ttys0.net
     http:
       paths:
       - path: /
@@ -66,5 +75,4 @@ spec:
           serviceName: kibana
           servicePort: 5601
   tls:
-    - hosts:
-        - kibana.cloudservices.aws.vumc.cloud
+    - secretName: ttys0-tls
