@@ -10,6 +10,18 @@ spec:
     requests:
       storage: 50Gi
 ---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: unifi-log
+  namespace: unifi
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,10 +39,16 @@ spec:
       labels:
         app: unifi-controller
     spec:
+      securityContext:
+        runAsUser: 999
+        fsGroup: 999
       nodeSelector:
         beta.kubernetes.io/arch: amd64
       containers:
-      - image: jacobalberty/unifi:5.10.12
+      - image: jacobalberty/unifi:5.10.19
+        env:
+          - name: "RUNAS_UID0"
+            value: "false"
         name: unifi-controller
         ports:
         - containerPort: 8080
@@ -45,11 +63,18 @@ spec:
           protocol: UDP
         volumeMounts:
         - name: unifi-data
-          mountPath: /usr/lib/unifi/data
+          mountPath: /unifi/data
+        - name: unifi-log
+          mountPath: /unifi/log
       volumes:
       - name: unifi-data
         persistentVolumeClaim:
           claimName: unifi-data
+      - name: unifi-log
+        persistentVolumeClaim:
+          claimName: unifi-log
+      imagePullSecrets:
+        - name: docker-reg-secret
 ---
 apiVersion: v1
 kind: Service
