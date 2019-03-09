@@ -162,7 +162,7 @@ dashboard:
         secretName: ttys0-tls
   auth:
     basic:
-      traefik-user: '$apr1$NWpBIK6s$rPJ7yhiq2G7/6XicLycTq/'
+      traefik-user: ''
   statistics: {}
     ## Number of recent errors to show in the ‘Health’ tab
     # recentErrors:
