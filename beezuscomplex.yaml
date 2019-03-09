@@ -31,7 +31,7 @@ spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
       containers:
-      - image: ghost:2.14.3
+      - image: ghost:2.15.0
         name: ghost-beezuscomplex
         env:
         # kubectl create secret generic beezuscomplex-dbuser -n web --from-literal=dbuser=DBUSER
