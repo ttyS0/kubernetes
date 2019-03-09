@@ -81,7 +81,34 @@ spec:
     targetPort: 2368
   selector:
     app: beezuscomplex
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: beezuscomplex
+  namespace: public
+spec:
+  type: ExternalName
+  externalName: beezuscomplex.web.svc
+  ports:
+  - port: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: beezuscomplex
+  namespace: public
+spec:
+  tls:
+    - secretName: beezuscomplex-tls
+  rules:
+  - host: beezuscomplex.com
+    http:
+      paths:
+      - backend:
+          serviceName: beezuscomplex
+          servicePort: 80
+        path: /
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -92,7 +119,7 @@ spec:
   tls:
     - secretName: beezuscomplex-tls
   rules:
-  - host: "home.beezuscomplex.com"
+  - host: beezuscomplex.com
     http:
       paths:
       - backend:
