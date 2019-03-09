@@ -23,8 +23,44 @@ data:
     filebeat.autodiscover:
       providers:
         - type: kubernetes
-          hints.enabled: true
+          templates:
+            - condition:
+                or:
+                  - equals:
+                      kubernetes.namespace: kube-system
+                  - equals:
+                      kubernetes.namespace: default
+              config:
+                - type: docker
+                  hints.enabled: true
+                  containers.ids:
+                    - "${data.kubernetes.container.id}"
+                  # First option to pass metadata
+                  fields:
+                    _service: "${data.kubernetes.labels.ut-service}"
+                    _token: "${data.kubernetes.labels.ut-token}"
+                    type: "${data.kubernetes.labels.ut-type}"
+                  fields_under_root: true
+                  exclude_lines: ["^\\s+[\\-`('.|_]"]  # drop asciiart lines
+                  multiline.pattern: '^[[:space:]]'
+                  multiline.negate: false
+                  multiline.match: after
+    processors:
+      - add_kubernetes_metadata:
+          in_cluster: true
+      # This ensures that every log that passes has required fields.
+      #- drop_event.when.not:
+      #    has_fields: ['kubernetes.labels.ut-service', 'kubernetes.labels.ut-token', 'kubernetes.labels.ut-type']
 
+      # Second option to pass metadata, this renames fields to outer most json level. Info is moved from kubernetes.labels
+      #- rename:
+      #    fields:
+      #      - from: "kubernetes.labels.ut-service"
+      #        to: "_service"
+      #      - from: "kubernetes.labels.ut-token"
+      #        to: "_token"
+      #      - from: "kubernetes.labels.ut-type"
+      #        to: "type"
     output.logstash:
       hosts: ['${LOGSTASH_HOST:logstash}:${LOGSTASH_PORT:5044}']
 ---
@@ -52,6 +88,8 @@ metadata:
   labels:
     k8s-app: filebeat
 spec:
+  updateStrategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
