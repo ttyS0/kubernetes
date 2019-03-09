@@ -62,7 +62,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: kibana
-  namespace: elk
+  namespace: web
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
