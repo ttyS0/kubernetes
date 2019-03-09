@@ -58,6 +58,8 @@ spec:
         k8s-app: filebeat
     spec:
       serviceAccountName: filebeat
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
       terminationGracePeriodSeconds: 30
       containers:
       - name: filebeat
