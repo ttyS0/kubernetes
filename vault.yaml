@@ -131,3 +131,32 @@ spec:
         backend:
           serviceName: vault
           servicePort: 8200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault
+  namespace: public
+spec:
+  type: ExternalName
+  externalName: vault.vault.svc
+  ports:
+  - port: 8200
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: vault
+  namespace: public
+spec:
+  tls:
+  - secretName: ttys0-tls
+  rules:
+  - host: vault.ttys0.net
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: vault
+          servicePort: 8200

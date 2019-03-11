@@ -28,5 +28,13 @@
   "process": "systemd",
   "paths": {
     "contentPath": "/var/lib/ghost/content"
+  },
+  "storage": {
+    "active": "s3",
+    "s3": {
+      "region": "us-east-1",
+      "bucket": "ghost-beezuscomplex",
+      "assetHost": "https://cdn.beezuscomplex.com"
+    }
   }
 }

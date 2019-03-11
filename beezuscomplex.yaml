@@ -34,6 +34,16 @@ spec:
       - image: ghost:2.16.4
         name: ghost-beezuscomplex
         env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: beezuscomplex-s3
+              key: accessID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: beezuscomplex-s3
+              key: secretKey
         # kubectl create secret generic beezuscomplex-dbuser -n web --from-literal=dbuser=DBUSER
         - name: database__connection__user
           valueFrom:
