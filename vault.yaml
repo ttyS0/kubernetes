@@ -42,7 +42,7 @@ spec:
           name: consul-agent
           protocol: TCP
       - name: vault
-        image: docker.ttys0.net/vault:1.0.3
+        image: docker.ttys0.net/vault:1.1.0-1
         imagePullPolicy: Always
         args:
         - server

@@ -33,7 +33,7 @@ spec:
       imagePullSecrets:
       - name: docker-reg-secret
       containers:
-      - image: ghost:2.16.4
+      - image: ghost:2.18.3
         name: ghost-108minutes
         env:
         - name: AWS_ACCESS_KEY_ID
@@ -132,7 +132,7 @@ spec:
   tls:
     - secretName: 108minutes-tls
   rules:
-  - host: 108minutes.com
+  - host: 108minutes.net
     http:
       paths:
       - backend:

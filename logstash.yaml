@@ -27,11 +27,11 @@ data:
       }
     }
     output {
-        elasticsearch {
-            hosts => [ "es:9200" ]
-            manage_template => false
-            index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
-        }
+      elasticsearch {
+          hosts => [ "es:9200" ]
+          manage_template => false
+          index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+      }
     }
 ---
 apiVersion: apps/v1beta1

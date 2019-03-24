@@ -24,12 +24,6 @@ data:
       providers:
         - type: kubernetes
           templates:
-            - condition:
-                or:
-                  - equals:
-                      kubernetes.namespace: kube-system
-                  - equals:
-                      kubernetes.namespace: default
               config:
                 - type: docker
                   hints.enabled: true

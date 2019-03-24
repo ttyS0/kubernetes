@@ -31,7 +31,7 @@ spec:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
       containers:
-      - image: ghost:2.16.4
+      - image: ghost:2.18.3
         name: ghost-beezuscomplex
         env:
         - name: AWS_ACCESS_KEY_ID
