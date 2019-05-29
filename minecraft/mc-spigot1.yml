@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: spigot-1
-        image: "docker.ttys0.net/spigot-server:1.13.1"
+        image: "docker.ttys0.net/spigot:1.13.2"
         ports:
         - containerPort: 25565
         volumeMounts:

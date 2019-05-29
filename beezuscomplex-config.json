@@ -33,7 +33,7 @@
     "active": "s3",
     "s3": {
       "region": "us-east-1",
-      "bucket": "ghost-beezuscomplex",
+      "bucket": "ghost-beezuscomplex-com",
       "assetHost": "https://cdn.beezuscomplex.com"
     }
   }

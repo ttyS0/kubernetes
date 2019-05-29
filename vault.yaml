@@ -26,23 +26,21 @@ spec:
                 values: ['vault']
             topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64
       containers:
       - name: consul-agent
-        image: "consul:latest"
+        image: "consul:1.5.1"
         args:
         - "agent"
-        - "-retry-join=consul-server-0.consul-server.consul.svc.cluster.local"
-        - "-retry-join=consul-server-1.consul-server.consul.svc.cluster.local"
-        - "-retry-join=consul-server-2.consul-server.consul.svc.cluster.local"
+        - "-retry-join=consul-consul-server-0.consul-consul-server.consul.svc.cluster.local"
+        - "-retry-join=consul-consul-server-1.consul-consul-server.consul.svc.cluster.local"
+        - "-retry-join=consul-consul-server-2.consul-consul-server.consul.svc.cluster.local"
         - "-datacenter=home"
         ports:
         - containerPort: 8500
           name: consul-agent
           protocol: TCP
       - name: vault
-        image: docker.ttys0.net/vault:1.1.0-1
+        image: docker.ttys0.net/vault:1.1.2-1
         imagePullPolicy: Always
         args:
         - server
@@ -113,7 +111,7 @@ spec:
   - port: 8200
 
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: vault

@@ -28,12 +28,10 @@ spec:
       labels:
         app: 108minutes
     spec:
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64
       imagePullSecrets:
       - name: docker-reg-secret
       containers:
-      - image: ghost:2.19.2
+      - image: ghost:2.21.0
         name: ghost-108minutes
         env:
         - name: AWS_ACCESS_KEY_ID
@@ -95,7 +93,7 @@ spec:
     app: 108minutes
 
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: www108minutes
@@ -123,7 +121,7 @@ spec:
   ports:
   - port: 80
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: www108minutes

@@ -28,10 +28,8 @@ spec:
       labels:
         app: beezuscomplex
     spec:
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64
       containers:
-      - image: ghost:2.19.2
+      - image: ghost:2.22.3
         name: ghost-beezuscomplex
         env:
         - name: AWS_ACCESS_KEY_ID
@@ -103,7 +101,7 @@ spec:
   ports:
   - port: 80
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: beezuscomplex
@@ -120,7 +118,7 @@ spec:
           servicePort: 80
         path: /
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: beezuscomplex

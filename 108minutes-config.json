@@ -33,7 +33,7 @@
     "active": "s3",
     "s3": {
       "region": "us-east-1",
-      "bucket": "ghost-108minutes",
+      "bucket": "ghost-108minutes-net",
       "assetHost": "https://cdn.108minutes.net"
     }
   }
