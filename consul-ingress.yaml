@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: consul-ui
+  namespace: consul
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  tls:
+    - secretName: ttys0-tls
+  rules:
+    - host: consul.ttys0.net
+      http:
+        paths:
+          - backend:
+              serviceName: consul-consul-ui
+              servicePort: 80
+

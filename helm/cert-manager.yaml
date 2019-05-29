@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: quay.io/jetstack/cert-manager-controller
-  tag: v0.6.0
+  tag: v0.6.2
   pullPolicy: IfNotPresent
 
 rbac:
@@ -32,8 +32,6 @@ extraEnv:
 # - name: SOME_VAR
 #   value: 'some value'
 
-nodeSelector:
-  beta.kubernetes.io/arch: amd64
 
 ingressShim: {}
   # defaultIssuerName: ""

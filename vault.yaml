@@ -29,11 +29,19 @@ spec:
       containers:
       - name: consul-agent
         image: "consul:1.5.1"
+        env:
+          - name: GOSSIP_ENCRYPTION_KEY
+            valueFrom:
+              secretKeyRef:
+                key: gossipKey
+                name: consul-gossip-key
         args:
         - "agent"
         - "-retry-join=consul-consul-server-0.consul-consul-server.consul.svc.cluster.local"
         - "-retry-join=consul-consul-server-1.consul-consul-server.consul.svc.cluster.local"
         - "-retry-join=consul-consul-server-2.consul-consul-server.consul.svc.cluster.local"
+        - "-encrypt=$(GOSSIP_ENCRYPTION_KEY)"
+        - "-disable-host-node-id"
         - "-datacenter=home"
         ports:
         - containerPort: 8500

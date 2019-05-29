@@ -48,6 +48,7 @@ kubernetes:
   namespaces:
   - web
   - openfaas
+  - consul
   # labelSelector:
   # ingressClass:
   # ingressEndpoint:
