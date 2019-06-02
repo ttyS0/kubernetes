@@ -1,0 +1,36 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: vault-unseal
+  namespace: vault
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - env:
+                - name: KEY1
+                  valueFrom:
+                    secretKeyRef:
+                      key: key1
+                      name: unseal-keys
+                - name: KEY2
+                  valueFrom:
+                    secretKeyRef:
+                      key: key2
+                      name: unseal-keys
+                - name: KEY3
+                  valueFrom:
+                    secretKeyRef:
+                      key: key3
+                      name: unseal-keys
+              name: vault-unseal
+              image: docker.ttys0.net/k8sutil:6
+              imagePullPolicy: Always
+              args:
+                - vault-unseal.sh
+          imagePullSecrets:
+            - name: docker-reg-secret
+          restartPolicy: Never
