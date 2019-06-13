@@ -27,7 +27,7 @@ spec:
                       key: key3
                       name: unseal-keys
               name: vault-unseal
-              image: docker.ttys0.net/k8sutil:7
+              image: docker.ttys0.net/k8sutil:8
               imagePullPolicy: Always
               args:
                 - vault-unseal.sh

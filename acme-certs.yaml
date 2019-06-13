@@ -96,16 +96,13 @@ spec:
   commonName: 'beezuscomplex.com'
   dnsNames:
   - beezuscomplex.com
-  - www.beezuscomplex.com
-  - home.beezuscomplex.com
   acme:
     config:
     - dns01:
         provider: r53-beezuscomplex
       domains:
       - beezuscomplex.com
-      - www.beezuscomplex.com
-      - home.beezuscomplex.com
+      - '*.beezuscomplex.com'
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
@@ -126,6 +123,7 @@ spec:
         provider: r53-beezuscomplex
       domains:
       - beezuscomplex.com
+      - '*.beezuscomplex.com'
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
@@ -140,16 +138,13 @@ spec:
   commonName: '108minutes.net'
   dnsNames:
   - 108minutes.net
-  - www.108minutes.net
-  - home.108minutes.net
   acme:
     config:
     - dns01:
         provider: r53-108minutes
       domains:
       - 108minutes.net
-      - www.108minutes.net
-      - home.108minutes.net
+      - '*.108minutes.net'
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
@@ -170,3 +165,4 @@ spec:
         provider: r53-108minutes
       domains:
       - 108minutes.net
+      - '*.108minutes.net'

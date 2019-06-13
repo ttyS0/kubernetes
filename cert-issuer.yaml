@@ -14,11 +14,23 @@ spec:
         route53:
           region: us-east-1
           hostedZoneID: Z2LEPLZZSMS5AN
+          accessKeyID: XXXXX
+          secretAccessKeySecretRef:
+            name: sean-aws-route53
+            key: aws_secret_access_key
       - name: r53-108minutes
         route53:
           region: us-east-1
           hostedZoneID: ZJPHD6K04R99J
+          accessKeyID: XXXXX
+          secretAccessKeySecretRef:
+            name: sean-aws-route53
+            key: aws_secret_access_key
       - name: r53-beezuscomplex
         route53:
           region: us-east-1
           hostedZoneID: ZKK3ZQLK83BR8
+          accessKeyID: XXXXX
+          secretAccessKeySecretRef:
+            name: sean-aws-route53
+            key: aws_secret_access_key
