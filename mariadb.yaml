@@ -43,7 +43,7 @@ spec:
       nodeSelector:
         beta.kubernetes.io/arch: amd64
       containers:
-      - image: mariadb:10.4.2
+      - image: mariadb:10.4.5
         name: mariadb
         env:
         # kubectl create secret generic mysql-root-passwd --from-literal=passwd=ROOT_PASSWORD
