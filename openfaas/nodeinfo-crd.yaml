@@ -1,0 +1,11 @@
+---
+apiVersion: openfaas.com/v1alpha2
+kind: Function
+metadata:
+  name: nodeinfo
+  namespace: openfaas-fn
+spec:
+  name: nodeinfo
+  image: functions/nodeinfo:latest
+  labels: {}
+

@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: vault
+  name: vault
+  namespace: vault
+spec:
+  selector:
+    matchLabels:
+      app: vault
+  serviceName: "vault"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values: ['vault']
+            topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: consul-agent
+        image: "consul:1.5.1"
+        env:
+          - name: GOSSIP_ENCRYPTION_KEY
+            valueFrom:
+              secretKeyRef:
+                key: gossipKey
+                name: consul-gossip-key
+        args:
+        - "agent"
+        - "-retry-join=consul-consul-server-0.consul-consul-server.consul.svc.cluster.local"
+        - "-retry-join=consul-consul-server-1.consul-consul-server.consul.svc.cluster.local"
+        - "-retry-join=consul-consul-server-2.consul-consul-server.consul.svc.cluster.local"
+        - "-encrypt=$(GOSSIP_ENCRYPTION_KEY)"
+        - "-disable-host-node-id"
+        - "-datacenter=home"
+        ports:
+        - containerPort: 8500
+          name: consul-agent
+          protocol: TCP
+      - name: vault
+        image: harbor.ttys0.net/library/vault:1.1.3-1
+        imagePullPolicy: Always
+        args:
+        - server
+        ports:
+        - containerPort: 8200
+          name: vault-port
+          protocol: TCP
+        - containerPort: 8201
+          name: cluster-port
+          protocol: TCP
+        securityContext:
+          capabilities:
+            add:
+            - IPC_LOCK
+        env:
+        - name: VAULT_LOCAL_CONFIG
+          value: |
+            api_addr = "https://vault.ttys0.net"
+            cluster_addr = "http://vault:8201"
+            ui = true
+            cluster_name = "home"
+            storage "consul" {
+              address = "127.0.0.1:8500"
+            }
+            listener "tcp" {
+              address       = "0.0.0.0:8200"
+              tls_disable = 1
+            }
+        livenessProbe:
+          httpGet:
+            path: /v1/sys/health?&sealedcode=200&uninitcode=200&standbycode=200
+            port: 8200
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /v1/sys/health
+            port: 8200
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vault
+  name: vault
+  namespace: vault
+spec:
+  selector:
+    app: vault
+  ports:
+  - name: vault-api
+    port: 8200
+
+

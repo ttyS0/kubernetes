@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-unseal
+  namespace: vault
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: KEY1
+              valueFrom:
+                secretKeyRef:
+                  key: key1
+                  name: unseal-keys
+            - name: KEY2
+              valueFrom:
+                secretKeyRef:
+                  key: key2
+                  name: unseal-keys
+            - name: KEY3
+              valueFrom:
+                secretKeyRef:
+                  key: key3
+                  name: unseal-keys
+          name: vault-unseal
+          image: harbor.ttys0.net/library/k8sutil:1
+          imagePullPolicy: Always
+          args:
+            - vault-unseal.sh
+      restartPolicy: Never

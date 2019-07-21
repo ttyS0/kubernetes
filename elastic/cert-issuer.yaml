@@ -1,0 +1,16 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: vault
+  namespace: elastic
+spec:
+  vault:
+    path: elasticCA/sign/elastic
+    server: "http://vault.vault.svc:8200"
+    auth:
+      appRole:
+        path: approle
+        roleId: "df45fb85-ca3e-1b36-96db-7f594e26cccc"
+        secretRef:
+          name: vault-certs-secretid
+          key: secretid

@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-beats
+  namespace: elastic
+data:
+  logstash.yml: |
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline
+    xpack.monitoring.elasticsearch.hosts: ["http://es-master:9200"]
+    xpack.monitoring.elasticsearch.username: "${ELASTICSEARCH_USERNAME}"
+    xpack.monitoring.elasticsearch.password: "${ELASTICSEARCH_PASSWORD}"
+  logstash.conf: |
+    # all input will come from filebeat, no local logs
+    input {
+      beats {
+        port => 5044
+      }
+    }
+    filter {
+      if [message] =~ /^\{.*\}$/ {
+        if [kubernetes][container][name] == "vault-logs" {
+          json {
+            source => "message"
+            target => "vault"
+            remove_field => ["message"]
+          }
+        } else if [kubernetes][container][name] == "kibana" {
+          json {
+            source => "message"
+            target => "kibana"
+            remove_field => ["message"]
+          }
+        } else if [kubernetes][container][name] == "elasticsearch" {
+          json {
+            source => "message"
+            target => "elasticsearch"
+            remove_field => ["message"]
+          }
+        } else {
+          json {
+            source => "message"
+            target => "json"
+            remove_field => ["message"]
+          }
+        }
+      }
+    }
+    output {
+        elasticsearch {
+            hosts => "es-master:9200"
+            index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+            user => "${ELASTICSEARCH_USERNAME}"
+            password => "${ELASTICSEARCH_PASSWORD}"
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash-beats
+  namespace: elastic
+spec:
+  selector:
+    matchLabels:
+      app: logstash
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: logstash
+    spec:
+      containers:
+        - name: logstash
+          image: docker.elastic.co/logstash/logstash:7.2.0
+          ports:
+            - containerPort: 5044
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/logstash/config
+            - name: logstash-pipeline
+              mountPath: /usr/share/logstash/pipeline
+          env:
+            - name: ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: elastic-credentials
+            - name: ELASTICSEARCH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: elastic-credentials
+      volumes:
+        - name: config
+          configMap:
+            name: logstash-filebeat-cm
+            items:
+              - key: logstash.yml
+                path: logstash.yml
+        - name: logstash-pipeline
+          configMap:
+            name: logstash-filebeat-cm
+            items:
+              - key: logstash.conf
+                path: logstash.conf
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: logstash-beats
+  namespace: elastic
+spec:
+  selector:
+    app: logstash
+  ports:
+    - protocol: TCP
+      port: 5044
+      targetPort: 5044
+  type: ClusterIP
