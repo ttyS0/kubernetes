@@ -50,3 +50,10 @@ spec:
               serviceName: beezuscomplex
               servicePort: 80
             path: /
+    - host: www.beezuscomplex.com
+      http:
+        paths:
+          - backend:
+              serviceName: beezuscomplex
+              servicePort: 80
+            path: /
