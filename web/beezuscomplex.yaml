@@ -29,7 +29,7 @@ spec:
         app: beezuscomplex
     spec:
       containers:
-      - image: ghost:2.25.6
+      - image: ghost:2.25.8
         name: ghost-beezuscomplex
         env:
         - name: AWS_ACCESS_KEY_ID

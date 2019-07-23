@@ -79,7 +79,7 @@ spec:
       imagePullSecrets:
       - name: docker-reg-secret
       containers:
-      - image: ghost:2.25.6
+      - image: ghost:2.25.8
         name: ghost-108minutes
         env:
         - name: AWS_ACCESS_KEY_ID
