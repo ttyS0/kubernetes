@@ -7,7 +7,12 @@ spec:
   secretName: elasticsearch-tls
   duration: 2160h
   renewBefore: 1920h
-  commonName: instance
+  commonName: es-master
+  dnsNames:
+    - instance
+    - es-master-0
+    - es-master-1
+    - es-master-2
   issuerRef:
     name: vault
     kind: Issuer

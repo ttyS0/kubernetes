@@ -10,19 +10,20 @@ filebeatConfig:
       close_inactive: 12h
 
     processors:
-      - add_cloud_metadata: ~
       - add_kubernetes_metadata: ~
       - add_docker_metadata: ~
 
     output.logstash:
-      hosts: ["logstash-filebeat:5044"]
+      hosts: ["logstash-beats:5044"]
 
     xpack.monitoring:
       enabled: true
       elasticsearch:
-        hosts: ["http://es-master:9200"]
+        hosts: ["https://es-master:9200"]
         username: '${ELASTICSEARCH_USERNAME}'
         password: '${ELASTICSEARCH_PASSWORD}'
+        ssl.certificate_authorities: ["/etc/filebeat/config/certs/ca.crt"]
+
 
 # Extra environment variables to append to the DaemonSet pod spec.
 # This will be appended to the current 'env:' key. You can use any of the kubernetes env
@@ -98,10 +99,10 @@ serviceAccount: ""
 
 # A list of secrets and their paths to mount inside the pod
 # This is useful for mounting certificates for security other sensitive values
-secretMounts: []
-#  - name: filebeat-certificates
-#    secretName: filebeat-certificates
-#    path: /usr/share/filebeat/certs
+secretMounts:
+  - name: elasticsearch-tls
+    secretName: elasticsearch-tls
+    path: /etc/filebeat/config/certs
 
 # How long to wait for Filebeat pods to stop gracefully
 terminationGracePeriod: 30

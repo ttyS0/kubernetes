@@ -89,7 +89,18 @@ spec:
             port: 8200
           initialDelaySeconds: 10
           periodSeconds: 5
-
+        volumeMounts:
+          - mountPath: /vault/logs
+            name: logs
+      - name: vault-logs
+        image: busybox
+        args: [/bin/sh, -c, 'tail -n+1 -F /vault/logs/audit.log']
+        volumeMounts:
+          - mountPath: /vault/logs
+            name: logs
+      volumes:
+        - name: logs
+          emptyDir: {}
 
 ---
 apiVersion: v1
