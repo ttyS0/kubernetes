@@ -80,38 +80,38 @@ spec:
       - name: docker-reg-secret
       containers:
         - image: ghost:2.29.1
-        name: ghost-108minutes
-        env:
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: 108minutes-s3
-              key: accessID
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: 108minutes-s3
-              key: secretKey
-        # kubectl create secret generic 108minutes-dbuser -n web --from-literal=dbuser=DBUSER
-        - name: database__connection__user
-          valueFrom:
-            secretKeyRef:
-              name: 108minutes-dbuser
-              key: dbuser
-          # kubectl create secret generic 108minutes-dbpass -n web --from-literal=dbpass=DBPASS
-        - name: database__connection__password
-          valueFrom:
-            secretKeyRef:
-              name: 108minutes-dbpass
-              key: dbpass
-        ports:
-        - containerPort: 2368
-        volumeMounts:
-        - name: 108minutes-data
-          mountPath: /var/lib/ghost/content
-        - name: 108minutes-conf
-          mountPath: /var/lib/ghost/config.production.json
-          subPath: config.production.json
+          name: ghost-108minutes
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: 108minutes-s3
+                  key: accessID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: 108minutes-s3
+                  key: secretKey
+            # kubectl create secret generic 108minutes-dbuser -n web --from-literal=dbuser=DBUSER
+            - name: database__connection__user
+              valueFrom:
+                secretKeyRef:
+                  name: 108minutes-dbuser
+                  key: dbuser
+              # kubectl create secret generic 108minutes-dbpass -n web --from-literal=dbpass=DBPASS
+            - name: database__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: 108minutes-dbpass
+                  key: dbpass
+          ports:
+            - containerPort: 2368
+          volumeMounts:
+            - name: 108minutes-data
+              mountPath: /var/lib/ghost/content
+            - name: 108minutes-conf
+              mountPath: /var/lib/ghost/config.production.json
+              subPath: config.production.json
       volumes:
       - name: 108minutes-data
         persistentVolumeClaim:
