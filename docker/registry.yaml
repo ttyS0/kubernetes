@@ -1,0 +1,112 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: images
+  namespace: docker
+spec:
+  storageClassName: rbd-persist
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry
+  namespace: docker
+data:
+  config.yml: |
+    version: 0.1
+    log:
+      fields:
+        service: registry
+      level: info
+      formatter: text
+    storage:
+      cache:
+        blobdescriptor: inmemory
+      filesystem:
+        rootdirectory: /var/lib/registry
+      maintenance:
+        uploadpurging:
+          enabled: true
+          age: 168h
+          interval: 24h
+          dryrun: false
+        readonly:
+          enabled: false
+      delete:
+        enabled: true
+    http:
+      addr: :5000
+      host: https://docker.ttys0.net
+      headers:
+        X-Content-Type-Options: [nosniff]
+      http2:
+        disabled: false
+    health:
+      storagedriver:
+        enabled: true
+        interval: 10s
+        threshold: 3
+    auth:
+      htpasswd:
+        realm: registry
+        path: /etc/docker/secret/registry.htpasswd
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+  namespace: docker
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: registry
+  template:
+    metadata:
+      labels:
+        app: registry
+    spec:
+      containers:
+        - name: registry
+          image: registry:2.7.1
+          env:
+            - name: "REGISTRY_HTTP_ADDR"
+              value: ":5000"
+            - name: "REGISTRY_STORAGE_DELETE_ENABLED"
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 5000
+          volumeMounts:
+            - name: images
+              mountPath: "/var/lib/registry"
+            - name: registry
+              mountPath: "/etc/docker/registry"
+      volumes:
+        - name: registry
+          configMap:
+            name: registry
+        - name: images
+          persistentVolumeClaim:
+            claimName: images
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  namespace: web
+spec:
+  ports:
+    - name: http
+      port: 5000
+  selector:
+    app: registry
