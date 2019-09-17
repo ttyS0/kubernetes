@@ -34,7 +34,7 @@ secretMounts:
     path: /usr/share/kibana/config/certs
 
 image: "docker.elastic.co/kibana/kibana"
-imageTag: "7.2.0"
+imageTag: "7.3.0"
 imagePullPolicy: "IfNotPresent"
 
 podAnnotations: {}
@@ -107,7 +107,9 @@ service:
   type: ClusterIP
   port: 5601
   nodePort:
-  annotations: {}
+  annotations: {
+    contour.heptio.com/upstream-protocol.tls: "5601,http"
+  }
     # cloud.google.com/load-balancer-type: "Internal"
     # service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
     # service.beta.kubernetes.io/azure-load-balancer-internal: "true"

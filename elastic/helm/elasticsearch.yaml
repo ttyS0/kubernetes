@@ -16,7 +16,7 @@ roles:
 replicas: 3
 minimumMasterNodes: 2
 
-esMajorVersion: 7
+esMajorVersion: ""
 
 # Allows you to add any config files in /usr/share/elasticsearch/config/
 # such as elasticsearch.yml and log4j2.properties
@@ -54,7 +54,7 @@ secretMounts:
     path: /usr/share/elasticsearch/config/certs
 
 image: "docker.elastic.co/elasticsearch/elasticsearch"
-imageTag: "7.2.0"
+imageTag: "7.3.0"
 imagePullPolicy: "IfNotPresent"
 
 podAnnotations: {}
@@ -217,3 +217,5 @@ lifecycle: {}
 
 sysctlInitContainer:
   enabled: true
+
+keystore: []
