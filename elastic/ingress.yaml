@@ -1,0 +1,34 @@
+apiVersion: contour.heptio.com/v1beta1
+kind: IngressRoute
+metadata:
+  name: elasticsearch
+  namespace: elastic
+spec:
+  virtualhost:
+    fqdn: elasticsearch.ttys0.net
+    tls:
+      secretName: web/ttys0-tls
+  routes:
+    - match: /
+      permitInsecure: true
+      services:
+        - name: es-master
+          port: 9200
+---
+apiVersion: contour.heptio.com/v1beta1
+kind: IngressRoute
+metadata:
+  name: kibana
+  namespace: elastic
+spec:
+  virtualhost:
+    fqdn: kibana.ttys0.net
+    tls:
+      secretName: web/ttys0-tls
+  routes:
+    - match: /
+      permitInsecure: true
+      services:
+        - name: kb-kibana
+          port: 5601
+
