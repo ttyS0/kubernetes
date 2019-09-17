@@ -139,7 +139,9 @@ transportPort: 9300
 service:
   type: ClusterIP
   nodePort:
-  annotations: {}
+  annotations: {
+    contour.heptio.com/upstream-protocol.tls: "9200"
+  }
 
 updateStrategy: RollingUpdate
 
