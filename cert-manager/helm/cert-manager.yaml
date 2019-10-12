@@ -18,7 +18,7 @@ global:
 
   leaderElection:
     # Override the namespace used to store the ConfigMap for leader election
-    namespace: ""
+    namespace: "kube-system"
 
 replicaCount: 1
 
@@ -61,10 +61,10 @@ extraEnv: []
 # - name: SOME_VAR
 #   value: 'some value'
 
-resources: {}
-  # requests:
-  #   cpu: 10m
-#   memory: 32Mi
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
 
 # Pod Security Context
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -107,6 +107,42 @@ prometheus:
 
 webhook:
   enabled: true
+  replicacount: 1
+
+  strategy: {}
+    # type: RollingUpdate
+    # rollingUpdate:
+    #   maxSurge: 0
+    #   maxUnavailable: 1
+  podAnnotations: {}
+
+  # Optional additional arguments for webhook
+  extraArgs: []
+
+  resources: {}
+    # requests:
+    #   cpu: 10m
+  #   memory: 32Mi
+
+  nodeSelector: {}
+
+  affinity: {}
+
+  tolerations: []
+
+  image:
+    repository: quay.io/jetstack/cert-manager-webhook
+    # Override the image tag to deploy by setting this variable.
+    # If no value is set, the chart's appVersion will be used.
+    # tag: canary
+    pullPolicy: IfNotPresent
+
+  # If true, the apiserver's cabundle will be automatically injected into the
+  # webhook's ValidatingWebhookConfiguration resource by the CA injector.
+  # in future this will default to false, as the apiserver can use the loopback
+  # configuration caBundle to talk to itself in kubernetes 1.11+
+  # see https://github.com/kubernetes/kubernetes/pull/62649
+  injectAPIServerCA: true
 
 cainjector:
   enabled: true

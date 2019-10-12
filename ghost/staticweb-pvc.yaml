@@ -1,0 +1,34 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: static-web-data
+spec:
+  storageClassName: cephfs-static-web
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  cephfs:
+    monitors:
+      - 10.0.1.50:6789
+      - 10.0.1.51:6789
+      - 10.0.1.52:6789
+    user: static-web
+    # kubectl create secret generic ceph-static-web -n web --from-literal=key='XXXXX'
+    secretRef:
+      name: ceph-static-web
+    path: "/static-web"
+    readOnly: false
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: static-web-data
+  namespace: ghost
+spec:
+  storageClassName: cephfs-static-web
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi

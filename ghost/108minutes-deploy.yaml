@@ -1,20 +1,7 @@
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: 108minutes
-  namespace: web
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Gi
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: web
+  namespace: ghost
   name: 108minutes-conf
 data:
   production.json: |
@@ -63,7 +50,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: 108minutes
-  namespace: web
+  namespace: ghost
 spec:
   selector:
     matchLabels:
@@ -76,10 +63,8 @@ spec:
       labels:
         app: 108minutes
     spec:
-      imagePullSecrets:
-      - name: docker-reg-secret
       containers:
-        - image: ghost:2.29.1
+        - image: ghost:2.36.0
           name: ghost-108minutes
           env:
             - name: AWS_ACCESS_KEY_ID
@@ -128,7 +113,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: www108minutes
-  namespace: web
+  namespace: ghost
   labels:
     app: 108minutes
 spec:
@@ -139,60 +124,4 @@ spec:
   selector:
     app: 108minutes
 
----
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: www108minutes
-  namespace: web
-  annotations:
-    traefik.ingress.kubernetes.io/redirect-permanent: "true"
-    traefik.ingress.kubernetes.io/redirect-regex: ^https://www.108minutes.net/(.*)
-    traefik.ingress.kubernetes.io/redirect-replacement: https://108minutes.net/$1
-spec:
-  tls:
-    - secretName: 108minutes-tls
-  rules:
-  - host: 108minutes.net
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: www108minutes
-          servicePort: 80
-      - path: /.well-known
-        backend:
-          serviceName: static-web
-          servicePort: 80
-  - host: www.108minutes.net
-    http:
-      paths:
-        - path: /
-          backend:
-            serviceName: www108minutes
-            servicePort: 80
-        - path: /.well-known
-          backend:
-            serviceName: static-web
-            servicePort: 80
----
-apiVersion: certmanager.k8s.io/v1alpha1
-kind: Certificate
-metadata:
-  name: 108minutes-tls
-  namespace: web
-spec:
-  secretName: 108minutes-tls
-  issuerRef:
-    name: letsencrypt
-    kind: ClusterIssuer
-  commonName: '*.108minutes.net'
-  dnsNames:
-    - 108minutes.net
-  acme:
-    config:
-      - dns01:
-          provider: r53-108minutes
-        domains:
-          - '*.108minutes.net'
-          - 108minutes.net
+

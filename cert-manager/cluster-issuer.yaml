@@ -1,4 +1,4 @@
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
   name: letsencrypt
@@ -8,29 +8,37 @@ spec:
     email: sean@ttys0.net
     privateKeySecretRef:
       name: letsencrypt
-    dns01:
-      providers:
-      - name: r53-ttys0
+    solvers:
+    - selector:
+        dnsZones:
+          - "ttys0.net"
+      dns01:
         route53:
           region: us-east-1
           hostedZoneID: Z2LEPLZZSMS5AN
-          accessKeyID: AKIA
+          accessKeyID: AKIA536JVCLPET5TWSHK
           secretAccessKeySecretRef:
             name: cert-manager-aws
             key: secretKey
-      - name: r53-108minutes
+    - selector:
+        dnsZones:
+          - "108minutes.net"
+      dns01:
         route53:
           region: us-east-1
           hostedZoneID: ZJPHD6K04R99J
-          accessKeyID: AKIA
+          accessKeyID: AKIA536JVCLPET5TWSHK
           secretAccessKeySecretRef:
             name: cert-manager-aws
             key: secretKey
-      - name: r53-beezuscomplex
+    - selector:
+        dnsZones:
+          - "beezuscomplex.com"
+      dns01:
         route53:
           region: us-east-1
           hostedZoneID: ZKK3ZQLK83BR8
-          accessKeyID: AKIA
+          accessKeyID: AKIA536JVCLPET5TWSHK
           secretAccessKeySecretRef:
             name: cert-manager-aws
             key: secretKey

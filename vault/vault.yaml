@@ -50,7 +50,7 @@ spec:
           name: consul-agent
           protocol: TCP
       - name: vault
-        image: harbor.ttys0.net/library/vault:1.2.2-0
+        image: vault:1.2.3
         imagePullPolicy: Always
         args:
         - server

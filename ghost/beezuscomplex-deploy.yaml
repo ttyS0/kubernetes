@@ -1,21 +1,8 @@
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: beezuscomplex-data
-  namespace: web
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
 kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: beezuscomplex
-  namespace: web
+  namespace: ghost
 spec:
   selector:
     matchLabels:
@@ -29,7 +16,7 @@ spec:
         app: beezuscomplex
     spec:
       containers:
-      - image: ghost:2.25.8
+      - image: ghost:2.36.0
         name: ghost-beezuscomplex
         env:
         - name: AWS_ACCESS_KEY_ID
@@ -78,7 +65,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: beezuscomplex
-  namespace: web
+  namespace: ghost
   labels:
     app: beezuscomplex
 spec:
@@ -89,59 +76,10 @@ spec:
   selector:
     app: beezuscomplex
 ---
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: beezuscomplex
-  namespace: web
-  annotations:
-    traefik.ingress.kubernetes.io/redirect-permanent: "true"
-    traefik.ingress.kubernetes.io/redirect-regex: ^https://www.beezuscomplex.com/(.*)
-    traefik.ingress.kubernetes.io/redirect-replacement: https://beezuscomplex.com/$1
-spec:
-  tls:
-    - secretName: beezuscomplex-tls
-  rules:
-  - host: beezuscomplex.com
-    http:
-      paths:
-      - backend:
-          serviceName: beezuscomplex
-          servicePort: 80
-        path: /
-  - host: www.beezuscomplex.com
-    http:
-      paths:
-        - backend:
-            serviceName: beezuscomplex
-            servicePort: 80
-          path: /
----
-apiVersion: certmanager.k8s.io/v1alpha1
-kind: Certificate
-metadata:
-  name: beezuscomplex-tls
-  namespace: web
-spec:
-  secretName: beezuscomplex-tls
-  issuerRef:
-    name: letsencrypt
-    kind: ClusterIssuer
-  commonName: '*.beezuscomplex.com'
-  dnsNames:
-    - beezuscomplex.com
-  acme:
-    config:
-      - dns01:
-          provider: r53-beezuscomplex
-        domains:
-          - '*.beezuscomplex.com'
-          - beezuscomplex.com
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: web
+  namespace: ghost
   name: beezuscomplex-conf
 data:
   production.json: |
@@ -185,3 +123,4 @@ data:
         }
       }
     }
+
