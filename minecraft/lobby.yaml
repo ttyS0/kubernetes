@@ -197,6 +197,8 @@ metadata:
   namespace: minecraft
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: minecraft
@@ -207,9 +209,11 @@ spec:
         app: minecraft
         world: lobby
     spec:
+      imagePullSecrets:
+        - name: github
       containers:
         - name: lobby
-          image: "harbor.ttys0.net/library/spigot:1.14.4"
+          image: docker.pkg.github.com/ttys0/docker-minecraft/spigot:1.14.4
           ports:
             - containerPort: 25565
           volumeMounts:

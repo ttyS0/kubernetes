@@ -64,6 +64,8 @@ metadata:
   namespace: minecraft
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: bungeecord
@@ -72,10 +74,12 @@ spec:
       labels:
         app: bungeecord
     spec:
+      imagePullSecrets:
+        - name: github
       containers:
-        - imagePullPolicy: Always
+        - imagePullPolicy: IfNotPresent
           name: bungeecord
-          image: harbor.ttys0.net/library/bungeecord
+          image: docker.pkg.github.com/ttys0/docker-minecraft/bungeecord:1420
           ports:
             - containerPort: 25577
           volumeMounts:
