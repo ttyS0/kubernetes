@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: minecraft-tls
+  namespace: minecraft
+spec:
+  secretName: minecraft-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'minecraft.ttys0.net'
+  dnsNames:
+    - minecraft.ttys0.net
