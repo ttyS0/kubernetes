@@ -212,8 +212,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
-          image: metallb/speaker:master
-          imagePullPolicy: Always
+          image: metallb/speaker:v0.8.3
+          imagePullPolicy: IfNotPresent
           name: speaker
           ports:
             - containerPort: 7472
@@ -268,8 +268,8 @@ spec:
         - args:
             - --port=7472
             - --config=config
-          image: metallb/controller:master
-          imagePullPolicy: Always
+          image: metallb/controller:v0.8.3
+          imagePullPolicy: IfNotPresent
           name: controller
           ports:
             - containerPort: 7472
@@ -291,4 +291,3 @@ spec:
         runAsUser: 65534
       serviceAccountName: controller
       terminationGracePeriodSeconds: 0
-
