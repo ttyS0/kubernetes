@@ -27,3 +27,18 @@ spec:
   dnsNames:
     - ttys0.net
     - '*.ttys0.net'
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: beezuscomplex-tls
+  namespace: ghost
+spec:
+  secretName: beezuscomplex-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: '*.beezuscomplex.com'
+  dnsNames:
+    - beezuscomplex.com
+    - '*.beezuscomplex.com'

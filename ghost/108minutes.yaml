@@ -1,3 +1,16 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: 108minutes
+  namespace: ghost
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: fast
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,7 +27,7 @@ data:
       "database": {
         "client": "mysql",
         "connection": {
-          "host": "mariadb.db.svc",
+          "host": "mariadb.mariadb.svc",
           "port": 3306,
           "database": "ghost_108minutes"
         }
@@ -64,7 +77,7 @@ spec:
         app: 108minutes
     spec:
       containers:
-        - image: ghost:3.0.2
+        - image: ghost:3.0.3
           name: ghost-108minutes
           env:
             - name: AWS_ACCESS_KEY_ID
@@ -98,15 +111,15 @@ spec:
               mountPath: /var/lib/ghost/config.production.json
               subPath: config.production.json
       volumes:
-      - name: 108minutes-data
-        persistentVolumeClaim:
-          claimName: 108minutes
-      - name: 108minutes-conf
-        configMap:
-          name: 108minutes-conf
-          items:
-          - key: production.json
-            path: config.production.json
+        - name: 108minutes-data
+          persistentVolumeClaim:
+            claimName: 108minutes
+        - name: 108minutes-conf
+          configMap:
+            name: 108minutes-conf
+            items:
+              - key: production.json
+                path: config.production.json
 
 ---
 apiVersion: v1
@@ -118,10 +131,66 @@ metadata:
     app: 108minutes
 spec:
   ports:
-  - name: server
-    port: 80
-    targetPort: 2368
+    - name: server
+      port: 80
+      targetPort: 2368
   selector:
     app: 108minutes
 
-
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: 108minutes
+  namespace: ghost
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+spec:
+  rules:
+    - host: 108minutes.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: www108minutes
+              servicePort: 80
+          - path: /.well-known
+            backend:
+              serviceName: static-web
+              servicePort: 80
+  tls:
+    - hosts:
+        - 108minutes.net
+        - www.108minutes.net
+      secretName: 108minutes-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ttys0
+  namespace: ghost
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+spec:
+  rules:
+    - host: ttys0.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: www108minutes
+              servicePort: 80
+          - path: /.well-known
+            backend:
+              serviceName: static-web
+              servicePort: 80
+  tls:
+    - hosts:
+        - ttys0.net
+        - www.ttys0.net
+      secretName: ttys0-tls
