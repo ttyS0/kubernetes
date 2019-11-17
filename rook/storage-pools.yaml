@@ -5,9 +5,8 @@ metadata:
   namespace: rook-ceph
 spec:
   failureDomain: host
-  erasureCoded:
-    dataChunks: 2
-    codingChunks: 1
+  replicated:
+    size: 2
   deviceClass: hdd
 ---
 apiVersion: ceph.rook.io/v1

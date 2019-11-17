@@ -8,7 +8,7 @@ spec:
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
-  commonName: 'vault.ttys0.net'
+  commonName: vault.ttys0.net
   dnsNames:
     - vault.ttys0.net
 
