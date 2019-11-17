@@ -43,28 +43,28 @@ spec:
         runAsUser: 999
         fsGroup: 999
       containers:
-        - image: jacobalberty/unifi:5.11
+        - image: jacobalberty/unifi:5.12.22
           imagePullPolicy: Always
-        env:
+          env:
           - name: "RUNAS_UID0"
             value: "false"
-        name: unifi-controller
-        ports:
-        - containerPort: 8080
-        - containerPort: 8081
-        - containerPort: 8443
-        - containerPort: 8880
-        - containerPort: 8843
-        - containerPort: 3478
-          protocol: UDP
-        - containerPort: 6789
-        - containerPort: 10001
-          protocol: UDP
-        volumeMounts:
-        - name: unifi-data
-          mountPath: /unifi/data
-        - name: unifi-log
-          mountPath: /unifi/log
+          name: unifi-controller
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+            - containerPort: 8443
+            - containerPort: 8880
+            - containerPort: 8843
+            - containerPort: 3478
+              protocol: UDP
+            - containerPort: 6789
+            - containerPort: 10001
+              protocol: UDP
+          volumeMounts:
+            - name: unifi-data
+              mountPath: /unifi/data
+            - name: unifi-log
+              mountPath: /unifi/log
       volumes:
       - name: unifi-data
         persistentVolumeClaim:
