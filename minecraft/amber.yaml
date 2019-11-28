@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: amber
+  namespace: minecraft
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5G
+  storageClassName: shared
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,6 +30,8 @@ spec:
         app: minecraft
         world: amber
     spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
       imagePullSecrets:
         - name: github
       containers:
@@ -28,12 +43,6 @@ spec:
           volumeMounts:
             - name: server
               mountPath: /minecraft/server
-            - name: world
-              mountPath: /minecraft/server/world
-            - name: world-nether
-              mountPath: /minecraft/server/world_nether
-            - name: world-the-end
-              mountPath: /minecraft/server/world_the_end
             - name: logs
               mountPath: /minecraft/server/logs
           env:
@@ -42,16 +51,7 @@ spec:
       volumes:
         - name: server
           persistentVolumeClaim:
-            claimName: cephfs-amber
-        - name: world
-          persistentVolumeClaim:
-            claimName: amber-world
-        - name: world-nether
-          persistentVolumeClaim:
-            claimName: amber-world-nether
-        - name: world-the-end
-          persistentVolumeClaim:
-            claimName: amber-world-end
+            claimName: amber
         - name: logs
           emptyDir: {}
 ---

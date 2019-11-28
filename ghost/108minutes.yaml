@@ -27,7 +27,7 @@ data:
       "database": {
         "client": "mysql",
         "connection": {
-          "host": "mariadb.mariadb.svc",
+          "host": "mariadb.mariadb.svc.cluster.local",
           "port": 3306,
           "database": "ghost_108minutes"
         }

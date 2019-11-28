@@ -8,6 +8,6 @@ spec:
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
-  commonName: 'minecraft.ttys0.net'
+  commonName: minecraft.ttys0.net
   dnsNames:
     - minecraft.ttys0.net
