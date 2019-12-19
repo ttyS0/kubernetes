@@ -9,7 +9,7 @@ spec:
   resources:
     requests:
       storage: 5G
-  storageClassName: shared
+  storageClassName: cephfs
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -225,7 +225,7 @@ spec:
         - name: github
       containers:
         - name: lobby
-          image: docker.pkg.github.com/ttys0/docker-minecraft/spigot:1.14.4
+          image: docker.pkg.github.com/ttys0/docker-minecraft/spigot:1.15.1
           ports:
             - containerPort: 25565
           volumeMounts:

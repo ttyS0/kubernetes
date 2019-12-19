@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: beezuscomplex-data
+  name: beezuscomplex
   namespace: ghost
 spec:
   accessModes:
@@ -57,15 +57,15 @@ spec:
           ports:
             - containerPort: 2368
           volumeMounts:
-            - name: beezuscomplex-data
+            - name: beezuscomplex
               mountPath: /var/lib/ghost/content
             - name: beezuscomplex-conf
               mountPath: /var/lib/ghost/config.production.json
               subPath: config.production.json
       volumes:
-        - name: beezuscomplex-data
+        - name: beezuscomplex
           persistentVolumeClaim:
-            claimName: beezuscomplex-data
+            claimName: beezuscomplex
         - name: beezuscomplex-conf
           configMap:
             name: beezuscomplex-conf

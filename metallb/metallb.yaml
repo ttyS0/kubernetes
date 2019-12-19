@@ -1,9 +1,15 @@
 apiVersion: v1
-kind: Namespace
+kind: ConfigMap
 metadata:
-  labels:
-    app: metallb
-  name: metallb-system
+  namespace: metallb
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - 10.0.1.200-10.0.1.250
 ---
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
@@ -11,7 +17,7 @@ metadata:
   labels:
     app: metallb
   name: speaker
-  namespace: metallb-system
+  namespace: metallb
 spec:
   allowPrivilegeEscalation: false
   allowedCapabilities:
@@ -40,7 +46,7 @@ metadata:
   labels:
     app: metallb
   name: controller
-  namespace: metallb-system
+  namespace: metallb
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -48,14 +54,14 @@ metadata:
   labels:
     app: metallb
   name: speaker
-  namespace: metallb-system
+  namespace: metallb
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
     app: metallb
-  name: metallb-system:controller
+  name: metallb:controller
 rules:
   - apiGroups:
       - ''
@@ -85,7 +91,7 @@ kind: ClusterRole
 metadata:
   labels:
     app: metallb
-  name: metallb-system:speaker
+  name: metallb:speaker
 rules:
   - apiGroups:
       - ''
@@ -119,7 +125,7 @@ metadata:
   labels:
     app: metallb
   name: config-watcher
-  namespace: metallb-system
+  namespace: metallb
 rules:
   - apiGroups:
       - ''
@@ -135,30 +141,30 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     app: metallb
-  name: metallb-system:controller
+  name: metallb:controller
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: metallb-system:controller
+  name: metallb:controller
 subjects:
   - kind: ServiceAccount
     name: controller
-    namespace: metallb-system
+    namespace: metallb
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:
     app: metallb
-  name: metallb-system:speaker
+  name: metallb:speaker
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: metallb-system:speaker
+  name: metallb:speaker
 subjects:
   - kind: ServiceAccount
     name: speaker
-    namespace: metallb-system
+    namespace: metallb
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -166,7 +172,7 @@ metadata:
   labels:
     app: metallb
   name: config-watcher
-  namespace: metallb-system
+  namespace: metallb
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -184,7 +190,7 @@ metadata:
     app: metallb
     component: speaker
   name: speaker
-  namespace: metallb-system
+  namespace: metallb
 spec:
   selector:
     matchLabels:
@@ -248,7 +254,7 @@ metadata:
     app: metallb
     component: controller
   name: controller
-  namespace: metallb-system
+  namespace: metallb
 spec:
   revisionHistoryLimit: 3
   selector:

@@ -9,7 +9,7 @@ spec:
   resources:
     requests:
       storage: 5G
-  storageClassName: shared
+  storageClassName: cephfs
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -36,7 +36,7 @@ spec:
         - name: github
       containers:
         - name: amber
-          image: docker.pkg.github.com/ttys0/docker-minecraft/spigot:1.14.4
+          image: docker.pkg.github.com/ttys0/docker-minecraft/spigot:1.15.1
           ports:
             - containerPort: 25565
             - containerPort: 8123

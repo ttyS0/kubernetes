@@ -42,17 +42,17 @@ spec:
         app: mariadb
     spec:
       containers:
-        - image: mariadb:10.4.10
+      - image: mariadb:10.4.11
         name: mariadb
         env:
           # kubectl create secret generic root -n mariadb --from-literal=passwd=ROOT_PASSWORD
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: root
-              key: passwd
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: root
+                key: passwd
         ports:
-        - containerPort: 3306
+          - containerPort: 3306
           name: mariadb
         volumeMounts:
         - name: mariadb

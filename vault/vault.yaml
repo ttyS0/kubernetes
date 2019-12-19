@@ -18,19 +18,23 @@ spec:
       labels:
         app: vault
     spec:
+      tolerations:
+        - key: ceph
+          value: osd
+          effect: NoSchedule
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values: ['vault']
-            topologyKey: kubernetes.io/hostname
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values: ['vault']
+              topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
       containers:
       - name: consul-agent
-        image: "consul:1.6.1"
+        image: "consul:1.6.2"
         env:
           - name: GOSSIP_ENCRYPTION_KEY
             valueFrom:
@@ -38,19 +42,19 @@ spec:
                 key: gossipKey
                 name: consul-gossip-key
         args:
-        - "agent"
-        - "-retry-join=consul-consul-server-0.consul-consul-server.consul.svc.cluster.local"
-        - "-retry-join=consul-consul-server-1.consul-consul-server.consul.svc.cluster.local"
-        - "-retry-join=consul-consul-server-2.consul-consul-server.consul.svc.cluster.local"
-        - "-encrypt=$(GOSSIP_ENCRYPTION_KEY)"
-        - "-disable-host-node-id"
-        - "-datacenter=home"
+          - "agent"
+          - "-retry-join=hashicorp-consul-server-0.hashicorp-consul-server.consul.svc.cluster.local"
+          - "-retry-join=hashicorp-consul-server-1.hashicorp-consul-server.consul.svc.cluster.local"
+          - "-retry-join=hashicorp-consul-server-2.hashicorp-consul-server.consul.svc.cluster.local"
+          - "-encrypt=$(GOSSIP_ENCRYPTION_KEY)"
+          - "-disable-host-node-id"
+          - "-datacenter=home"
         ports:
         - containerPort: 8500
           name: consul-agent
           protocol: TCP
       - name: vault
-        image: vault:1.3.0
+        image: vault:1.3.1
         imagePullPolicy: Always
         args:
         - server
@@ -142,5 +146,5 @@ spec:
   tls:
     - hosts:
         - vault.ttys0.net
-      secretName: vault-ttys0-tls
+      secretName: vault-tls
 

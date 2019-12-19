@@ -9,7 +9,7 @@ spec:
   resources:
     requests:
       storage: 1G
-  storageClassName: shared
+  storageClassName: cephfs
 
 ---
 apiVersion: v1
@@ -49,18 +49,6 @@ data:
                 autoindex  on;
                 try_files $uri $uri/ =404;
             }
-    }
-
-    server {
-        listen 80;
-        server_name ttys0.net;
-        root /usr/share/nginx/html/ttys0.net;
-        index index.html;
-        autoindex on;
-
-        location / {
-            try_files $uri $uri/ =404;
-        }
     }
 
     server {
@@ -136,4 +124,4 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: static-web
----
+

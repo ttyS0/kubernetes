@@ -13,6 +13,6 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: consul-consul-ui
+              serviceName: hashicorp-consul-ui
               servicePort: 80
 

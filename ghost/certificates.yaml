@@ -8,25 +8,9 @@ spec:
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
-  commonName: '*.108minutes.net'
+  commonName: '108minutes.net'
   dnsNames:
     - 108minutes.net
-    - '*.108minutes.net'
----
-apiVersion: cert-manager.io/v1alpha2
-kind: Certificate
-metadata:
-  name: ttys0-tls
-  namespace: ghost
-spec:
-  secretName: ttys0-tls
-  issuerRef:
-    name: letsencrypt
-    kind: ClusterIssuer
-  commonName: '*.ttys0.net'
-  dnsNames:
-    - ttys0.net
-    - '*.ttys0.net'
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
@@ -38,7 +22,6 @@ spec:
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
-  commonName: '*.beezuscomplex.com'
+  commonName: 'beezuscomplex.com'
   dnsNames:
     - beezuscomplex.com
-    - '*.beezuscomplex.com'

@@ -9,37 +9,19 @@ spec:
     privateKeySecretRef:
       name: letsencrypt
     solvers:
-    - selector:
-        dnsZones:
-          - "ttys0.net"
-      dns01:
-        route53:
-          region: us-east-1
-          hostedZoneID: Z2LEPLZZSMS5AN
-          accessKeyID: AKIA
-          secretAccessKeySecretRef:
-            name: cert-manager-aws
-            key: secretKey
-    - selector:
-        dnsZones:
-          - "108minutes.net"
-      dns01:
-        route53:
-          region: us-east-1
-          hostedZoneID: ZJPHD6K04R99J
-          accessKeyID: AKIA
-          secretAccessKeySecretRef:
-            name: cert-manager-aws
-            key: secretKey
-    - selector:
-        dnsZones:
-          - "beezuscomplex.com"
-      dns01:
-        route53:
-          region: us-east-1
-          hostedZoneID: ZKK3ZQLK83BR8
-          accessKeyID: AKIA
-          secretAccessKeySecretRef:
-            name: cert-manager-aws
-            key: secretKey
+      - selector:
+          dnsZones:
+            - 'ttys0.net'
+            - 'skj.dev'
+            - 'beezuscomplex.com'
+            - '108minutes.net'
+            - 'amateur.dev'
+            - 'gutenpress.org'
+        dns01:
+          cloudflare:
+            email: sean@ttys0.net
+            apiKeySecretRef:
+              name: cloudflare-api-key
+              key: api-key
+
 
