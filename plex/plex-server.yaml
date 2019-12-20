@@ -84,7 +84,9 @@ spec:
   selector:
     app: plex
   type: LoadBalancer
+  externalTrafficPolicy: Local
   ports:
     - port: 32400
       name: plex
+
 
