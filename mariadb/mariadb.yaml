@@ -53,7 +53,7 @@ spec:
                 key: passwd
         ports:
           - containerPort: 3306
-          name: mariadb
+            name: mariadb
         volumeMounts:
         - name: mariadb
           mountPath: /var/lib/mysql
