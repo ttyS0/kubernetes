@@ -1,0 +1,105 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: tautulli
+  namespace: plex
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100G
+  storageClassName: fast
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tautulli-app
+  namespace: plex
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1G
+  storageClassName: cephfs
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: tautulli
+  namespace: plex
+spec:
+  selector:
+    matchLabels:
+      app: tautulli
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tautulli
+    spec:
+      dnsPolicy: Default
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+        - image: tautulli/tautulli
+          name: tautulli
+          env:
+            - name: TZ
+              value: "America/Chicago"
+          ports:
+            - containerPort: 8181
+          volumeMounts:
+            - name: data
+              mountPath: /config
+            - name: app
+              mountPath: /app
+      securityContext:
+        fsGroup: 1000
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: tautulli
+        - name: app
+          persistentVolumeClaim:
+            claimName: tautulli-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tautulli
+  namespace: plex
+  labels:
+    app: tautulli
+spec:
+  selector:
+    app: tautulli
+  ports:
+    - port: 8181
+      name: tautulli
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: tautulli
+  namespace: plex
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/whitelist-source-range: '10.0.1.0/24, 10.0.8.0/24, 160.129.250.188/32'
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: plex.ttys0.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: tautulli
+              servicePort: 8181
+  tls:
+    - hosts:
+        - plex.ttys0.net
+      secretName: plex-tls
