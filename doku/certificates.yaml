@@ -1,0 +1,27 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: skj-tls
+  namespace: doku
+spec:
+  secretName: skj-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: wiki.skj.dev
+  dnsNames:
+    - wiki.skj.dev
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: videotranscoding-wiki-tls
+  namespace: doku
+spec:
+  secretName: videotranscoding-wiki-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: videotranscoding.wiki
+  dnsNames:
+    - videotranscoding.wiki
