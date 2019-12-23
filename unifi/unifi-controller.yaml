@@ -10,18 +10,6 @@ spec:
     requests:
       storage: 50Gi
 ---
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: unifi-log
-  namespace: unifi
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -70,10 +58,8 @@ spec:
         persistentVolumeClaim:
           claimName: unifi-data
       - name: unifi-log
-        persistentVolumeClaim:
-          claimName: unifi-log
-      imagePullSecrets:
-        - name: docker-reg-secret
+        emptyDir:
+          {}
 ---
 apiVersion: v1
 kind: Service

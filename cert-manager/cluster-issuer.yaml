@@ -17,6 +17,7 @@ spec:
             - '108minutes.net'
             - 'amateur.dev'
             - 'gutenpress.org'
+            - 'videotranscoding.wiki'
         dns01:
           cloudflare:
             email: sean@ttys0.net
