@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: videotranscoding-dev
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/permanent-redirect: "https://github.com/donmelton/video_transcoding"
+spec:
+  rules:
+    - host: videotranscoding.dev
+
