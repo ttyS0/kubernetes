@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: pfsense-tls
+  namespace: plex
+spec:
+  secretName: plex-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: plex.ttys0.net
+  dnsNames:
+    - plex.ttys0.net

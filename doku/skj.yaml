@@ -33,17 +33,21 @@ spec:
         kubernetes.io/arch: amd64
       containers:
         - name: skj
-          image: crazymax/dokuwiki:2018-04-22
+          image: crazymax/dokuwiki:2018-04-22b
           env:
             - name: TZ
               value: "America/Chicago"
+            - name: PUID
+              value: "1001"
+            - name: PGID
+              value: "1001"
           ports:
-            - containerPort: 80
+            - containerPort: 8000
           volumeMounts:
             - mountPath: /data
               name: data
       securityContext:
-        fsGroup: 1500
+        fsGroup: 1001
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -58,7 +62,7 @@ metadata:
     app: skj
 spec:
   ports:
-    - port: 80
+    - port: 8000
   selector:
     app: skj
 ---
@@ -72,14 +76,14 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
-    - host: wiki.skj.dev
+    - host: skj.wiki
       http:
         paths:
           - path: /
             backend:
               serviceName: skj
-              servicePort: 80
+              servicePort: 8000
   tls:
     - hosts:
-        - wiki.skj.dev
+        - skj.wiki
       secretName: skj-tls

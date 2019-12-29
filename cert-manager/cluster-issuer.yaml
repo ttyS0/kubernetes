@@ -18,6 +18,7 @@ spec:
             - 'amateur.dev'
             - 'gutenpress.org'
             - 'videotranscoding.wiki'
+            - 'skj.wiki'
         dns01:
           cloudflare:
             email: sean@ttys0.net

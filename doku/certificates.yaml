@@ -8,9 +8,9 @@ spec:
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
-  commonName: wiki.skj.dev
+  commonName: skj.wiki
   dnsNames:
-    - wiki.skj.dev
+    - skj.wiki
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate

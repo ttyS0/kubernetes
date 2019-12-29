@@ -33,17 +33,21 @@ spec:
         kubernetes.io/arch: amd64
       containers:
         - name: skj
-          image: crazymax/dokuwiki:2018-04-22
+          image: crazymax/dokuwiki:2018-04-22b
           env:
             - name: TZ
               value: "America/Chicago"
+            - name: PUID
+              value: "1001"
+            - name: PGID
+              value: "1001"
           ports:
-            - containerPort: 80
+            - containerPort: 8000
           volumeMounts:
             - mountPath: /data
               name: data
       securityContext:
-        fsGroup: 1500
+        fsGroup: 1001
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -58,7 +62,7 @@ metadata:
     app: videotranscoding
 spec:
   ports:
-    - port: 80
+    - port: 8000
   selector:
     app: videotranscoding
 ---
@@ -78,7 +82,7 @@ spec:
           - path: /
             backend:
               serviceName: videotranscoding
-              servicePort: 80
+              servicePort: 8000
   tls:
     - hosts:
         - videotranscoding.wiki
