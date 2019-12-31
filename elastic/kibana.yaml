@@ -41,6 +41,13 @@ spec:
           securityContext:
             runAsUser: 1000
           image: docker.elastic.co/kibana/kibana:7.5.1
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /api/status
+              port: kb-ui
+            initialDelaySeconds: 5
+            timeoutSeconds: 60
           ports:
             - containerPort: 5601
               name: kb-ui
