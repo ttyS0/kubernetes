@@ -14,15 +14,15 @@ spec:
         app: csi-cephfsplugin
     spec:
       serviceAccount: cephfs-csi-nodeplugin
+      nodeSelector:
+        kubernetes.io/arch: amd64
       hostNetwork: true
       # to use e.g. Rook orchestrated cluster, and mons' FQDN is
       # resolved through k8s service, set dns policy to cluster first
       dnsPolicy: ClusterFirstWithHostNet
-      nodeSelector:
-        kubernetes.io/arch: amd64
       containers:
         - name: driver-registrar
-          image: quay.io/k8scsi/csi-node-driver-registrar:v1.1.0
+          image: quay.io/k8scsi/csi-node-driver-registrar:v1.2.0
           args:
             - "--v=5"
             - "--csi-address=/csi/csi.sock"
@@ -123,10 +123,6 @@ spec:
             - name: socket-dir
               mountPath: /csi
           imagePullPolicy: "IfNotPresent"
-      tolerations:
-        - key: ceph
-          value: osd
-          effect: NoSchedule
       volumes:
         - name: mount-cache-dir
           emptyDir: {}
