@@ -3,6 +3,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: csi-rbdplugin-provisioner
+  namespace: ceph
   labels:
     app: csi-metrics
 spec:
@@ -23,6 +24,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: csi-rbdplugin-provisioner
+  namespace: ceph
 spec:
   replicas: 3
   selector:
@@ -34,6 +36,8 @@ spec:
         app: csi-rbdplugin-provisioner
     spec:
       serviceAccount: rbd-csi-provisioner
+      nodeSelector:
+        kubernetes.io/arch: amd64
       containers:
         - name: csi-provisioner
           image: quay.io/k8scsi/csi-provisioner:v1.4.0
