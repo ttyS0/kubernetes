@@ -166,7 +166,7 @@ spec:
 kind: DaemonSet
 apiVersion: apps/v1
 metadata:
-  name: csi-cephfsplugin
+  name: csi-cephfsplugin-arm64
   namespace: ceph
 spec:
   selector:

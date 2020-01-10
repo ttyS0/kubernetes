@@ -157,7 +157,7 @@ spec:
 kind: DaemonSet
 apiVersion: apps/v1
 metadata:
-  name: csi-rbdplugin
+  name: csi-rbdplugin-arm64
   namespace: ceph
 spec:
   selector:
