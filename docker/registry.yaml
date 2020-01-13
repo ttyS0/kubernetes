@@ -5,12 +5,12 @@ metadata:
   name: images
   namespace: docker
 spec:
-  storageClassName: rbd-persist
+  storageClassName: bulk
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Gi
+      storage: 200Gi
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -55,7 +55,7 @@ data:
     auth:
       htpasswd:
         realm: registry
-        path: /etc/docker/secret/registry.htpasswd
+        path: /auth/htpasswd
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -77,11 +77,6 @@ spec:
       containers:
         - name: registry
           image: registry:2.7.1
-          env:
-            - name: "REGISTRY_HTTP_ADDR"
-              value: ":5000"
-            - name: "REGISTRY_STORAGE_DELETE_ENABLED"
-              value: "true"
           ports:
             - name: http
               containerPort: 5000
@@ -90,6 +85,8 @@ spec:
               mountPath: "/var/lib/registry"
             - name: registry
               mountPath: "/etc/docker/registry"
+            - name: htpasswd
+              mountPath: "/auth"
       volumes:
         - name: registry
           configMap:
@@ -97,16 +94,49 @@ spec:
         - name: images
           persistentVolumeClaim:
             claimName: images
+        - name: htpasswd
+          secret:
+            secretName: htpasswd
+            items:
+              - key: htpasswd
+                path: htpasswd
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: registry
-  namespace: web
+  namespace: docker
 spec:
   ports:
     - name: http
       port: 5000
   selector:
     app: registry
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: registry
+  namespace: docker
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/whitelist-source-range: '10.0.0.0/16, 192.168.0.0/16'
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "500m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/auth-realm: "registry"
+spec:
+  rules:
+    - host: docker.ttys0.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: registry
+              servicePort: 5000
+  tls:
+    - hosts:
+        - docker.ttys0.net
+      secretName: docker-tls

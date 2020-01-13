@@ -1,8 +1,7 @@
----
 kind: DaemonSet
 apiVersion: apps/v1
 metadata:
-  name: csi-rbdplugin
+  name: csi-rbdplugin-arm64
   namespace: ceph
 spec:
   selector:
@@ -15,15 +14,17 @@ spec:
     spec:
       serviceAccount: rbd-csi-nodeplugin
       nodeSelector:
-        kubernetes.io/arch: amd64
+        kubernetes.io/arch: arm64
       hostNetwork: true
       hostPID: true
       # to use e.g. Rook orchestrated cluster, and mons' FQDN is
       # resolved through k8s service, set dns policy to cluster first
       dnsPolicy: ClusterFirstWithHostNet
+      imagePullSecrets:
+        - name: home-registry
       containers:
         - name: driver-registrar
-          image: quay.io/k8scsi/csi-node-driver-registrar:v1.2.0
+          image: docker.ttys0.net/csi-node-driver-registrar:v1.2.0
           args:
             - "--v=5"
             - "--csi-address=/csi/csi.sock"
@@ -53,7 +54,7 @@ spec:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:canary-amd64
+          image: quay.io/cephcsi/cephcsi:canary-arm64
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=rbd"
@@ -101,7 +102,7 @@ spec:
             - name: keys-tmp-dir
               mountPath: /tmp/csi/keys
         - name: liveness-prometheus
-          image: quay.io/cephcsi/cephcsi:canary
+          image: quay.io/cephcsi/cephcsi:canary-arm64
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
@@ -153,24 +154,3 @@ spec:
           emptyDir: {
             medium: "Memory"
           }
----
-# This is a service to expose the liveness and grpc metrics
-apiVersion: v1
-kind: Service
-metadata:
-  name: csi-metrics-rbdplugin
-  namespace: ceph
-  labels:
-    app: csi-metrics
-spec:
-  ports:
-    - name: http-metrics
-      port: 8080
-      protocol: TCP
-      targetPort: 8680
-    - name: grpc-metrics
-      port: 8090
-      protocol: TCP
-      targetPort: 8090
-  selector:
-    app: csi-rbdplugin

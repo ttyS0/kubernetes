@@ -104,11 +104,13 @@ spec:
       labels:
         app: static-web
     spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64
       imagePullSecrets:
-        - name: github
+        - name: home-registry
       containers:
         - name: static-web
-          image: docker.pkg.github.com/ttys0/docker-staticweb/staticweb:1
+          image: docker.ttys0.net/static-web:1
           command: ["/home/auto-reload-nginx.sh"]
           ports:
             - containerPort: 80
