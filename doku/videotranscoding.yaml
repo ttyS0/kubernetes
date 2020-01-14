@@ -32,7 +32,7 @@ spec:
       nodeSelector:
         kubernetes.io/arch: amd64
       containers:
-        - name: skj
+        - name: videotranscoding
           image: crazymax/dokuwiki:2018-04-22b
           env:
             - name: TZ
@@ -46,6 +46,43 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: data
+        - name: smtp
+          image: tecnativa/postfix-relay:latest
+          ports:
+            - containerPort: 25
+          env:
+            - name: MAIL_RELAY_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: videotranscoding-smtp
+                  key: host
+            - name: MAIL_RELAY_PORT
+              value: "587"
+            - name: MAIL_RELAY_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: videotranscoding-smtp
+            - name: MAIL_RELAY_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: pass
+                  name: videotranscoding-smtp
+            - name: MAIL_CANONICAL_DOMAINS
+              valueFrom:
+                secretKeyRef:
+                  key: canonical_domains
+                  name: videotranscoding-smtp
+            - name: MAIL_NON_CANONICAL_DEFAULT
+              valueFrom:
+                secretKeyRef:
+                  key: default_domain
+                  name: videotranscoding-smtp
+            - name: ROUTE_CUSTOM
+              valueFrom:
+                secretKeyRef:
+                  key: allowed_subnets
+                  name: videotranscoding-smtp
       securityContext:
         fsGroup: 1001
       volumes:
