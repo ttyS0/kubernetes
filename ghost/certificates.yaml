@@ -11,6 +11,7 @@ spec:
   commonName: '108minutes.net'
   dnsNames:
     - 108minutes.net
+    - www.108minutes.net
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
@@ -25,3 +26,4 @@ spec:
   commonName: 'beezuscomplex.com'
   dnsNames:
     - beezuscomplex.com
+    - www.beezuscomplex.com

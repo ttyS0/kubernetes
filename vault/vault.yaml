@@ -147,4 +147,26 @@ spec:
     - hosts:
         - vault.ttys0.net
       secretName: vault-tls
-
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: vault-ext
+  namespace: vault
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/whitelist-source-range: '160.129.250.188/32, 160.129.251.199/32'
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: vault.ttys0.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: vault
+              servicePort: 8200
+  tls:
+    - hosts:
+        - vault.ttys0.net
+      secretName: vault-tls

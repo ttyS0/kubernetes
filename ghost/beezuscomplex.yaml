@@ -166,3 +166,32 @@ spec:
         - beezuscomplex.com
         - www.beezuscomplex.com
       secretName: beezuscomplex-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: beezuscomplex-ext
+  namespace: ghost
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+spec:
+  rules:
+    - host: beezuscomplex.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: beezuscomplex
+              servicePort: 80
+          - path: /.well-known
+            backend:
+              serviceName: static-web
+              servicePort: 80
+  tls:
+    - hosts:
+        - beezuscomplex.com
+        - www.beezuscomplex.com
+      secretName: beezuscomplex-tls

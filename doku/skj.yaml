@@ -87,3 +87,25 @@ spec:
     - hosts:
         - skj.wiki
       secretName: skj-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: skj-ext
+  namespace: doku
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: skj.wiki
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: skj
+              servicePort: 8000
+  tls:
+    - hosts:
+        - skj.wiki
+      secretName: skj-tls

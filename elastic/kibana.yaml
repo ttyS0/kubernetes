@@ -84,7 +84,29 @@ metadata:
   namespace: elastic
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/whitelist-source-range: '10.0.1.0/24, 10.0.8.0/24, 160.129.250.188/32'
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: kibana.ttys0.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kibana
+              servicePort: 5601
+  tls:
+    - hosts:
+        - kibana.ttys0.net
+      secretName: kibana-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kibana-ext
+  namespace: elastic
+  annotations:
+    kubernetes.io/ingress.class: nginx-ext
+    nginx.ingress.kubernetes.io/whitelist-source-range: '160.129.250.188/32, 160.129.251.199/32'
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
