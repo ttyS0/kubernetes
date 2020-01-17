@@ -104,13 +104,21 @@ spec:
       labels:
         app: static-web
     spec:
-      nodeSelector:
-        kubernetes.io/arch: arm64
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - static-web
+              topologyKey: "kubernetes.io/hostname"
       imagePullSecrets:
         - name: home-registry
       containers:
         - name: static-web
-          image: docker.ttys0.net/static-web:1
+          image: docker.ttys0.net/static-web:2
           command: ["/home/auto-reload-nginx.sh"]
           ports:
             - containerPort: 80
