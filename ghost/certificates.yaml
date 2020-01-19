@@ -27,3 +27,18 @@ spec:
   dnsNames:
     - beezuscomplex.com
     - www.beezuscomplex.com
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: skj-tls
+  namespace: ghost
+spec:
+  secretName: skj-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'skj.dev'
+  dnsNames:
+    - skj.dev
+    - www.skj.dev
