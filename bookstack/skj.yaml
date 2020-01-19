@@ -29,7 +29,7 @@ spec:
         - name: home-registry
       containers:
         - name: skj
-          image: docker.ttys0.net/bookstack:0.27.5-1
+          image: docker.ttys0.net/bookstack:0.27.5-4
           env:
             - name: DB_HOST
               value: "mariadb.mariadb.svc.cluster.local"
