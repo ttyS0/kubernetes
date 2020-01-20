@@ -86,6 +86,8 @@ spec:
       labels:
         app: bungeecord
     spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
       imagePullSecrets:
         - name: github
       containers:

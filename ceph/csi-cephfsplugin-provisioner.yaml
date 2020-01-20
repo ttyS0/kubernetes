@@ -92,7 +92,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:canary
+          image: quay.io/cephcsi/cephcsi:v2.0.0-amd64
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
@@ -157,9 +157,8 @@ spec:
           imagePullPolicy: "IfNotPresent"
       volumes:
         - name: socket-dir
-          hostPath:
-            path: /var/lib/kubelet/plugins/cephfs.csi.ceph.com
-            type: DirectoryOrCreate
+          emptyDir:
+            medium: "Memory"
         - name: host-sys
           hostPath:
             path: /sys

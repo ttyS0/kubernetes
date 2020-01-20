@@ -38,6 +38,10 @@ spec:
       serviceAccount: rbd-csi-provisioner
       nodeSelector:
         kubernetes.io/arch: amd64
+      tolerations:
+        - key: ceph
+          value: osd
+          effect: NoSchedule
       containers:
         - name: csi-provisioner
           image: quay.io/k8scsi/csi-provisioner:v1.4.0
@@ -108,7 +112,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:canary
+          image: quay.io/cephcsi/cephcsi:v2.0.0-amd64
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=rbd"
@@ -177,9 +181,8 @@ spec:
           hostPath:
             path: /lib/modules
         - name: socket-dir
-          hostPath:
-            path: /var/lib/kubelet/plugins/rbd.csi.ceph.com
-            type: DirectoryOrCreate
+          emptyDir:
+            medium: "Memory"
         - name: ceph-csi-config
           configMap:
             name: ceph-csi-config
