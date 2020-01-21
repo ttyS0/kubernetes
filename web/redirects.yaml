@@ -9,4 +9,15 @@ metadata:
 spec:
   rules:
     - host: videotranscoding.dev
-
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ttys0-net
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/permanent-redirect: "https://skj.dev"
+spec:
+  rules:
+    - host: ttys0.net

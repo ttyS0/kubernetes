@@ -221,6 +221,8 @@ spec:
         app: minecraft
         world: lobby
     spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
       imagePullSecrets:
         - name: github
       containers:

@@ -123,4 +123,25 @@ spec:
     - hosts:
         - videotranscoding.wiki
       secretName: videotranscoding-tls
-
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: videotranscoding-ext
+  namespace: bookstack
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: videotranscoding.wiki
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: videotranscoding
+              servicePort: 80
+  tls:
+    - hosts:
+        - videotranscoding.wiki
+      secretName: videotranscoding-tls
