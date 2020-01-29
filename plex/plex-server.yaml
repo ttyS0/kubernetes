@@ -1,28 +1,3 @@
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: plex-data
-  namespace: plex
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 15T
-  storageClassName: bulk
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: plex-server
-  namespace: plex
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200G
-  storageClassName: fast
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -42,7 +17,7 @@ spec:
         app: plex
     spec:
       containers:
-        - image: plexinc/pms-docker:1.18.4.2171-ac2afe5f8
+        - image: plexinc/pms-docker:1.18.5.2309-f5213a238
           name: plex
           env:
             - name: HOSTNAME
