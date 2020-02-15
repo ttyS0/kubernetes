@@ -29,7 +29,7 @@ spec:
         - name: home-registry
       containers:
         - name: videotranscoding
-          image: docker.ttys0.net/bookstack:0.27.5-4
+          image: docker.ttys0.net/bookstack:0.28.2-1
           env:
             - name: DB_HOST
               value: "mariadb.mariadb.svc.cluster.local"
@@ -101,6 +101,7 @@ spec:
     - port: 80
   selector:
     app: videotranscoding
+  sessionAffinity: ClientIP
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -109,6 +110,8 @@ metadata:
   namespace: bookstack
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
@@ -131,6 +134,8 @@ metadata:
   namespace: bookstack
   annotations:
     kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
