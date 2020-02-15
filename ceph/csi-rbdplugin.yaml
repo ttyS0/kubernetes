@@ -16,6 +16,10 @@ spec:
       serviceAccount: rbd-csi-nodeplugin
       nodeSelector:
         kubernetes.io/arch: amd64
+      tolerations:
+        - key: ceph
+          value: osd
+          effect: NoSchedule
       hostNetwork: true
       hostPID: true
       # to use e.g. Rook orchestrated cluster, and mons' FQDN is
