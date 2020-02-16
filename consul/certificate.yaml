@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: consul-tls
+  namespace: consul
+spec:
+  secretName: consul-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: consul.ttys0.net
+  dnsNames:
+    - consul.ttys0.net

@@ -34,7 +34,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: consul-agent
-        image: "consul:1.6.2"
+        image: "consul:1.7.0"
         env:
           - name: GOSSIP_ENCRYPTION_KEY
             valueFrom:
@@ -43,9 +43,9 @@ spec:
                 name: consul-gossip-key
         args:
           - "agent"
-          - "-retry-join=hashicorp-consul-server-0.hashicorp-consul-server.consul.svc.cluster.local"
-          - "-retry-join=hashicorp-consul-server-1.hashicorp-consul-server.consul.svc.cluster.local"
-          - "-retry-join=hashicorp-consul-server-2.hashicorp-consul-server.consul.svc.cluster.local"
+          - "-retry-join=skj-consul-server-0.skj-consul-server.consul.svc.cluster.local"
+          - "-retry-join=skj-consul-server-1.skj-consul-server.consul.svc.cluster.local"
+          - "-retry-join=skj-consul-server-2.skj-consul-server.consul.svc.cluster.local"
           - "-encrypt=$(GOSSIP_ENCRYPTION_KEY)"
           - "-disable-host-node-id"
           - "-datacenter=home"
