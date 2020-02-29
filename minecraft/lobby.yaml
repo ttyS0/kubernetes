@@ -223,11 +223,9 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/arch: amd64
-      imagePullSecrets:
-        - name: github
       containers:
         - name: lobby
-          image: docker.pkg.github.com/ttys0/docker-minecraft/spigot:1.15.1
+          image: ttys0/spigot:v1.15.2
           ports:
             - containerPort: 25565
           volumeMounts:

@@ -88,12 +88,10 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/arch: amd64
-      imagePullSecrets:
-        - name: github
       containers:
         - imagePullPolicy: IfNotPresent
           name: bungeecord
-          image: docker.pkg.github.com/ttys0/docker-minecraft/bungeecord:1428-1
+          image: ttys0/bungeecord:v1486
           ports:
             - containerPort: 25577
           volumeMounts:
