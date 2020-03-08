@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: amber
+  name: survival1
   namespace: minecraft
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 5G
-  storageClassName: cephfs
+      storage: 10G
+  storageClassName: cephfs-bulk
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -41,17 +41,13 @@ spec:
           volumeMounts:
             - name: server
               mountPath: /minecraft/server
-            - name: logs
-              mountPath: /minecraft/server/logs
           env:
             - name: JVM_OPTS
               value: "-Xms2G -Xmx2G"
       volumes:
         - name: server
           persistentVolumeClaim:
-            claimName: amber
-        - name: logs
-          emptyDir: {}
+            claimName: survival1
 ---
 apiVersion: v1
 kind: Service

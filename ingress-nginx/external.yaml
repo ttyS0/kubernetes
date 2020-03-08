@@ -190,7 +190,7 @@ metadata:
     app.kubernetes.io/name: ingress-nginx-ext
     app.kubernetes.io/part-of: ingress-nginx
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: ingress-nginx-ext
@@ -205,17 +205,13 @@ spec:
         prometheus.io/scrape: "true"
     spec:
       nodeSelector:
-        kubernetes.io/arch: amd64
-      tolerations:
-        - key: ceph
-          value: osd
-          effect: NoSchedule
+        kubernetes.io/arch: arm64
       # wait up to five minutes for the drain of connections
       terminationGracePeriodSeconds: 300
       serviceAccountName: nginx-ingress-serviceaccount-ext
       containers:
         - name: nginx-ingress-controller-ext
-          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller-arm64:0.30.0
           args:
             - /nginx-ingress-controller
             - --configmap=$(POD_NAMESPACE)/nginx-configuration-external
@@ -224,6 +220,7 @@ spec:
             - --publish-service=$(POD_NAMESPACE)/ingress-nginx-external
             - --annotations-prefix=nginx.ingress.kubernetes.io
             - --ingress-class=nginx-external
+            - --maxmind-license-key=b82vAILUd8Cc7WL3
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:
@@ -231,8 +228,8 @@ spec:
                 - ALL
               add:
                 - NET_BIND_SERVICE
-            # www-data -> 33
-            runAsUser: 33
+            # www-data -> 101
+            runAsUser: 101
           env:
             - name: POD_NAME
               valueFrom:
@@ -271,7 +268,6 @@ spec:
               exec:
                 command:
                   - /wait-shutdown
----
 ---
 apiVersion: v1
 kind: Service
