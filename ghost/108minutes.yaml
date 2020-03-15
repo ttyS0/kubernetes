@@ -77,7 +77,7 @@ spec:
         app: 108minutes
     spec:
       containers:
-        - image: ghost:3.9.0
+        - image: ghost:3.11.0
           name: ghost-108minutes
           env:
             - name: AWS_ACCESS_KEY_ID
