@@ -25,11 +25,9 @@ spec:
                     values:
                       - videotranscoding
               topologyKey: "kubernetes.io/hostname"
-      imagePullSecrets:
-        - name: home-registry
       containers:
         - name: videotranscoding
-          image: docker.ttys0.net/bookstack:0.28.2-1
+          image: ttys0/bookstack:v0.28.3
           env:
             - name: DB_HOST
               value: "mariadb.mariadb.svc.cluster.local"
