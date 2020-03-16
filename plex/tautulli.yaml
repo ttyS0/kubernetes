@@ -1,20 +1,7 @@
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: tautulli
-  namespace: plex
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100G
-  storageClassName: fast
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: tautulli-app
+  name: tautulli-conf
   namespace: plex
 spec:
   accessModes:
@@ -53,19 +40,14 @@ spec:
           ports:
             - containerPort: 8181
           volumeMounts:
-            - name: data
+            - name: conf
               mountPath: /config
-            - name: app
-              mountPath: /app
       securityContext:
         fsGroup: 1000
       volumes:
-        - name: data
+        - name: conf
           persistentVolumeClaim:
-            claimName: tautulli
-        - name: app
-          persistentVolumeClaim:
-            claimName: tautulli-app
+            claimName: tautulli-conf
 ---
 apiVersion: v1
 kind: Service
