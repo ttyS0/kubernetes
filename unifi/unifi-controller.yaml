@@ -34,10 +34,11 @@ spec:
         fsGroup: 999
       containers:
         - image: jacobalberty/unifi:5.12.35
-          imagePullPolicy: Always
           env:
-          - name: "RUNAS_UID0"
+          - name: RUNAS_UID0
             value: "false"
+          - name: CERT_IS_CHAIN
+            value: "true"
           name: unifi-controller
           ports:
             - containerPort: 8080
@@ -55,10 +56,28 @@ spec:
               mountPath: /unifi/data
             - name: unifi-log
               mountPath: /unifi/log
+            - name: unifi-cert
+              mountPath: /unifi/cert/cert.pem
+              subPath: cert.pem
+            - name: unifi-key
+              mountPath: /unifi/cert/privkey.pem
+              subPath: privkey.pem
       volumes:
       - name: unifi-data
         persistentVolumeClaim:
           claimName: unifi-data
+      - name: unifi-cert
+        secret:
+          secretName: unifi-tls
+          items:
+            - key: tls.crt
+              path: cert.pem
+      - name: unifi-key
+        secret:
+          secretName: unifi-tls
+          items:
+            - key: tls.key
+              path: privkey.pem
       - name: unifi-log
         emptyDir:
           {}
