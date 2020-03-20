@@ -74,7 +74,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-cephfsplugin-attacher
-          image: quay.io/k8scsi/csi-attacher:v2.1.0
+          image: quay.io/k8scsi/csi-attacher:v2.1.1
           args:
             - "--v=5"
             - "--csi-address=$(ADDRESS)"
@@ -92,7 +92,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v2.0.0-amd64
+          image: quay.io/cephcsi/cephcsi:v2.0.1-amd64
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
