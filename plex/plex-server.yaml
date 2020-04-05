@@ -23,6 +23,19 @@ spec:
     requests:
       storage: 200G
   storageClassName: fast
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: plex-media
+#  namespace: plex
+#spec:
+#  accessModes:
+#    - ReadWriteMany
+#  resources:
+#    requests:
+#      storage: 15T
+#  storageClassName: cephfs-bulk
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -42,7 +55,7 @@ spec:
         app: plex
     spec:
       containers:
-        - image: plexinc/pms-docker:1.18.8.2527-740d4c206
+        - image: plexinc/pms-docker:1.18.9.2578-513b381af
           name: plex
           env:
             - name: HOSTNAME
