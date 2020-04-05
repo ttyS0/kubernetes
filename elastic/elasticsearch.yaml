@@ -1,113 +1,74 @@
-kind: PersistentVolumeClaim
-apiVersion: v1
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
 metadata:
-  name: es-data
+  name: es
   namespace: elastic
 spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: fast
+  version: 7.6.2
+  nodeSets:
+    - name: home
+      config:
+        node.master: true
+        node.data: true
+        node.ingest: true
+        node.ml: true
+        node.store.allow_mmap: false
+      podTemplate:
+        metadata:
+          labels:
+        spec:
+          nodeSelector:
+            kubernetes.io/arch: amd64
+          containers:
+            - name: elasticsearch
+              resources:
+                limits:
+                  memory: 4Gi
+              env:
+                - name: ES_JAVA_OPTS
+                  value: "-Xms2g -Xmx2g"
+      count: 3
+      volumeClaimTemplates:
+        - metadata:
+            name: es-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 50Gi
+            storageClassName: fast
+  http:
+    service:
+      spec:
+        type: LoadBalancer
+    tls:
+      certificate:
+        secretName: elastic-tls
 ---
-apiVersion: v1
-kind: ConfigMap
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
 metadata:
-  name: es-config
-  namespace: elastic
-data:
-  elasticsearch.yml: |
-    cluster.name: home
-    network.host: "0.0.0.0"
-    bootstrap.memory_lock: false
-    discovery.type: single-node
-    xpack.security.enabled: false
-    xpack.monitoring.enabled: true
-    xpack.monitoring.collection.enabled: true
-  ES_JAVA_OPTS: -Xms2048m -Xmx2048m
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: elasticsearch
+  name: kb
   namespace: elastic
 spec:
-  selector:
-    matchLabels:
-      app: elasticsearch
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: elasticsearch
+  version: 7.6.2
+  count: 1
+  elasticsearchRef:
+    name: "es"
+  http:
+    service:
+      spec:
+        type: LoadBalancer
+    tls:
+      certificate:
+        secretName: kibana-tls
+  podTemplate:
     spec:
-      securityContext:
-        fsGroup: 1000
-      initContainers:
-        - name: init-sysctl
-          image: busybox
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            privileged: true
-          command: ["sysctl", "-w", "vm.max_map_count=262144"]
+      nodeSelector:
+        kubernetes.io/arch: amd64
       containers:
-        - name: elasticsearch
+        - name: kibana
           resources:
-            requests:
-              memory: 4Gi
-          securityContext:
-            privileged: true
-            runAsUser: 1000
-            capabilities:
-              add:
-                - IPC_LOCK
-                - SYS_RESOURCE
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
-          env:
-            - name: ES_JAVA_OPTS
-              valueFrom:
-                configMapKeyRef:
-                  name: es-config
-                  key: ES_JAVA_OPTS
-          readinessProbe:
-            httpGet:
-              scheme: HTTP
-              path: /_cluster/health?local=true
-              port: 9200
-            initialDelaySeconds: 5
-          ports:
-            - containerPort: 9200
-              name: es-http
-            - containerPort: 9300
-              name: es-transport
-          volumeMounts:
-            - name: es-data
-              mountPath: /usr/share/elasticsearch/data
-            - name: es-config
-              mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
-              subPath: elasticsearch.yml
-      volumes:
-        - name: es-config
-          configMap:
-            name: es-config
-            items:
-              - key: elasticsearch.yml
-                path: elasticsearch.yml
-        - name: es-data
-          persistentVolumeClaim:
-            claimName: es-data
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: elasticsearch
-  namespace: elastic
-  labels:
-    app: elasticsearch
-spec:
-  ports:
-    - name: es-http
-      port: 9200
-  selector:
-    app: elasticsearch
+            limits:
+              memory: 1Gi

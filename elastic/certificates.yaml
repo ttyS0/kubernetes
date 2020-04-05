@@ -11,3 +11,18 @@ spec:
   commonName: 'kibana.ttys0.net'
   dnsNames:
     - kibana.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: elastic-tls
+  namespace: elastic
+spec:
+  secretName: elastic-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'elasticsearch.ttys0.net'
+  dnsNames:
+    - es.ttys0.net
+    - elasticsearch.ttys0.net
