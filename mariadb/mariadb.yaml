@@ -46,11 +46,10 @@ spec:
         name: mariadb
         resources:
           limits:
-            cpu: "1"
-            memory: "2Gi"
+            memory: "3Gi"
           requests:
-            cpu: 500m
-            memory: "1Gi"
+            cpu: 1000m
+            memory: "2Gi"
         env:
           # kubectl create secret generic root -n mariadb --from-literal=passwd=ROOT_PASSWORD
           - name: MYSQL_ROOT_PASSWORD
