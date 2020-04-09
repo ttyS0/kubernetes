@@ -1,0 +1,201 @@
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: vault-tls
+  namespace: vault
+spec:
+  secretName: vault-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: vault.ttys0.net
+  dnsNames:
+    - vault.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: unifi-tls
+  namespace: unifi
+spec:
+  secretName: unifi-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: unifi.ttys0.net
+  dnsNames:
+    - unifi.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: plex-tls
+  namespace: plex
+spec:
+  secretName: plex-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: plex.ttys0.net
+  dnsNames:
+    - plex.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: prom-tls
+  namespace: monitoring
+spec:
+  secretName: prom-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: prometheus.ttys0.net
+  dnsNames:
+    - prometheus.ttys0.net
+    - alertmanager.ttys0.net
+    - grafana.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: minecraft-tls
+  namespace: minecraft
+spec:
+  secretName: minecraft-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: minecraft.ttys0.net
+  dnsNames:
+    - minecraft.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: 108minutes-tls
+  namespace: ghost
+spec:
+  secretName: 108minutes-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: '108minutes.net'
+  dnsNames:
+    - 108minutes.net
+    - www.108minutes.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: beezuscomplex-tls
+  namespace: ghost
+spec:
+  secretName: beezuscomplex-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'beezuscomplex.com'
+  dnsNames:
+    - beezuscomplex.com
+    - www.beezuscomplex.com
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: skj-tls
+  namespace: ghost
+spec:
+  secretName: skj-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'skj.dev'
+  dnsNames:
+    - skj.dev
+    - www.skj.dev
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: kibana-tls
+  namespace: elastic
+spec:
+  secretName: kibana-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'kibana.ttys0.net'
+  dnsNames:
+    - kibana.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: elastic-tls
+  namespace: elastic
+spec:
+  secretName: elastic-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'elasticsearch.ttys0.net'
+  dnsNames:
+    - es.ttys0.net
+    - elasticsearch.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: docker-tls
+  namespace: docker
+spec:
+  secretName: docker-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: docker.ttys0.net
+  dnsNames:
+    - docker.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: consul-tls
+  namespace: consul
+spec:
+  secretName: consul-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: consul.ttys0.net
+  dnsNames:
+    - consul.ttys0.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: skj-tls
+  namespace: bookstack
+spec:
+  secretName: skj-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: skj.wiki
+  dnsNames:
+    - skj.wiki
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: videotranscoding-tls
+  namespace: bookstack
+spec:
+  secretName: videotranscoding-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: videotranscoding.wiki
+  dnsNames:
+    - videotranscoding.wiki

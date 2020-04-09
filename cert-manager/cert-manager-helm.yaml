@@ -25,11 +25,13 @@ global:
     # Override the namespace used to store the ConfigMap for leader election
     namespace: "kube-system"
 
+installCRDs: true
+
 replicaCount: 1
 
 strategy: {}
   # type: RollingUpdate
-  # rollingUpdate:
+# rollingUpdate:
 #   maxSurge: 0
 #   maxUnavailable: 1
 
@@ -79,7 +81,15 @@ securityContext:
   runAsUser: 1001
   runAsNonRoot: true
 
-podAnnotations: {}
+volumes: []
+
+volumeMounts: []
+
+# Optional additional annotations to add to the controller Deployment
+# deploymentAnnotations: {}
+
+# Optional additional annotations to add to the controller Pods
+# podAnnotations: {}
 
 podLabels:
 # Optional DNS settings, useful if you have a public and private DNS zone for
@@ -144,19 +154,25 @@ webhook:
 
   strategy: {}
     # type: RollingUpdate
-    # rollingUpdate:
+  # rollingUpdate:
   #   maxSurge: 0
   #   maxUnavailable: 1
 
-  podAnnotations: {}
+  securityContext: {}
+
+  # Optional additional annotations to add to the webhook Deployment
+  # deploymentAnnotations: {}
+
+  # Optional additional annotations to add to the webhook Pods
+  # podAnnotations: {}
 
   # Optional additional arguments for webhook
   extraArgs: []
 
-  resources: {}
-    # requests:
-  #   cpu: 10m
-  #   memory: 32Mi
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
 
   nodeSelector: {}
 
@@ -171,12 +187,6 @@ webhook:
     # tag: canary
     pullPolicy: IfNotPresent
 
-  # If true, the apiserver's cabundle will be automatically injected into the
-  # webhook's ValidatingWebhookConfiguration resource by the CA injector.
-  # in future this will default to false, as the apiserver can use the loopback
-  # configuration caBundle to talk to itself in kubernetes 1.11+
-  # see https://github.com/kubernetes/kubernetes/pull/62649
-  injectAPIServerCA: true
 
   # The port that the webhook should listen on for requests.
   # In GKE private clusters, by default kubernetes apiservers are allowed to
@@ -186,23 +196,30 @@ webhook:
   securePort: 10250
 
 cainjector:
+  enabled: true
   replicaCount: 1
 
   strategy: {}
     # type: RollingUpdate
-    # rollingUpdate:
+  # rollingUpdate:
   #   maxSurge: 0
   #   maxUnavailable: 1
 
-  podAnnotations: {}
+  securityContext: {}
+
+  # Optional additional annotations to add to the cainjector Deployment
+  # deploymentAnnotations: {}
+
+  # Optional additional annotations to add to the cainjector Pods
+  # podAnnotations: {}
 
   # Optional additional arguments for cainjector
   extraArgs: []
 
-  resources: {}
-    # requests:
-  #   cpu: 10m
-  #   memory: 32Mi
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
 
   nodeSelector: {}
 
