@@ -23,19 +23,19 @@ spec:
     requests:
       storage: 200G
   storageClassName: fast
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  name: plex-media
-#  namespace: plex
-#spec:
-#  accessModes:
-#    - ReadWriteMany
-#  resources:
-#    requests:
-#      storage: 15T
-#  storageClassName: cephfs-bulk
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-import
+  namespace: plex
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1T
+  storageClassName: cephfs-bulk
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -55,7 +55,7 @@ spec:
         app: plex
     spec:
       containers:
-        - image: plexinc/pms-docker:1.18.9.2578-513b381af
+        - image: plexinc/pms-docker:1.19.1.2645-ccb6eb67e
           name: plex
           env:
             - name: HOSTNAME
@@ -71,6 +71,8 @@ spec:
               mountPath: /transcode
             - name: plex-data
               mountPath: /data
+            - name: plex-import
+              mountPath: /incoming
           resources:
             limits:
               gpu.intel.com/i915: 1
@@ -85,6 +87,9 @@ spec:
             claimName: plex-data
         - name: plex-transcode
           emptyDir: {}
+        - name: plex-import
+          persistentVolumeClaim:
+            claimName: plex-import
 ---
 apiVersion: v1
 kind: Service
