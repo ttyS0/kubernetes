@@ -142,7 +142,7 @@ spec:
         - name: home-registry
       containers:
         - name: static-web
-          image: docker.ttys0.net/static-web:2
+          image: ttys0/staticweb:v1.0-1
           command: ["/home/auto-reload-nginx.sh"]
           ports:
             - containerPort: 80
