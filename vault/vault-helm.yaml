@@ -368,11 +368,11 @@ server:
         }
 
         seal "transit" {
-          address = "https://bombadil:8200"
+          address = "https://bombadil.ttys0.net:8200"
           disable_renewal = "false"
           key_name = "autounseal"
           mount_path = "transit/"
-          tls_skip_verify = "true"
+          tls_skip_verify = "false"
         }
 
         service_registration "kubernetes" {}
