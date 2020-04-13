@@ -168,7 +168,7 @@ server:
     # path: /v1/sys/health?standbyok=true
   # Used to enable a livenessProbe for the pods
   livenessProbe:
-    enabled: false
+    enabled: true
     path: "/v1/sys/health?standbyok=true"
     initialDelaySeconds: 60
 
@@ -356,6 +356,8 @@ server:
         ui = true
 
         cluster_name = "home"
+
+        api_addr = "https://vault.ttys0.net"
 
         listener "tcp" {
           tls_disable = 1
