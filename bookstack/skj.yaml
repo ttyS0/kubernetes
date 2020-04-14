@@ -15,6 +15,10 @@ spec:
       labels:
         app: skj
     spec:
+      securityContext:
+        runAsUser: 33
+        runAsGroup: 33
+        fsGroup: 33
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -27,7 +31,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
         - name: skj
-          image: ttys0/bookstack:v0.28.3
+          image: ttys0/bookstack:v0.29.0
           env:
             - name: DB_HOST
               value: "mariadb.mariadb.svc.cluster.local"
@@ -84,8 +88,12 @@ spec:
               value: "database"
             - name: SESSION_DRIVER
               value: "database"
+            - name: RUN_APACHE_USER
+              value: "www-data"
+            - name: RUN_APACHE_GROUP
+              value: "www-data"
           ports:
-            - containerPort: 80
+            - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
@@ -96,7 +104,7 @@ metadata:
     app: skj
 spec:
   ports:
-    - port: 80
+    - port: 8080
   selector:
     app: skj
   sessionAffinity: ClientIP
@@ -108,8 +116,6 @@ metadata:
   namespace: bookstack
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
@@ -119,7 +125,7 @@ spec:
           - path: /
             backend:
               serviceName: skj
-              servicePort: 80
+              servicePort: 8080
   tls:
     - hosts:
         - skj.wiki
@@ -132,8 +138,6 @@ metadata:
   namespace: bookstack
   annotations:
     kubernetes.io/ingress.class: nginx-external
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
@@ -143,7 +147,7 @@ spec:
           - path: /
             backend:
               serviceName: skj
-              servicePort: 80
+              servicePort: 8080
   tls:
     - hosts:
         - skj.wiki
