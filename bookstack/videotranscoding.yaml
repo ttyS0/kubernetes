@@ -15,6 +15,8 @@ spec:
       labels:
         app: videotranscoding
     spec:
+      securityContext:
+        fsGroup: 33
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -27,7 +29,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
         - name: videotranscoding
-          image: ttys0/bookstack:v0.28.3
+          image: ttys0/bookstack:v0.29.0
           env:
             - name: DB_HOST
               value: "mariadb.mariadb.svc.cluster.local"
