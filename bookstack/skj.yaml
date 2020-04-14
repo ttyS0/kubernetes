@@ -16,8 +16,6 @@ spec:
         app: skj
     spec:
       securityContext:
-        runAsUser: 33
-        runAsGroup: 33
         fsGroup: 33
       affinity:
         podAntiAffinity:
@@ -88,12 +86,8 @@ spec:
               value: "database"
             - name: SESSION_DRIVER
               value: "database"
-            - name: RUN_APACHE_USER
-              value: "www-data"
-            - name: RUN_APACHE_GROUP
-              value: "www-data"
           ports:
-            - containerPort: 8080
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -104,7 +98,7 @@ metadata:
     app: skj
 spec:
   ports:
-    - port: 8080
+    - port: 80
   selector:
     app: skj
   sessionAffinity: ClientIP
@@ -125,7 +119,7 @@ spec:
           - path: /
             backend:
               serviceName: skj
-              servicePort: 8080
+              servicePort: 80
   tls:
     - hosts:
         - skj.wiki
@@ -147,7 +141,7 @@ spec:
           - path: /
             backend:
               serviceName: skj
-              servicePort: 8080
+              servicePort: 80
   tls:
     - hosts:
         - skj.wiki
