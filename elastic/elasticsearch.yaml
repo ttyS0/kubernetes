@@ -30,7 +30,7 @@ spec:
       count: 3
       volumeClaimTemplates:
         - metadata:
-            name: es-data
+            name: elasticsearch-data
           spec:
             accessModes:
               - ReadWriteOnce
