@@ -7,6 +7,8 @@ spec:
   selector:
     matchLabels:
       app: csi-cephfsplugin
+  updateStrategy:
+    type: OnDelete
   template:
     metadata:
       labels:
@@ -23,7 +25,7 @@ spec:
         - name: home-registry
       containers:
         - name: driver-registrar
-          image: docker.ttys0.net/csi-node-driver-registrar:v1.2.0
+          image: ttys0/csi-node-driver-registrar:v1.3.0
           args:
             - "--v=5"
             - "--csi-address=/csi/csi.sock"
@@ -53,7 +55,7 @@ spec:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v2.0.1-arm64
+          image: ttys0/cephcsi:v2.1.0
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
@@ -62,10 +64,6 @@ spec:
             - "--v=5"
             - "--drivername=cephfs.csi.ceph.com"
             - "--metadatastorage=k8s_configmap"
-            - "--mountcachedir=/mount-cache-dir"
-            - "--metricsport=8090"
-            - "--metricspath=/metrics"
-            - "--enablegrpcmetrics=false"
           env:
             - name: POD_IP
               valueFrom:
@@ -105,7 +103,7 @@ spec:
             - name: keys-tmp-dir
               mountPath: /tmp/csi/keys
         - name: liveness-prometheus
-          image: quay.io/cephcsi/cephcsi:v2.0.1-arm64
+          image: ttys0/cephcsi:v2.1.0
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
