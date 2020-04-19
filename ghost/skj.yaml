@@ -69,7 +69,7 @@ spec:
         app: skj
     spec:
       containers:
-        - image: ghost:3.13.1
+        - image: ghost:3.13.3
           name: ghost-skj
           env:
             - name: database__connection__user
