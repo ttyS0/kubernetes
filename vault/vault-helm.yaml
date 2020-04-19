@@ -102,7 +102,8 @@ injector:
   # Example:
   # nodeSelector: |
   #   beta.kubernetes.io/arch: amd64
-  nodeSelector: null
+  nodeSelector: |
+    kubernetes.io/arch: amd64
 
 server:
   # Resource requests, limits, etc. for the server cluster placement. This
@@ -371,9 +372,8 @@ server:
 
         seal "transit" {
           address = "https://bombadil.ttys0.net:8200"
-          disable_renewal = "false"
           key_name = "autounseal"
-          mount_path = "transit/"
+          mount_path = "transit"
           tls_skip_verify = "false"
         }
 
