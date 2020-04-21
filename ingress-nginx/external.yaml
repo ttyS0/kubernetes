@@ -214,6 +214,7 @@ spec:
           image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller-arm64:0.30.0
           args:
             - /nginx-ingress-controller
+            - --default-backend-service=ghost/static-web
             - --configmap=$(POD_NAMESPACE)/nginx-configuration-external
             - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services-external
             - --udp-services-configmap=$(POD_NAMESPACE)/udp-services-external
