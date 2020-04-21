@@ -1,74 +1,3 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: bungeecord
-  namespace: minecraft
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1G
-  storageClassName: cephfs
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  namespace: minecraft
-  name: bungeecord-yml
-data:
-  config-yml: |
-    player_limit: 10
-    ip_forward: true
-    permissions:
-      default:
-        - bungeecord.command.server
-        - bungeecord.command.list
-      admin:
-        - bungeecord.command.alert
-        - bungeecord.command.end
-        - bungeecord.command.ip
-        - bungeecord.command.reload
-    timeout: 30000
-    log_commands: false
-    online_mode: true
-    servers:
-      lobby:
-        motd: '&1Limbo'
-        address: lobby:25565
-        restricted: false
-      amber:
-        motd: "&1Amber"
-        address: amber:25565
-        resricted: false
-    listeners:
-      - query_port: 25577
-        motd: '&1Seans Bungee Server'
-        priorities:
-          - amber
-        bind_local_address: true
-        tab_list: GLOBAL_PING
-        query_enabled: false
-        host: 0.0.0.0:25577
-        forced_hosts: {}
-        max_players: 0
-        tab_size: 60
-        ping_passthrough: false
-        force_default_server: false
-        proxy_protocol: false
-    disabled_commands:
-      - disabledcommandhere
-    network_compression_threshold: 256
-    groups:
-      ttys0:
-        - admin
-    connection_throttle: 4000
-    connection_throttle_limit: 3
-    stats: f2876aa6-74d2-468c-90ee-1377111f1c9f
-    forge_support: false
-    inject_commands: false
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -88,31 +17,28 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/arch: amd64
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
       containers:
         - imagePullPolicy: IfNotPresent
           name: bungeecord
           image: ttys0/bungeecord:v1486
+          workingDir: "/minecraft/worlds/bungeecord"
           ports:
             - containerPort: 25577
           volumeMounts:
-            - name: bungeecord-yml
-              mountPath: /config/config.yml
-              subPath: config.yml
-            - name: bungeecord-plugins
-              mountPath: /plugins
+            - name: worlds
+              mountPath: "/minecraft/worlds"
           env:
             - name: JVM_OPTS
-              value: "-Xms1G -Xmx1G"
+              value: "-Xms2G -Xmx2G"
+            - name: BUNGEE_HOME
+              value: "/minecraft/worlds/bungeecord"
       volumes:
-        - name: bungeecord-yml
-          configMap:
-            name: bungeecord-yml
-            items:
-              - key: config-yml
-                path: config.yml
-        - name: bungeecord-plugins
+        - name: worlds
           persistentVolumeClaim:
-            claimName: bungeecord
+            claimName: minecraft-worlds
 ---
 apiVersion: v1
 kind: Service

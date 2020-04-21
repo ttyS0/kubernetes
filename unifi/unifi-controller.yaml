@@ -33,12 +33,12 @@ spec:
         runAsUser: 999
         fsGroup: 999
       containers:
-        - image: jacobalberty/unifi:5.12.35
+        - image: jacobalberty/unifi:5.12.66
           env:
-          - name: RUNAS_UID0
-            value: "false"
-          - name: CERT_IS_CHAIN
-            value: "true"
+            - name: RUNAS_UID0
+              value: "false"
+            - name: CERT_IS_CHAIN
+              value: "true"
           name: unifi-controller
           ports:
             - containerPort: 8080

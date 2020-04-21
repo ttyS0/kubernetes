@@ -161,20 +161,6 @@ spec:
 apiVersion: cert-manager.io/v1alpha3
 kind: Certificate
 metadata:
-  name: consul-tls
-  namespace: consul
-spec:
-  secretName: consul-tls
-  issuerRef:
-    name: letsencrypt
-    kind: ClusterIssuer
-  commonName: consul.ttys0.net
-  dnsNames:
-    - consul.ttys0.net
----
-apiVersion: cert-manager.io/v1alpha3
-kind: Certificate
-metadata:
   name: skj-tls
   namespace: bookstack
 spec:

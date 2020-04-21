@@ -92,10 +92,7 @@ injector:
   # Toleration Settings for injector pods
   # This should be a multi-line string matching the Toleration array
   # in a PodSpec.
-  tolerations: |
-    - key: ceph
-      value: osd
-      effect: NoSchedule
+  tolerations: {}
 
   # nodeSelector labels for injector pod assignment, formatted as a muli-line string.
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
@@ -218,10 +215,7 @@ server:
   # This should be a multi-line string matching the Toleration array
   # in a PodSpec.
   # tolerations: {}
-  tolerations: |
-    - key: ceph
-      value: osd
-      effect: NoSchedule
+  tolerations: {}
 
   # nodeSelector labels for server pod assignment, formatted as a muli-line string.
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
