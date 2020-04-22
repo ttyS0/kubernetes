@@ -873,12 +873,11 @@ kubeEtcd:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
-    scheme: http
+    scheme: https
     insecureSkipVerify: false
-    serverName: ""
-    caFile: ""
-    certFile: ""
-    keyFile: ""
+    caFile: "/etc/prometheus/secrets/etcd-client/ca.crt"
+    certFile: "/etc/prometheus/secrets/etcd-client/healthcheck-client.crt"
+    keyFile: "/etc/prometheus/secrets/etcd-client/healthcheck-client.key"
 
     ## 	metric relabel configs to apply to samples before ingestion.
     ##
@@ -1259,6 +1258,7 @@ prometheusOperator:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
   ##
   affinity: {}
+
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -1589,7 +1589,8 @@ prometheus:
     ## reflected in the running Pods. To change the secrets mounted into the Prometheus Pods, the object must be deleted and recreated
     ## with the new list of secrets.
     ##
-    secrets: []
+    secrets:
+      - etcd-client
 
     ## ConfigMaps is a list of ConfigMaps in the same namespace as the Prometheus object, which shall be mounted into the Prometheus Pods.
     ## The ConfigMaps are mounted into /etc/prometheus/configmaps/.
