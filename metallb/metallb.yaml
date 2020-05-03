@@ -331,7 +331,6 @@ spec:
               name: monitoring
           resources:
             limits:
-              cpu: 100m
               memory: 100Mi
           securityContext:
             allowPrivilegeEscalation: false
@@ -386,7 +385,6 @@ spec:
               name: monitoring
           resources:
             limits:
-              cpu: 100m
               memory: 100Mi
           securityContext:
             allowPrivilegeEscalation: false
