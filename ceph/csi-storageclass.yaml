@@ -14,7 +14,6 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-namespace: ceph
   csi.storage.k8s.io/controller-expand-secret-name: csi-rbd-secret
   csi.storage.k8s.io/controller-expand-secret-namespace: ceph
-  mounter: rbd-nbd
 allowVolumeExpansion: true
 reclaimPolicy: Delete
 mountOptions:
@@ -38,7 +37,6 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-namespace: ceph
   csi.storage.k8s.io/controller-expand-secret-name: csi-rbd-secret
   csi.storage.k8s.io/controller-expand-secret-namespace: ceph
-  mounter: rbd-nbd
 allowVolumeExpansion: true
 reclaimPolicy: Delete
 mountOptions:
@@ -59,7 +57,6 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-namespace: ceph
   csi.storage.k8s.io/controller-expand-secret-name: csi-cephfs-secret
   csi.storage.k8s.io/controller-expand-secret-namespace: ceph
-  mounter: fuse
 allowVolumeExpansion: true
 reclaimPolicy: Delete
 ---
@@ -78,7 +75,6 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-namespace: ceph
   csi.storage.k8s.io/controller-expand-secret-name: csi-cephfs-secret
   csi.storage.k8s.io/controller-expand-secret-namespace: ceph
-  mounter: fuse
 allowVolumeExpansion: true
 reclaimPolicy: Delete
 
