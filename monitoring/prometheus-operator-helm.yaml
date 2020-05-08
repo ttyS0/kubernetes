@@ -486,6 +486,9 @@ grafana:
   ##
   defaultDashboardsEnabled: true
 
+  nodeSelector:
+    kubernetes.io/arch: "amd64"
+
   admin:
     existingSecret: grafana-admin
     userKey: admin-user
@@ -1892,7 +1895,28 @@ prometheus:
     ##
     portName: "web"
 
-  additionalServiceMonitors: []
+  additionalServiceMonitors:
+    - name: ingress-nginx-internal
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
+      namespaceSelector:
+        matchNames:
+          - ingress-nginx
+      endpoints:
+        - port: prom
+          interval: 10s
+
+    - name: ingress-nginx-external
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx-ext
+      namespaceSelector:
+        matchNames:
+          - ingress-nginx
+      endpoints:
+        - port: prom
+          interval: 10s
     ## Name of the ServiceMonitor to create
     ##
     # - name: ""
