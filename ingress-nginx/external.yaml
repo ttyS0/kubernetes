@@ -298,6 +298,10 @@ spec:
       port: 443
       targetPort: 443
       protocol: TCP
+    - name: prom
+      port: 10254
+      targetPort: 10254
+      protocol: TCP
   selector:
     app.kubernetes.io/name: ingress-nginx-ext
     app.kubernetes.io/part-of: ingress-nginx
