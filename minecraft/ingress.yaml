@@ -19,3 +19,25 @@ spec:
     - hosts:
         - minecraft.ttys0.net
       secretName: minecraft-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: minecraft-ext
+  namespace: minecraft
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: minecraft.ttys0.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: amber
+              servicePort: 8123
+  tls:
+    - hosts:
+        - minecraft.ttys0.net
+      secretName: minecraft-tls

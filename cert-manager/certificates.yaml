@@ -1,16 +1,4 @@
-apiVersion: cert-manager.io/v1alpha3
-kind: Certificate
-metadata:
-  name: vault-tls
-  namespace: vault
-spec:
-  secretName: vault-tls
-  issuerRef:
-    name: letsencrypt
-    kind: ClusterIssuer
-  commonName: vault.ttys0.net
-  dnsNames:
-    - vault.ttys0.net
+
 ---
 apiVersion: cert-manager.io/v1alpha3
 kind: Certificate
@@ -55,20 +43,7 @@ spec:
     - prometheus.ttys0.net
     - alertmanager.ttys0.net
     - grafana.ttys0.net
----
-apiVersion: cert-manager.io/v1alpha3
-kind: Certificate
-metadata:
-  name: minecraft-tls
-  namespace: minecraft
-spec:
-  secretName: minecraft-tls
-  issuerRef:
-    name: letsencrypt
-    kind: ClusterIssuer
-  commonName: minecraft.ttys0.net
-  dnsNames:
-    - minecraft.ttys0.net
+
 ---
 apiVersion: cert-manager.io/v1alpha3
 kind: Certificate
