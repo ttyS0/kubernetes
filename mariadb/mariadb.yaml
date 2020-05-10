@@ -20,7 +20,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 100Gi
   storageClassName: fast
 ---
 apiVersion: apps/v1
@@ -46,9 +46,8 @@ spec:
         name: mariadb
         resources:
           limits:
-            memory: "3Gi"
+            memory: "4Gi"
           requests:
-            cpu: 1000m
             memory: "2Gi"
         env:
           # kubectl create secret generic root -n mariadb --from-literal=passwd=ROOT_PASSWORD
