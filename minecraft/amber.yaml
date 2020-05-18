@@ -42,6 +42,7 @@ spec:
           ports:
             - containerPort: 25565
             - containerPort: 8123
+            - containerPort: 25575
           volumeMounts:
             - name: worlds
               mountPath: /minecraft/worlds
@@ -71,6 +72,9 @@ spec:
     - name: map
       port: 8123
       targetPort: 8123
+    - name: rcon
+      port: 25575
+      targetPort: 25575
   selector:
     app: minecraft
     world: amber
