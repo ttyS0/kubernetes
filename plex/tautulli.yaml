@@ -32,7 +32,7 @@ spec:
       nodeSelector:
         kubernetes.io/arch: amd64
       containers:
-        - image: tautulli/tautulli
+        - image: tautulli/tautulli:v2.2.4
           name: tautulli
           env:
             - name: TZ
