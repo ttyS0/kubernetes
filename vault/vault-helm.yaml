@@ -30,7 +30,7 @@ injector:
   # required.
   agentImage:
     repository: "vault"
-    tag: "1.4.1"
+    tag: "1.4.2"
 
   # Mount Path of the Vault Kubernetes Auth Method.
   authPath: "auth/kubernetes"
