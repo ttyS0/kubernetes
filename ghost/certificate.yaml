@@ -1,0 +1,44 @@
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: 108minutes-tls
+  namespace: ghost
+spec:
+  secretName: 108minutes-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: '108minutes.net'
+  dnsNames:
+    - 108minutes.net
+    - www.108minutes.net
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: beezuscomplex-tls
+  namespace: ghost
+spec:
+  secretName: beezuscomplex-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'beezuscomplex.com'
+  dnsNames:
+    - beezuscomplex.com
+    - www.beezuscomplex.com
+---
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: skj-tls
+  namespace: ghost
+spec:
+  secretName: skj-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'skj.dev'
+  dnsNames:
+    - skj.dev
+    - www.skj.dev
