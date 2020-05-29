@@ -49,12 +49,17 @@ spec:
     spec:
       containers:
         - name:  pihole-cloudflared
-          image: visibilityspots/cloudflared:latest
+          image: crazymax/cloudflared:2020.5.1
           resources:
             requests:
               memory: "64Mi"
             limits:
               memory: "128Mi"
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: TUNNEL_DNS_UPSTREAM
+              value: "https://1.1.1.1/dns-query,https://1.0.0.1/dns-query"
         - name: pihole-core
           image: pihole/pihole:v5.0
           resources:
@@ -66,9 +71,9 @@ spec:
             - name: TZ
               value: America/Chicago
             - name: DNS1
-              value: 127.0.0.1#5054
+              value: 127.0.0.1#5053
             - name: DNS2
-              value: 127.0.0.1#5054
+              value: 127.0.0.1#5053
           ports:
             - containerPort: 80
               name: web
