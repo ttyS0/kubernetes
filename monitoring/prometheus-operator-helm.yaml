@@ -1802,6 +1802,11 @@ prometheus:
         scheme: https
         static_configs:
           - targets: [ 'ceph.ttys0.net' ]
+      - job_name: pfsense
+        scheme: http
+        static_configs:
+          - targets: [ '10.0.1.1:9273' ]
+
 
     # - job_name: kube-etcd
     #   kubernetes_sd_configs:
