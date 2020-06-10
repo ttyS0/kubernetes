@@ -25,7 +25,7 @@ global:
     # Override the namespace used to store the ConfigMap for leader election
     namespace: "kube-system"
 
-installCRDs: true
+installCRDs: false
 
 replicaCount: 1
 
@@ -35,6 +35,9 @@ strategy: {}
 #   maxSurge: 0
 #   maxUnavailable: 1
 
+# Comma separated list of feature gates that should be enabled on the
+# controller pod.
+featureGates: ""
 
 image:
   repository: quay.io/jetstack/cert-manager-controller
@@ -70,7 +73,6 @@ extraEnv: []
 
 resources:
   requests:
-    cpu: 10m
     memory: 32Mi
 
 # Pod Security Context
@@ -105,10 +107,10 @@ podDnsConfig:
 
 nodeSelector: {}
 
-ingressShim: {}
-  # defaultIssuerName: ""
-# defaultIssuerKind: ""
-# defaultIssuerGroup: ""
+ingressShim:
+  defaultIssuerName: "letsencrypt"
+  defaultIssuerKind: "ClusterIssuer"
+  defaultIssuerGroup: "cert-manager.io"
 
 prometheus:
   enabled: true
@@ -149,7 +151,6 @@ affinity: {}
 tolerations: []
 
 webhook:
-  enabled: true
   replicaCount: 1
 
   strategy: {}
@@ -171,7 +172,6 @@ webhook:
 
   resources:
     requests:
-      cpu: 10m
       memory: 32Mi
 
   nodeSelector: {}
@@ -218,7 +218,6 @@ cainjector:
 
   resources:
     requests:
-      cpu: 10m
       memory: 32Mi
 
   nodeSelector: {}
@@ -233,3 +232,12 @@ cainjector:
     # If no value is set, the chart's appVersion will be used.
     # tag: canary
     pullPolicy: IfNotPresent
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    # name: ""
+    # Optional additional annotations to add to the controller's ServiceAccount
+    # annotations: {}

@@ -6,6 +6,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: minecraft.ttys0.net
@@ -18,7 +20,7 @@ spec:
   tls:
     - hosts:
         - minecraft.ttys0.net
-      secretName: minecraft-tls
+      secretName: minecraft-net-tls
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -28,6 +30,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx-external
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: minecraft.ttys0.net
@@ -40,4 +44,4 @@ spec:
   tls:
     - hosts:
         - minecraft.ttys0.net
-      secretName: minecraft-tls
+      secretName: minecraft-net-tls

@@ -176,6 +176,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: pihole.ttys0.net
@@ -188,4 +190,4 @@ spec:
   tls:
     - hosts:
         - pihole.ttys0.net
-      secretName: pihole-tls
+      secretName: pihole-net-tls

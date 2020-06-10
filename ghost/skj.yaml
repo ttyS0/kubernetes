@@ -69,7 +69,7 @@ spec:
         app: skj
     spec:
       containers:
-        - image: ghost:3.18.1
+        - image: ghost:3.19.0
           name: ghost-skj
           env:
             - name: database__connection__user
@@ -128,6 +128,8 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: skj.dev
@@ -145,7 +147,7 @@ spec:
     - hosts:
         - skj.dev
         - www.skj.dev
-      secretName: skj-tls
+      secretName: skj-dev-tls
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -157,6 +159,8 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: skj.dev
@@ -174,6 +178,6 @@ spec:
     - hosts:
         - skj.dev
         - www.skj.dev
-      secretName: skj-tls
+      secretName: skj-dev-tls
 
 

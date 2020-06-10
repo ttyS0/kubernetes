@@ -65,6 +65,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: influxdb.ttys0.net
@@ -77,4 +79,4 @@ spec:
   tls:
     - hosts:
         - influxdb.ttys0.net
-      secretName: influxdb-tls
+      secretName: influxdb-net-tls

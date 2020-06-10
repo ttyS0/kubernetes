@@ -71,9 +71,11 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
-    - host: plex.ttys0.net
+    - host: tautulli.ttys0.net
       http:
         paths:
           - path: /
@@ -82,5 +84,5 @@ spec:
               servicePort: 8181
   tls:
     - hosts:
-        - plex.ttys0.net
-      secretName: plex-tls
+        - tautulli.ttys0.net
+      secretName: tautulli-net-tls

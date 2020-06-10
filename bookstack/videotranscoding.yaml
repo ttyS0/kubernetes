@@ -101,7 +101,6 @@ spec:
     - port: 80
   selector:
     app: videotranscoding
-  sessionAffinity: ClientIP
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -110,9 +109,9 @@ metadata:
   namespace: bookstack
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: videotranscoding.wiki
@@ -125,7 +124,7 @@ spec:
   tls:
     - hosts:
         - videotranscoding.wiki
-      secretName: videotranscoding-tls
+      secretName: videotranscoding-wiki-tls
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -134,9 +133,9 @@ metadata:
   namespace: bookstack
   annotations:
     kubernetes.io/ingress.class: nginx-external
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: videotranscoding.wiki
@@ -149,4 +148,4 @@ spec:
   tls:
     - hosts:
         - videotranscoding.wiki
-      secretName: videotranscoding-tls
+      secretName: videotranscoding-wiki-tls

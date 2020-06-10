@@ -101,7 +101,6 @@ spec:
     - port: 80
   selector:
     app: skj
-  sessionAffinity: ClientIP
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -111,6 +110,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: skj.wiki
@@ -123,7 +124,7 @@ spec:
   tls:
     - hosts:
         - skj.wiki
-      secretName: skj-tls
+      secretName: skj-wiki-tls
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -133,6 +134,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx-external
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: skj.wiki
@@ -145,4 +148,4 @@ spec:
   tls:
     - hosts:
         - skj.wiki
-      secretName: skj-tls
+      secretName: skj-wiki-tls
