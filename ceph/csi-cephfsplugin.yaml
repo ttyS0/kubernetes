@@ -58,7 +58,7 @@ spec:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v2.1.1-amd64
+          image: quay.io/cephcsi/cephcsi:v2.1.2-amd64
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
@@ -106,7 +106,7 @@ spec:
             - name: keys-tmp-dir
               mountPath: /tmp/csi/keys
         - name: liveness-prometheus
-          image: quay.io/cephcsi/cephcsi:v2.1.1-amd64
+          image: quay.io/cephcsi/cephcsi:v2.1.2-amd64
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
