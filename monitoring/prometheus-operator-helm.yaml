@@ -342,7 +342,7 @@ alertmanager:
     ## ConfigSecret is the name of a Kubernetes Secret in the same namespace as the Alertmanager object, which contains configuration for
     ## this Alertmanager instance. Defaults to 'alertmanager-' The secret is mounted into /etc/alertmanager/config.
     ##
-    # configSecret:
+    configSecret: alertmanager-slack-notify
 
     ## Define Log Format
     # Use logfmt (default) or json-formatted logging
@@ -1802,10 +1802,10 @@ prometheus:
         scheme: https
         static_configs:
           - targets: [ 'ceph.ttys0.net' ]
-      - job_name: pfsense
-        scheme: http
-        static_configs:
-          - targets: [ '10.0.1.1:9273' ]
+    #      - job_name: pfsense
+    #        scheme: http
+    #        static_configs:
+    #          - targets: [ '10.0.1.1:9273' ]
 
 
     # - job_name: kube-etcd
