@@ -1,0 +1,53 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: skj-dev
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: hugo.skj.dev
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: hugo
+              servicePort: 80
+  tls:
+    - hosts:
+        - skj.dev
+        - www.skj.dev
+        - hugo.skj.dev
+      secretName: skj-dev-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: 108minutes-net
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: hugo.108minutes.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: hugo
+              servicePort: 80
+  tls:
+    - hosts:
+        - 108minutes.net
+        - www.108minutes.net
+        - hugo.108minutes.net
+      secretName: 108minutes-net-tls
