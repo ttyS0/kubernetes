@@ -35,7 +35,7 @@ data:
   default.conf: |
     server {
         listen 80;
-        server_name 108minutes.net hugo.108minutes.net;
+        server_name 108minutes.net;
         root /usr/share/nginx/html/108minutes.net;
         index index.html;
         autoindex on;
@@ -47,7 +47,7 @@ data:
 
     server {
         listen 80;
-        server_name skj.dev hugo.skj.dev;
+        server_name skj.dev;
         root /usr/share/nginx/html/skj.dev;
         index index.html;
         autoindex on;

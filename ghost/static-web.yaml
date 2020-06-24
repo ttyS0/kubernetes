@@ -53,18 +53,6 @@ data:
 
     server {
         listen 80;
-        server_name 108minutes.net;
-        root /usr/share/nginx/html/108minutes.net;
-        index index.html;
-        autoindex on;
-
-        location / {
-            try_files $uri $uri/ =404;
-        }
-    }
-
-    server {
-        listen 80;
         server_name beezuscomplex.com;
         root /usr/share/nginx/html/beezuscomplex.com;
         index index.html;
@@ -79,18 +67,6 @@ data:
         listen 80;
         server_name minecraft.ttys0.net;
         root /usr/share/nginx/html/minecraft;
-        index index.html;
-        autoindex on;
-
-        location / {
-            try_files $uri $uri/ =404;
-        }
-    }
-
-    server {
-        listen 80;
-        server_name skj.dev;
-        root /usr/share/nginx/html/skj.dev;
         index index.html;
         autoindex on;
 
