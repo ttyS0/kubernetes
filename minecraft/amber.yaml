@@ -51,8 +51,6 @@ spec:
               value: "-Xms2G -Xmx2G"
             - name: SPIGOT_DIR
               value: "/minecraft/worlds/amber"
-            - name: SPIGOT_OPTS
-              value: "--forceUpgrade"
       volumes:
         - name: worlds
           persistentVolumeClaim:
