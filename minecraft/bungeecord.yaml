@@ -23,7 +23,7 @@ spec:
       containers:
         - imagePullPolicy: IfNotPresent
           name: bungeecord
-          image: ttys0/bungeecord:v1486
+          image: ttys0/bungeecord:v1513
           workingDir: "/minecraft/worlds/bungeecord"
           ports:
             - containerPort: 25577

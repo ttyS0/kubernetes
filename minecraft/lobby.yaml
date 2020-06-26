@@ -24,7 +24,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: lobby
-          image: ttys0/spigot:v1.15.2
+          image: ttys0/spigot:v1.16.1
           workingDir: "/minecraft/worlds/lobby"
           ports:
             - containerPort: 25565
@@ -36,6 +36,8 @@ spec:
               value: "-Xms2G -Xmx2G"
             - name: SPIGOT_DIR
               value: "/minecraft/worlds/lobby"
+            - name: SPIGOT_OPTS
+              value: "--forceUpgrade"
       volumes:
         - name: worlds
           persistentVolumeClaim:

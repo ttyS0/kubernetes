@@ -37,8 +37,8 @@ spec:
         fsGroup: 1000
       containers:
         - name: amber
-          image: ttys0/spigot:v1.15.2
-          workingDir: "/minecraft/worlds/amber-2020-05-10"
+          image: ttys0/spigot:v1.16.1
+          workingDir: "/minecraft/worlds/amber"
           ports:
             - containerPort: 25565
             - containerPort: 8123
@@ -50,7 +50,9 @@ spec:
             - name: JVM_OPTS
               value: "-Xms2G -Xmx2G"
             - name: SPIGOT_DIR
-              value: "/minecraft/worlds/amber-2020-05-10"
+              value: "/minecraft/worlds/amber"
+            - name: SPIGOT_OPTS
+              value: "--forceUpgrade"
       volumes:
         - name: worlds
           persistentVolumeClaim:
