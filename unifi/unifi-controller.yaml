@@ -33,7 +33,7 @@ spec:
         runAsUser: 999
         fsGroup: 999
       containers:
-        - image: jacobalberty/unifi:5.12.72
+        - image: jacobalberty/unifi:5.13.32
           env:
             - name: RUNAS_UID0
               value: "false"
