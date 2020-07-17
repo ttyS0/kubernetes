@@ -49,7 +49,7 @@ spec:
     spec:
       containers:
         - name:  pihole-cloudflared
-          image: crazymax/cloudflared:2020.6.5
+          image: crazymax/cloudflared:2020.7.1
           resources:
             requests:
               memory: "64Mi"
@@ -59,9 +59,9 @@ spec:
             - name: TZ
               value: America/Chicago
             - name: TUNNEL_DNS_UPSTREAM
-              value: "https://1.1.1.1/dns-query,https://1.0.0.1/dns-query"
+              value: "https://1.0.0.1/dns-query,https://1.1.1.1/dns-query"
         - name: pihole-core
-          image: pihole/pihole:v5.0
+          image: pihole/pihole:v5.1.1
           resources:
             requests:
               memory: "128Mi"
