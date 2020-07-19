@@ -1,8 +1,8 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: postgresql
-  namespace: postgresql
+  name: postgres
+  namespace: postgres
 spec:
   accessModes:
     - ReadWriteOnce
@@ -14,27 +14,27 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: postgresql
-  namespace: postgresql
+  name: postgres
+  namespace: postgres
   labels:
-    app: postgresql
+    app: postgres
 spec:
   selector:
     matchLabels:
-      app: postgresql
+      app: postgres
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: postgresql
+        app: postgres
     spec:
       containers:
-        - image: postgres:12.2
-          name: postgresql
+        - image: postgres:12.3
+          name: postgres
           resources:
             limits:
-              memory: "3Gi"
+              memory: "4Gi"
             requests:
               cpu: 1000m
               memory: "2Gi"
@@ -46,25 +46,25 @@ spec:
                   key: passwd
           ports:
             - containerPort: 5432
-              name: postgresql
+              name: postgres
           volumeMounts:
             - name: data
-              mountPath: /var/lib/postgresql
+              mountPath: /var/lib/postgres
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: postgresql
+            claimName: postgres
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: postgresql
-  namespace: postgresql
+  name: postgres
+  namespace: postgres
 spec:
   type: LoadBalancer
   selector:
-    app: postgresql
+    app: postgres
   ports:
-    - name: postgresql
+    - name: postgres
       protocol: TCP
       port: 5432
