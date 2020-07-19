@@ -30,6 +30,9 @@ metadata:
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
+data:
+  22: "gitea/gitea:22"
+
 
 ---
 kind: ConfigMap
@@ -326,6 +329,10 @@ spec:
     - name: prom
       port: 10254
       targetPort: 10254
+      protocol: TCP
+    - name: proxied-tcp-22
+      port: 22
+      targetPort: 22
       protocol: TCP
   selector:
     app.kubernetes.io/name: ingress-nginx
