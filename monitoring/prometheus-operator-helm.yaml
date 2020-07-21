@@ -6,6 +6,10 @@
 ##
 nameOverride: ""
 
+## Override the deployment namespace
+##
+namespaceOverride: ""
+
 ## Provide a k8s version to auto dashboard import script example: kubeTargetVersionOverride: 1.16.6
 ##
 kubeTargetVersionOverride: ""
@@ -30,7 +34,11 @@ defaultRules:
     general: true
     k8s: true
     kubeApiserver: true
+    kubeApiserverAvailability: true
     kubeApiserverError: true
+    kubeApiserverSlos: true
+    kubelet: true
+    kubePrometheusGeneral: true
     kubePrometheusNodeAlerting: true
     kubePrometheusNodeRecording: true
     kubernetesAbsent: true
@@ -39,6 +47,7 @@ defaultRules:
     kubernetesStorage: true
     kubernetesSystem: true
     kubeScheduler: true
+    kubeStateMetrics: true
     network: true
     node: true
     prometheus: true
@@ -105,6 +114,7 @@ alertmanager:
   serviceAccount:
     create: true
     name: ""
+    annotations: {}
 
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
@@ -245,6 +255,9 @@ alertmanager:
     ## Port for Alertmanager Service to listen on
     ##
     port: 9093
+    ## To be used with a proxy extraContainer port
+    ##
+    targetPort: 9093
     ## Port to expose on each node
     ## Only used if service.type is 'NodePort'
     ##
@@ -322,7 +335,7 @@ alertmanager:
     ##
     image:
       repository: quay.io/prometheus/alertmanager
-      tag: v0.20.0
+      tag: v0.21.0
 
     ## If true then the user will be responsible to provide a secret with alertmanager configuration
     ## So when true the config part will be ignored (including templateFiles) and the one in the secret will be used
@@ -451,6 +464,7 @@ alertmanager:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ##
     securityContext:
+      runAsGroup: 2000
       runAsNonRoot: true
       runAsUser: 1000
       fsGroup: 2000
@@ -481,6 +495,7 @@ alertmanager:
 ##
 grafana:
   enabled: true
+  namespaceOverride: ""
 
   plugins:
     - vonage-status-panel
@@ -660,9 +675,32 @@ kubelet:
     ##
     cAdvisor: true
 
+    ## Enable scraping /metrics/probes from kubelet's service
+    ##
+    probes: true
+
+    ## Enable scraping /metrics/resource from kubelet's service
+    ##
+    resource: true
+    # From kubernetes 1.18, /metrics/resource/v1alpha1 renamed to /metrics/resource
+    resourcePath: "/metrics/resource/v1alpha1"
     ## Metric relabellings to apply to samples before ingestion
     ##
     cAdvisorMetricRelabelings: []
+    # - sourceLabels: [__name__, image]
+    #   separator: ;
+    #   regex: container_([a-z_]+);
+    #   replacement: $1
+    #   action: drop
+    # - sourceLabels: [__name__]
+    #   separator: ;
+    #   regex: container_(network_tcp_usage_total|network_udp_usage_total|tasks_state|cpu_load_average_10s)
+    #   replacement: $1
+    #   action: drop
+
+    ## Metric relabellings to apply to samples before ingestion
+    ##
+    probesMetricRelabelings: []
     # - sourceLabels: [__name__, image]
     #   separator: ;
     #   regex: container_([a-z_]+);
@@ -678,6 +716,26 @@ kubelet:
     #   metrics_path is required to match upstream rules and charts
     ##
     cAdvisorRelabelings:
+      - sourceLabels: [__metrics_path__]
+        targetLabel: metrics_path
+    # - sourceLabels: [__meta_kubernetes_pod_node_name]
+    #   separator: ;
+    #   regex: ^(.*)$
+    #   targetLabel: nodename
+    #   replacement: $1
+    #   action: replace
+
+    probesRelabelings:
+      - sourceLabels: [__metrics_path__]
+        targetLabel: metrics_path
+    # - sourceLabels: [__meta_kubernetes_pod_node_name]
+    #   separator: ;
+    #   regex: ^(.*)$
+    #   targetLabel: nodename
+    #   replacement: $1
+    #   action: replace
+
+    resourceRelabelings:
       - sourceLabels: [__metrics_path__]
         targetLabel: metrics_path
     # - sourceLabels: [__meta_kubernetes_pod_node_name]
@@ -1074,6 +1132,7 @@ nodeExporter:
 ## Configuration for prometheus-node-exporter subchart
 ##
 prometheus-node-exporter:
+  namespaceOverride: ""
   podLabels:
     ## Add the 'node-exporter' label to be used by serviceMonitor to match standard common usage in rules and grafana dashboards
     ##
@@ -1111,7 +1170,7 @@ prometheusOperator:
       enabled: true
       image:
         repository: jettech/kube-webhook-certgen
-        tag: v1.0.0
+        tag: v1.2.1
         pullPolicy: IfNotPresent
       resources: {}
       ## Provide a priority class name to the webhook patching job
@@ -1246,6 +1305,11 @@ prometheusOperator:
   #   cpu: 100m
   #   memory: 100Mi
 
+  # Required for use in managed kubernetes clusters (such as AWS EKS) with custom CNI (such as calico),
+  # because control-plane managed by AWS cannot communicate with pods' IP CIDR and admission webhooks are not working
+  ##
+  hostNetwork: false
+
   ## Define which Nodes the Pods are scheduled on.
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -1277,6 +1341,8 @@ prometheusOperator:
   #         - e2e-az2
 
   securityContext:
+    fsGroup: 65534
+    runAsGroup: 65534
     runAsNonRoot: true
     runAsUser: 65534
 
@@ -1290,8 +1356,9 @@ prometheusOperator:
   ## Configmap-reload image to use for reloading configmaps
   ##
   configmapReloadImage:
-    repository: quay.io/coreos/configmap-reload
-    tag: v0.0.1
+    repository: docker.io/jimmidyson/configmap-reload
+    tag: v0.3.0
+    sha: ""
 
   ## Prometheus-config-reloader image to use for config and rule reloading
   ##
@@ -1311,7 +1378,8 @@ prometheusOperator:
   ##
   hyperkubeImage:
     repository: k8s.gcr.io/hyperkube
-    tag: v1.12.1
+    tag: v1.16.12
+    sha: ""
     pullPolicy: IfNotPresent
 
 ## Deploy a Prometheus instance
@@ -1534,7 +1602,8 @@ prometheus:
     ##
     image:
       repository: quay.io/prometheus/prometheus
-      tag: v2.16.0
+      tag: v2.18.2
+      sha: ""
 
     ## Tolerations for use with node taints
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -1874,6 +1943,7 @@ prometheus:
     ## https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md
     ##
     securityContext:
+      runAsGroup: 2000
       runAsNonRoot: true
       runAsUser: 1000
       fsGroup: 2000
