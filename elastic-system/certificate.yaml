@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1alpha3
 kind: Certificate
 metadata:
   name: kibana-tls
-  namespace: elastic
+  namespace: elastic-system
 spec:
   secretName: kibana-tls
   issuerRef:
@@ -16,7 +16,7 @@ apiVersion: cert-manager.io/v1alpha3
 kind: Certificate
 metadata:
   name: elastic-tls
-  namespace: elastic
+  namespace: elastic-system
 spec:
   secretName: elastic-tls
   issuerRef:

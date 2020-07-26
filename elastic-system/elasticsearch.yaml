@@ -2,9 +2,9 @@ apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
   name: es
-  namespace: elastic
+  namespace: elastic-system
 spec:
-  version: 7.6.2
+  version: 7.8.0
   nodeSets:
     - name: home
       config:
@@ -17,13 +17,13 @@ spec:
         metadata:
           labels:
         spec:
-          nodeSelector:
-            kubernetes.io/arch: amd64
           containers:
             - name: elasticsearch
               resources:
                 limits:
                   memory: 4Gi
+                requests:
+                  cpu: 1
               env:
                 - name: ES_JAVA_OPTS
                   value: "-Xms2g -Xmx2g"
@@ -45,30 +45,4 @@ spec:
     tls:
       certificate:
         secretName: elastic-tls
----
-apiVersion: kibana.k8s.elastic.co/v1
-kind: Kibana
-metadata:
-  name: kb
-  namespace: elastic
-spec:
-  version: 7.6.2
-  count: 1
-  elasticsearchRef:
-    name: "es"
-  http:
-    service:
-      spec:
-        type: LoadBalancer
-    tls:
-      certificate:
-        secretName: kibana-tls
-  podTemplate:
-    spec:
-      nodeSelector:
-        kubernetes.io/arch: amd64
-      containers:
-        - name: kibana
-          resources:
-            limits:
-              memory: 1Gi
+
