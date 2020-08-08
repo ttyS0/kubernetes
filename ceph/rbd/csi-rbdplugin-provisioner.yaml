@@ -34,10 +34,6 @@ spec:
       serviceAccount: rbd-csi-provisioner
       nodeSelector:
         kubernetes.io/arch: amd64
-      tolerations:
-        - key: ceph
-          value: osd
-          effect: NoSchedule
       containers:
         - name: csi-provisioner
           image: quay.io/k8scsi/csi-provisioner:v1.6.0
@@ -66,7 +62,7 @@ spec:
           env:
             - name: ADDRESS
               value: unix:///csi/csi-provisioner.sock
-          imagePullPolicy: Always
+          imagePullPolicy: "IfNotPresent"
           securityContext:
             privileged: true
           volumeMounts:
@@ -111,7 +107,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v2.1.2-amd64
+          image: quay.io/cephcsi/cephcsi:v3.0.0
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=rbd"
@@ -120,6 +116,8 @@ spec:
             - "--v=5"
             - "--drivername=rbd.csi.ceph.com"
             - "--pidlimit=-1"
+            - "--rbdhardmaxclonedepth=8"
+            - "--rbdsoftmaxclonedepth=4"
           env:
             - name: POD_IP
               valueFrom:
@@ -147,7 +145,7 @@ spec:
             - name: keys-tmp-dir
               mountPath: /tmp/csi/keys
         - name: liveness-prometheus
-          image: quay.io/cephcsi/cephcsi:v2.1.2-amd64
+          image: quay.io/cephcsi/cephcsi:v3.0.0
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
@@ -177,8 +175,9 @@ spec:
           hostPath:
             path: /lib/modules
         - name: socket-dir
-          emptyDir:
+          emptyDir: {
             medium: "Memory"
+          }
         - name: ceph-csi-config
           configMap:
             name: ceph-csi-config

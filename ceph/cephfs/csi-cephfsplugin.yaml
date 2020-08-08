@@ -16,12 +16,6 @@ spec:
         app: csi-cephfsplugin
     spec:
       serviceAccount: cephfs-csi-nodeplugin
-      nodeSelector:
-        kubernetes.io/arch: amd64
-      tolerations:
-        - key: ceph
-          value: osd
-          effect: NoSchedule
       hostNetwork: true
       # to use e.g. Rook orchestrated cluster, and mons' FQDN is
       # resolved through k8s service, set dns policy to cluster first
@@ -58,7 +52,7 @@ spec:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v2.1.2-amd64
+          image: quay.io/cephcsi/cephcsi:v3.0.0
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
@@ -66,7 +60,6 @@ spec:
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--v=5"
             - "--drivername=cephfs.csi.ceph.com"
-            - "--metadatastorage=k8s_configmap"
           env:
             - name: POD_IP
               valueFrom:
@@ -101,12 +94,16 @@ spec:
               readOnly: true
             - name: host-dev
               mountPath: /dev
+            - name: host-mount
+              mountPath: /run/mount
             - name: ceph-csi-config
               mountPath: /etc/ceph-csi-config/
             - name: keys-tmp-dir
               mountPath: /tmp/csi/keys
         - name: liveness-prometheus
-          image: quay.io/cephcsi/cephcsi:v2.1.2-amd64
+          securityContext:
+            privileged: true
+          image: quay.io/cephcsi/cephcsi:v3.0.0
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
@@ -153,6 +150,9 @@ spec:
         - name: host-dev
           hostPath:
             path: /dev
+        - name: host-mount
+          hostPath:
+            path: /run/mount
         - name: ceph-csi-config
           configMap:
             name: ceph-csi-config
@@ -161,7 +161,7 @@ spec:
             medium: "Memory"
           }
 ---
-# This is a service to expose the liveness and grpc metrics
+# This is a service to expose the liveness metrics
 apiVersion: v1
 kind: Service
 metadata:

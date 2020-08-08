@@ -15,16 +15,22 @@ spec:
       labels:
         app: bungeecord
     spec:
-      nodeSelector:
-        kubernetes.io/arch: amd64
+      imagePullSecrets:
+        - name: home
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
       containers:
         - imagePullPolicy: IfNotPresent
           name: bungeecord
-          image: ttys0/bungeecord:v1513
+          image: docker.ttys0.net/bungeecord:1529
           workingDir: "/minecraft/worlds/bungeecord"
+          resources:
+            limits:
+              memory: "2Gi"
+            requests:
+              cpu: 500m
+              memory: "1Gi"
           ports:
             - containerPort: 25577
           volumeMounts:
@@ -32,7 +38,7 @@ spec:
               mountPath: "/minecraft/worlds"
           env:
             - name: JVM_OPTS
-              value: "-Xms2G -Xmx2G"
+              value: "-Xms1G -Xmx1G"
             - name: BUNGEE_HOME
               value: "/minecraft/worlds/bungeecord"
       volumes:

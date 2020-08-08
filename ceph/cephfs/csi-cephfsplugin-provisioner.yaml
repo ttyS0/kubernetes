@@ -34,10 +34,6 @@ spec:
       serviceAccount: cephfs-csi-provisioner
       nodeSelector:
         kubernetes.io/arch: amd64
-      tolerations:
-        - key: ceph
-          value: osd
-          effect: NoSchedule
       containers:
         - name: csi-provisioner
           image: quay.io/k8scsi/csi-provisioner:v1.4.0
@@ -91,7 +87,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v2.1.2-amd64
+          image: quay.io/cephcsi/cephcsi:v3.0.0
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
@@ -99,7 +95,6 @@ spec:
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--v=5"
             - "--drivername=cephfs.csi.ceph.com"
-            - "--metadatastorage=k8s_configmap"
             - "--pidlimit=-1"
           env:
             - name: POD_IP
@@ -132,7 +127,7 @@ spec:
             - name: keys-tmp-dir
               mountPath: /tmp/csi/keys
         - name: liveness-prometheus
-          image: quay.io/cephcsi/cephcsi:v2.1.1-amd64
+          image: quay.io/cephcsi/cephcsi:v3.0.0
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
@@ -153,8 +148,9 @@ spec:
           imagePullPolicy: "IfNotPresent"
       volumes:
         - name: socket-dir
-          emptyDir:
+          emptyDir: {
             medium: "Memory"
+          }
         - name: host-sys
           hostPath:
             path: /sys

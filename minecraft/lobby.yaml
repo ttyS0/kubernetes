@@ -17,15 +17,21 @@ spec:
         app: minecraft
         world: lobby
     spec:
-      nodeSelector:
-        kubernetes.io/arch: amd64
+      imagePullSecrets:
+        - name: home
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
       containers:
         - name: lobby
-          image: ttys0/spigot:v1.16.1
+          image: docker.ttys0.net/spigot:1.16.1
           workingDir: "/minecraft/worlds/lobby"
+          resources:
+            limits:
+              memory: "4Gi"
+            requests:
+              cpu: 1
+              memory: "3Gi"
           ports:
             - containerPort: 25565
           volumeMounts:
