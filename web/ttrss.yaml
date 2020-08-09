@@ -1,0 +1,264 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ttrss-data
+  namespace: web
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: fast
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: web
+  name: ttrss-conf
+data:
+  nginx.conf: |
+    worker_processes auto;
+    pid /var/run/nginx.pid;
+
+    events {
+        worker_connections  1024;
+    }
+
+    http {
+        include /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        access_log /dev/stdout;
+        error_log /dev/stderr warn;
+
+        sendfile on;
+
+        index index.php;
+
+        upstream app {
+            server localhost:9000;
+        }
+
+        server {
+            listen 80;
+            root /var/www/html;
+
+            location /tt-rss/cache {
+                aio threads;
+                internal;
+            }
+
+            location ~ \.php$ {
+                # regex to split $uri to $fastcgi_script_name and $fastcgi_path
+                fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+
+                # Check that the PHP script exists before passing it
+                try_files $fastcgi_script_name =404;
+
+                # Bypass the fact that try_files resets $fastcgi_path_info
+                # see: http://trac.nginx.org/nginx/ticket/321
+                set $path_info $fastcgi_path_info;
+                fastcgi_param PATH_INFO $path_info;
+
+                fastcgi_index index.php;
+                include fastcgi.conf;
+
+                fastcgi_pass app;
+            }
+
+            location / {
+                try_files $uri $uri/ =404;
+            }
+
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttrss
+  namespace: web
+spec:
+  selector:
+    matchLabels:
+      app: ttrss
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ttrss
+    spec:
+      imagePullSecrets:
+        - name: home
+      securityContext:
+        fsGroup: 1000
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 10.0.1.1
+        searches:
+          - ttys0.net
+        options:
+          - name: ndots
+            value: "1"
+          - name: edns0
+      containers:
+        - image: docker.ttys0.net/ttrss:20200809
+          name: ttrss
+          resources:
+            requests:
+              memory: 1Gi
+            limits:
+              memory: 2Gi
+          env:
+            - name: SELF_URL_PATH
+              value: "https://feeds.ttys0.net/tt-rss"
+            - name: DB_TYPE
+              value: "pgsql"
+            - name: DB_HOST
+              value: "pg.ttys0.net"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: pgttrss
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: passwd
+                  name: pgttrss
+            - name: DB_NAME
+              value: "ttrss"
+            - name: OWNER_UID
+              value: "1000"
+            - name: OWNER_GID
+              value: "1000"
+          ports:
+            - containerPort: 9000
+              name: php
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: ttrss-data
+        - image: docker.ttys0.net/ttrss:20200809
+          name: ttrss-updater
+          command: ["/updater.sh"]
+          resources:
+            requests:
+              memory: 1Gi
+            limits:
+              memory: 2Gi
+          env:
+            - name: SELF_URL_PATH
+              value: "https://feeds.ttys0.net/tt-rss"
+            - name: DB_TYPE
+              value: "pgsql"
+            - name: DB_HOST
+              value: "pg.ttys0.net"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: pgttrss
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: passwd
+                  name: pgttrss
+            - name: DB_NAME
+              value: "ttrss"
+            - name: OWNER_UID
+              value: "1000"
+            - name: OWNER_GID
+              value: "1000"
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: ttrss-data
+        - image: nginx:alpine
+          name: nginx
+          resources:
+            requests:
+              memory: 512Mi
+            limits:
+              memory: 1Gi
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: nginx-config
+              subPath: nginx.conf
+            - mountPath: /var/www/html
+              name: ttrss-data
+      volumes:
+        - name: ttrss-data
+          persistentVolumeClaim:
+            claimName: ttrss-data
+        - name: nginx-config
+          configMap:
+            name: ttrss-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ttrss
+  namespace: web
+  labels:
+    app: ttrss
+spec:
+  ports:
+    - port: 80
+      name: http
+      targetPort: 80
+  selector:
+    app: ttrss
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ttrss
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: feeds.ttys0.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ttrss
+              servicePort: 80
+  tls:
+    - hosts:
+        - feeds.ttys0.net
+      secretName: ttrss-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ttrss-ext
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: feeds.ttys0.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ttrss
+              servicePort: 80
+  tls:
+    - hosts:
+        - feeds.ttys0.net
+      secretName: ttrss-tls
