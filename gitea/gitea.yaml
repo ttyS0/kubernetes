@@ -28,6 +28,10 @@ spec:
       labels:
         app: gitea
     spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
       containers:
         - image: gitea/gitea:1.12.3
           name: gitea
@@ -49,7 +53,7 @@ spec:
             - name: DB_TYPE
               value: "postgres"
             - name: DB_HOST
-              value: "postgres.postgres.svc"
+              value: "postgres.postgres.svc.cluster.local"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:

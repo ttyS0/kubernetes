@@ -95,16 +95,10 @@ spec:
         - name: home
       securityContext:
         fsGroup: 1000
-      dnsPolicy: "None"
       dnsConfig:
-        nameservers:
-          - 10.0.1.1
-        searches:
-          - ttys0.net
         options:
           - name: ndots
             value: "1"
-          - name: edns0
       containers:
         - image: docker.ttys0.net/ttrss:20200809
           name: ttrss
@@ -119,7 +113,7 @@ spec:
             - name: DB_TYPE
               value: "pgsql"
             - name: DB_HOST
-              value: "pg.ttys0.net"
+              value: "postgres.postgres.svc.cluster.local"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
@@ -156,7 +150,7 @@ spec:
             - name: DB_TYPE
               value: "pgsql"
             - name: DB_HOST
-              value: "pg.ttys0.net"
+              value: "postgres.postgres.svc.cluster.local"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
