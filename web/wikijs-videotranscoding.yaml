@@ -20,7 +20,7 @@ metadata:
     app.kubernetes.io/name: wikijs
     app.kubernetes.io/instance: videotranscoding
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: wikijs
@@ -63,7 +63,7 @@ spec:
                   name: pgwikijs-videotranscoding
                   key: "passwd"
             - name: HA_ACTIVE
-              value: "false"
+              value: "true"
           ports:
             - name: http
               containerPort: 3000
@@ -134,30 +134,30 @@ spec:
     - hosts:
         - videotranscoding.wiki
       secretName: wikijs-videotranscoding-tls
-#---
-#apiVersion: networking.k8s.io/v1beta1
-#kind: Ingress
-#metadata:
-#  name: wikijs-videotranscoding-ext
-#  namespace: web
-#  labels:
-#    app.kubernetes.io/name: wikijs
-#    app.kubernetes.io/instance: videotranscoding
-#  annotations:
-#    kubernetes.io/ingress.class: nginx-external
-#    nginx.kubernetes.io/ssl-redirect: "true"
-#    kubernetes.io/tls-acme: "true"
-#    cert-manager.io/cluster-issuer: "letsencrypt"
-#spec:
-#  rules:
-#    - host: "videotranscoding.wiki"
-#      http:
-#        paths:
-#          - path: /
-#            backend:
-#              serviceName: wikijs-videotranscoding
-#              servicePort: 80
-#  tls:
-#    - hosts:
-#        - videotranscoding.wiki
-#      secretName: wikijs-videotranscoding-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: wikijs-videotranscoding-ext
+  namespace: web
+  labels:
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: videotranscoding
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: "videotranscoding.wiki"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: wikijs-videotranscoding
+              servicePort: 80
+  tls:
+    - hosts:
+        - videotranscoding.wiki
+      secretName: wikijs-videotranscoding-tls

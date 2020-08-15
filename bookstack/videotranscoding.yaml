@@ -83,7 +83,7 @@ spec:
                   key: clientSecret
                   name: bookstack-videotranscoding-github
             - name: APP_URL
-              value: "https://videotranscoding.wiki"
+              value: "https://old.videotranscoding.wiki"
             - name: CACHE_DRIVER
               value: "database"
             - name: SESSION_DRIVER
@@ -140,7 +140,7 @@ metadata:
     cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
-    - host: videotranscoding.wiki
+    - host: old.videotranscoding.wiki
       http:
         paths:
           - path: /
@@ -149,5 +149,5 @@ spec:
               servicePort: 80
   tls:
     - hosts:
-        - videotranscoding.wiki
-      secretName: videotranscoding-wiki-tls
+        - old.videotranscoding.wiki
+      secretName: old.videotranscoding-wiki-tls
