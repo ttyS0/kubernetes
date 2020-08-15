@@ -116,7 +116,7 @@ metadata:
     cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
-    - host: videotranscoding.wiki
+    - host: old.videotranscoding.wiki
       http:
         paths:
           - path: /
@@ -125,8 +125,8 @@ spec:
               servicePort: 80
   tls:
     - hosts:
-        - videotranscoding.wiki
-      secretName: videotranscoding-wiki-tls
+        - old.videotranscoding.wiki
+      secretName: old.videotranscoding-wiki-tls
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
