@@ -42,7 +42,7 @@ spec:
         app: mariadb
     spec:
       containers:
-      - image: mariadb:10.4.13
+      - image: mariadb:10.4.14
         name: mariadb
         resources:
           limits:

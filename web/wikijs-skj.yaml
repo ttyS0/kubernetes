@@ -1,0 +1,163 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: wikijs-skj-data
+  namespace: web
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: cephfs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikijs-skj
+  namespace: web
+  labels:
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: skj
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wikijs
+      app.kubernetes.io/instance: skj
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wikijs
+        app.kubernetes.io/instance: skj
+    spec:
+      imagePullSecrets:
+        - name: home
+      securityContext:
+        fsGroup: 1000
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      containers:
+        - name: wikijs
+          image: "docker.ttys0.net/wikijs:2.4.107-1"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_TYPE
+              value: postgres
+            - name: DB_HOST
+              value: "postgres.postgres.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "wikijs_skj"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: "user"
+                  name: pgwikijsskj
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: pgwikijsskj
+                  key: "passwd"
+            - name: HA_ACTIVE
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          resources:
+            requests:
+              memory: "2Gi"
+            limits:
+              memory: "4Gi"
+          volumeMounts:
+            - mountPath: /wiki/data
+              name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: wikijs-skj-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wikijs-skj
+  namespace: web
+  labels:
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: skj
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: skj
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: wikijs-skj
+  namespace: web
+  labels:
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: skj
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: "skj.wiki"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: wikijs-skj
+              servicePort: 80
+  tls:
+    - hosts:
+        - skj.wiki
+      secretName: wikijs-skj-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: wikijs-skj-ext
+  namespace: web
+  labels:
+    app.kubernetes.io/name: wikijs
+    app.kubernetes.io/instance: skj
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: "skj.wiki"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: wikijs-skj
+              servicePort: 80
+  tls:
+    - hosts:
+        - skj.wiki
+      secretName: wikijs-skj-tls
