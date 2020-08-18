@@ -1,0 +1,197 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: photoprism-originals
+  namespace: web
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Ti
+  storageClassName: bulk
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: photoprism-imports
+  namespace: web
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: cephfs-bulk
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: photoprism-data
+  namespace: web
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: fast
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: photoprism
+  namespace: web
+  labels:
+    app.kubernetes.io/name: photoprism
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: photoprism
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: photoprism
+    spec:
+      imagePullSecrets:
+        - name: home
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      nodeSelector:
+        kubernetes.io/arch: "amd64"
+      containers:
+        - name: photoprism
+          image: "photoprism/photoprism:20200814"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PHOTOPRISM_DEBUG
+              value: "false"
+            - name: PHOTOPRISM_HTTP_MODE
+              value: "release"
+            - name: PHOTOPRISM_SITE_URL
+              value: "https://photos.ttys0.net/"
+            - name: PHOTOPRISM_SITE_TITLE
+              value: "Sean's Photos"
+            - name: PHOTOPRISM_SITE_CAPTION
+              value: ""
+            - name: PHOTOPRISM_SITE_DESCRIPTION
+              value: ""
+            - name: PHOTOPRISM_SITE_AUTHOR
+              value: "Sean Johnson"
+            - name: PHOTOPRISM_HTTP_HOST
+              value: "0.0.0.0"
+            - name: PHOTOPRISM_DATABASE_DRIVER
+              value: "mysql"
+            - name: PHOTOPRISM_DATABASE_DSN
+              valueFrom:
+                secretKeyRef:
+                  key: dsn
+                  name: photoprism-mariadb
+            - name: PHOTOPRISM_STORAGE_PATH
+              value: "/data/storage"
+            - name: PHOTOPRISM_ORIGINALS_PATH
+              value: "/originals"
+            - name: PHOTOPRISM_IMPORT_PATH
+              value: "/imports"
+            - name: PHOTOPRISM_SIDECAR_JSON
+              value: "true"
+            - name: PHOTOPRISM_SIDECAR_YAML
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 2342
+              protocol: TCP
+          resources:
+            requests:
+              memory: "3Gi"
+          volumeMounts:
+            - mountPath: /data
+              name: data
+            - mountPath: /originals
+              name: originals
+            - mountPath: /imports
+              name: imports
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: photoprism-data
+        - name: originals
+          persistentVolumeClaim:
+            claimName: photoprism-originals
+        - name: imports
+          persistentVolumeClaim:
+            claimName: photoprism-imports
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: photoprism
+  namespace: web
+  labels:
+    app.kubernetes.io/name: photoprism
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 2342
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: photoprism
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: photoprism
+  namespace: web
+  labels:
+    app.kubernetes.io/name: photoprism
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: "photos.ttys0.net"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: photoprism
+              servicePort: 80
+  tls:
+    - hosts:
+        - photos.ttys0.net
+      secretName: photoprism-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: photoprism-ext
+  namespace: web
+  labels:
+    app.kubernetes.io/name: photoprism
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: "photos.ttys0.net"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: photoprism
+              servicePort: 80
+  tls:
+    - hosts:
+        - photos.ttys0.net
+      secretName: photoprism-tls

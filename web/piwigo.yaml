@@ -159,27 +159,4 @@ spec:
     - hosts:
         - pics.ttys0.net
       secretName: piwigo-tls
----
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: piwigo-ext
-  namespace: web
-  annotations:
-    kubernetes.io/ingress.class: nginx-external
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
-spec:
-  rules:
-    - host: pics.ttys0.net
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: piwigo
-              servicePort: 80
-  tls:
-    - hosts:
-        - pics.ttys0.net
-      secretName: piwigo-tls
+

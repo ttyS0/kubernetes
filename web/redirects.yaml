@@ -25,6 +25,18 @@ spec:
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
+  name: ttys0-net
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/permanent-redirect: "https://skj.dev"
+spec:
+  rules:
+    - host: ttys0.net
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
   name: wiki-skj
   namespace: web
   annotations:
@@ -33,3 +45,15 @@ metadata:
 spec:
   rules:
     - host: wiki.skj.dev
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: pics-ttys0-net
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/permanent-redirect: "https://photos.ttys0.net"
+spec:
+  rules:
+    - host: pics.ttys0.net
