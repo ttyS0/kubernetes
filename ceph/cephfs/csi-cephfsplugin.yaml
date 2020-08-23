@@ -52,7 +52,7 @@ spec:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v3.0.0
+          image: quay.io/cephcsi/cephcsi:v3.1.0
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
@@ -60,6 +60,11 @@ spec:
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--v=5"
             - "--drivername=cephfs.csi.ceph.com"
+            # If topology based provisioning is desired, configure required
+            # node labels representing the nodes topology domain
+            # and pass the label names below, for CSI to consume and advertize
+            # its equivalent topology domain
+            # - "--domainlabels=failure-domain/region,failure-domain/zone"
           env:
             - name: POD_IP
               valueFrom:
@@ -103,7 +108,7 @@ spec:
         - name: liveness-prometheus
           securityContext:
             privileged: true
-          image: quay.io/cephcsi/cephcsi:v3.0.0
+          image: quay.io/cephcsi/cephcsi:v3.1.0
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
