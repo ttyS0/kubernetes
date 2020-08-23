@@ -30,7 +30,7 @@ spec:
         app: postgres
     spec:
       containers:
-        - image: postgres:12.3
+        - image: postgres:12.4
           name: postgres
           resources:
             limits:
@@ -44,12 +44,14 @@ spec:
                 secretKeyRef:
                   name: root
                   key: passwd
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           ports:
             - containerPort: 5432
               name: postgres
           volumeMounts:
             - name: data
-              mountPath: /var/lib/postgresql
+              mountPath: /var/lib/postgresql/data
       volumes:
         - name: data
           persistentVolumeClaim:
