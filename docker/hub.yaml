@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hub
+  namespace: docker
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: hub
+  template:
+    metadata:
+      labels:
+        app: hub
+    spec:
+      imagePullSecrets:
+        - name: home
+      containers:
+        - name: hub
+          image: docker.ttys0.net/docker-registry-ui:1.5.0-1
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - name: DELETE_IMAGES
+              value: "false"
+            - name: REGISTRY_URL
+              value: "http://registry:5000"
+            - name: NGINX_PROXY_HEADER_Authorization
+              valueFrom:
+                secretKeyRef:
+                  key: auth
+                  name: basic-auth
+            - name: NGINX_PROXY_HEADER_X_Forwarded_For
+              value: "$$proxy_add_x_forwarded_for"
+            - name: PULL_URL
+              value: "https://hub.skj.dev"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hub
+  namespace: docker
+spec:
+  ports:
+    - name: http
+      port: 80
+  selector:
+    app: hub
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: hub
+  namespace: docker
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/auth-realm: "registry"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: hub.skj.dev
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: hub
+              servicePort: 80
+  tls:
+    - hosts:
+        - hub.skj.dev
+      secretName: hub-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: hub-ext
+  namespace: docker
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/auth-realm: "registry"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+    - host: hub.skj.dev
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: hub
+              servicePort: 80
+  tls:
+    - hosts:
+        - hub.skj.dev
+      secretName: hub-tls
