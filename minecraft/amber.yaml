@@ -30,14 +30,12 @@ spec:
         app: minecraft
         world: amber
     spec:
-      imagePullSecrets:
-        - name: home
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
       containers:
         - name: amber
-          image: docker.ttys0.net/spigot:1.16.1
+          image: hub.skj.dev/img/spigot:1.16.2
           workingDir: "/minecraft/worlds/amber"
           resources:
             limits:

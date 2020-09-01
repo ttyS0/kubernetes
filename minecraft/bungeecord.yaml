@@ -15,15 +15,13 @@ spec:
       labels:
         app: bungeecord
     spec:
-      imagePullSecrets:
-        - name: home
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
       containers:
         - imagePullPolicy: IfNotPresent
           name: bungeecord
-          image: docker.ttys0.net/bungeecord:1529
+          image: hub.skj.dev/img/bungeecord:1532
           workingDir: "/minecraft/worlds/bungeecord"
           resources:
             limits:

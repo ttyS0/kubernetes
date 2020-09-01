@@ -86,7 +86,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
         - name: hugo
-          image: ttys0/staticweb:v1.1
+          image: hub.skj.dev/img/staticweb:1
           command: ["/home/auto-reload-nginx.sh"]
           ports:
             - containerPort: 80

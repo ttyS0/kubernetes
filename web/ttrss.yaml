@@ -100,7 +100,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: docker.ttys0.net/ttrss:20200809
+        - image: hub.skj.dev/img/ttrss:20200927
           name: ttrss
           resources:
             requests:
@@ -136,7 +136,7 @@ spec:
           volumeMounts:
             - mountPath: /var/www/html
               name: ttrss-data
-        - image: docker.ttys0.net/ttrss:20200809
+        - image: hub.skj.dev/img/ttrss:20200927
           name: ttrss-updater
           command: ["/updater.sh"]
           resources:
