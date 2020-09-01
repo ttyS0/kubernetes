@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1alpha3
+kind: Certificate
+metadata:
+  name: hub-tls
+  namespace: docker
+spec:
+  secretName: hub-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: hub.skj.dev
+  dnsNames:
+    - hub.skj.dev
+    - notary.skj.dev
