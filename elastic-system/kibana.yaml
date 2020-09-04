@@ -5,7 +5,7 @@ metadata:
   name: kb
   namespace: elastic-system
 spec:
-  version: 7.9.0
+  version: 7.9.1
   count: 1
   elasticsearchRef:
     name: "es"
