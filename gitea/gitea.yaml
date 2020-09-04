@@ -33,7 +33,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: gitea/gitea:1.12.3
+        - image: gitea/gitea:1.12.4
           name: gitea
           resources:
             requests:
@@ -119,6 +119,7 @@ spec:
         paths:
           - path: /
             backend:
+
               serviceName: gitea
               servicePort: 3000
           - backend:
