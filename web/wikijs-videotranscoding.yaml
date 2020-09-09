@@ -41,7 +41,7 @@ spec:
             value: "1"
       containers:
         - name: wikijs
-          image: "docker.ttys0.net/wikijs:2.4.107-1"
+          image: "requarks/wiki:2.5.126"
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_TYPE
