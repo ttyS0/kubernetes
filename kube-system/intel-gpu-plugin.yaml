@@ -15,7 +15,7 @@ spec:
         app: intel-gpu-plugin
     spec:
       nodeSelector:
-        kubernetes.io/arch: amd64
+        iGPU: "true"
       containers:
         - name: intel-gpu-plugin
           env:
