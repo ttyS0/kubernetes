@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: skj
-  replicas: 2
+  replicas: 0
   strategy:
     type: Recreate
   template:
