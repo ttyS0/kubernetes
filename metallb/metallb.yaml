@@ -343,8 +343,6 @@ spec:
                 - ALL
             readOnlyRootFilesystem: true
       hostNetwork: true
-      nodeSelector:
-        beta.kubernetes.io/os: linux
       serviceAccountName: speaker
       terminationGracePeriodSeconds: 2
       tolerations:
