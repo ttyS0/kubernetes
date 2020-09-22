@@ -29,7 +29,7 @@ spec:
         app: tautulli
     spec:
       containers:
-        - image: tautulli/tautulli:v2.5.4
+        - image: tautulli/tautulli:v2.5.5
           name: tautulli
           env:
             - name: TZ
