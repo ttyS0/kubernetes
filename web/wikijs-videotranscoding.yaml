@@ -20,7 +20,7 @@ metadata:
     app.kubernetes.io/name: wikijs
     app.kubernetes.io/instance: videotranscoding
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: wikijs
