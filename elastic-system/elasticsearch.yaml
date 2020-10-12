@@ -4,7 +4,7 @@ metadata:
   name: es
   namespace: elastic-system
 spec:
-  version: 7.9.1
+  version: 7.9.2
   nodeSets:
     - name: home
       config:
@@ -14,8 +14,6 @@ spec:
         node.ml: true
         node.store.allow_mmap: false
       podTemplate:
-        metadata:
-          labels:
         spec:
           containers:
             - name: elasticsearch
