@@ -9,29 +9,29 @@ metadata:
   name: apmservers.apm.k8s.elastic.co
 spec:
   additionalPrinterColumns:
-    - JSONPath: .status.health
-      name: health
-      type: string
-    - JSONPath: .status.availableNodes
-      description: Available nodes
-      name: nodes
-      type: integer
-    - JSONPath: .spec.version
-      description: APM version
-      name: version
-      type: string
-    - JSONPath: .metadata.creationTimestamp
-      name: age
-      type: date
+  - JSONPath: .status.health
+    name: health
+    type: string
+  - JSONPath: .status.availableNodes
+    description: Available nodes
+    name: nodes
+    type: integer
+  - JSONPath: .spec.version
+    description: APM version
+    name: version
+    type: string
+  - JSONPath: .metadata.creationTimestamp
+    name: age
+    type: date
   group: apm.k8s.elastic.co
   names:
     categories:
-      - elastic
+    - elastic
     kind: ApmServer
     listKind: ApmServerList
     plural: apmservers
     shortNames:
-      - apm
+    - apm
     singular: apmserver
   scope: Namespaced
   subresources:
@@ -74,7 +74,7 @@ spec:
                     to the current namespace.
                   type: string
               required:
-                - name
+              - name
               type: object
             http:
               description: HTTP holds the HTTP layer configuration for the APM Server
@@ -208,8 +208,8 @@ spec:
                                 type: string
                               targetPort:
                                 anyOf:
-                                  - type: integer
-                                  - type: string
+                                - type: integer
+                                - type: string
                                 description: 'Number or name of the port to access
                                   on the pods targeted by the service. Number must
                                   be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
@@ -221,7 +221,7 @@ spec:
                                   omitted or set equal to the ''port'' field. More
                                   info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service'
                             required:
-                              - port
+                            - port
                             type: object
                           type: array
                         publishNotReadyAddresses:
@@ -359,7 +359,7 @@ spec:
                     to the current namespace.
                   type: string
               required:
-                - name
+              - name
               type: object
             podTemplate:
               description: PodTemplate provides customisation options (labels, annotations,
@@ -391,14 +391,14 @@ spec:
                             contain any ".." components.
                           type: string
                       required:
-                        - key
+                      - key
                       type: object
                     type: array
                   secretName:
                     description: SecretName is the name of the secret.
                     type: string
                 required:
-                  - secretName
+                - secretName
                 type: object
               type: array
             serviceAccountName:
@@ -410,7 +410,7 @@ spec:
               description: Version of the APM Server.
               type: string
           required:
-            - version
+          - version
           type: object
         status:
           description: ApmServerStatus defines the observed state of ApmServer
@@ -441,15 +441,15 @@ spec:
           type: object
   version: v1
   versions:
-    - name: v1
-      served: true
-      storage: true
-    - name: v1beta1
-      served: true
-      storage: false
-    - name: v1alpha1
-      served: false
-      storage: false
+  - name: v1
+    served: true
+    storage: true
+  - name: v1beta1
+    served: true
+    storage: false
+  - name: v1alpha1
+    served: false
+    storage: false
 status:
   acceptedNames:
     kind: ""
@@ -466,37 +466,37 @@ metadata:
   name: beats.beat.k8s.elastic.co
 spec:
   additionalPrinterColumns:
-    - JSONPath: .status.health
-      name: health
-      type: string
-    - JSONPath: .status.availableNodes
-      description: Available nodes
-      name: available
-      type: integer
-    - JSONPath: .status.expectedNodes
-      description: Expected nodes
-      name: expected
-      type: integer
-    - JSONPath: .spec.type
-      description: Beat type
-      name: type
-      type: string
-    - JSONPath: .spec.version
-      description: Beat version
-      name: version
-      type: string
-    - JSONPath: .metadata.creationTimestamp
-      name: age
-      type: date
+  - JSONPath: .status.health
+    name: health
+    type: string
+  - JSONPath: .status.availableNodes
+    description: Available nodes
+    name: available
+    type: integer
+  - JSONPath: .status.expectedNodes
+    description: Expected nodes
+    name: expected
+    type: integer
+  - JSONPath: .spec.type
+    description: Beat type
+    name: type
+    type: string
+  - JSONPath: .spec.version
+    description: Beat version
+    name: version
+    type: string
+  - JSONPath: .metadata.creationTimestamp
+    name: age
+    type: date
   group: beat.k8s.elastic.co
   names:
     categories:
-      - elastic
+    - elastic
     kind: Beat
     listKind: BeatList
     plural: beats
     shortNames:
-      - beat
+    - beat
     singular: beat
   scope: Namespaced
   subresources:
@@ -561,7 +561,7 @@ spec:
                     to the current namespace.
                   type: string
               required:
-                - name
+              - name
               type: object
             image:
               description: Image is the Beat Docker image to deploy. Version and Type
@@ -580,7 +580,7 @@ spec:
                     to the current namespace.
                   type: string
               required:
-                - name
+              - name
               type: object
             secureSettings:
               description: SecureSettings is a list of references to Kubernetes Secrets
@@ -610,14 +610,14 @@ spec:
                             contain any ".." components.
                           type: string
                       required:
-                        - key
+                      - key
                       type: object
                     type: array
                   secretName:
                     description: SecretName is the name of the secret.
                     type: string
                 required:
-                  - secretName
+                - secretName
                 type: object
               type: array
             serviceAccountName:
@@ -638,8 +638,8 @@ spec:
               description: Version of the Beat.
               type: string
           required:
-            - type
-            - version
+          - type
+          - version
           type: object
         status:
           description: BeatStatus defines the observed state of a Beat.
@@ -661,9 +661,9 @@ spec:
           type: object
   version: v1beta1
   versions:
-    - name: v1beta1
-      served: true
-      storage: true
+  - name: v1beta1
+    served: true
+    storage: true
 status:
   acceptedNames:
     kind: ""
@@ -680,32 +680,32 @@ metadata:
   name: elasticsearches.elasticsearch.k8s.elastic.co
 spec:
   additionalPrinterColumns:
-    - JSONPath: .status.health
-      name: health
-      type: string
-    - JSONPath: .status.availableNodes
-      description: Available nodes
-      name: nodes
-      type: integer
-    - JSONPath: .spec.version
-      description: Elasticsearch version
-      name: version
-      type: string
-    - JSONPath: .status.phase
-      name: phase
-      type: string
-    - JSONPath: .metadata.creationTimestamp
-      name: age
-      type: date
+  - JSONPath: .status.health
+    name: health
+    type: string
+  - JSONPath: .status.availableNodes
+    description: Available nodes
+    name: nodes
+    type: integer
+  - JSONPath: .spec.version
+    description: Elasticsearch version
+    name: version
+    type: string
+  - JSONPath: .status.phase
+    name: phase
+    type: string
+  - JSONPath: .metadata.creationTimestamp
+    name: age
+    type: date
   group: elasticsearch.k8s.elastic.co
   names:
     categories:
-      - elastic
+    - elastic
     kind: Elasticsearch
     listKind: ElasticsearchList
     plural: elasticsearches
     shortNames:
-      - es
+    - es
     singular: elasticsearch
   scope: Namespaced
   subresources:
@@ -889,8 +889,8 @@ spec:
                                 type: string
                               targetPort:
                                 anyOf:
-                                  - type: integer
-                                  - type: string
+                                - type: integer
+                                - type: string
                                 description: 'Number or name of the port to access
                                   on the pods targeted by the service. Number must
                                   be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
@@ -902,7 +902,7 @@ spec:
                                   omitted or set equal to the ''port'' field. More
                                   info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service'
                             required:
-                              - port
+                            - port
                             type: object
                           type: array
                         publishNotReadyAddresses:
@@ -1116,8 +1116,8 @@ spec:
                                     referenced
                                   type: string
                               required:
-                                - kind
-                                - name
+                              - kind
+                              - name
                               type: object
                             resources:
                               description: 'Resources represents the minimum resources
@@ -1126,8 +1126,8 @@ spec:
                                 limits:
                                   additionalProperties:
                                     anyOf:
-                                      - type: integer
-                                      - type: string
+                                    - type: integer
+                                    - type: string
                                     pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   description: 'Limits describes the maximum amount
                                     of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
@@ -1135,8 +1135,8 @@ spec:
                                 requests:
                                   additionalProperties:
                                     anyOf:
-                                      - type: integer
-                                      - type: string
+                                    - type: integer
+                                    - type: string
                                     pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   description: 'Requests describes the minimum amount
                                     of compute resources required. If Requests is
@@ -1177,8 +1177,8 @@ spec:
                                           type: string
                                         type: array
                                     required:
-                                      - key
-                                      - operator
+                                    - key
+                                    - operator
                                     type: object
                                   type: array
                                 matchLabels:
@@ -1219,8 +1219,8 @@ spec:
                             capacity:
                               additionalProperties:
                                 anyOf:
-                                  - type: integer
-                                  - type: string
+                                - type: integer
+                                - type: string
                                 pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                               description: Represents the actual resources of the
                                 underlying volume.
@@ -1260,8 +1260,8 @@ spec:
                                       is a valid value of PersistentVolumeClaimCondition.Type
                                     type: string
                                 required:
-                                  - status
-                                  - type
+                                - status
+                                - type
                                 type: object
                               type: array
                             phase:
@@ -1271,8 +1271,8 @@ spec:
                       type: object
                     type: array
                 required:
-                  - count
-                  - name
+                - count
+                - name
                 type: object
               minItems: 1
               type: array
@@ -1291,8 +1291,8 @@ spec:
                   properties:
                     maxUnavailable:
                       anyOf:
-                        - type: integer
-                        - type: string
+                      - type: integer
+                      - type: string
                       description: An eviction is allowed if at most "maxUnavailable"
                         pods selected by "selector" are unavailable after the eviction,
                         i.e. even in absence of the evicted pod. For example, one
@@ -1300,8 +1300,8 @@ spec:
                         is a mutually exclusive setting with "minAvailable".
                     minAvailable:
                       anyOf:
-                        - type: integer
-                        - type: string
+                      - type: integer
+                      - type: string
                       description: An eviction is allowed if at least "minAvailable"
                         pods selected by "selector" will still be available after
                         the eviction, i.e. even in the absence of the evicted pod.  So
@@ -1338,8 +1338,8 @@ spec:
                                   type: string
                                 type: array
                             required:
-                              - key
-                              - operator
+                            - key
+                            - operator
                             type: object
                           type: array
                         matchLabels:
@@ -1373,7 +1373,7 @@ spec:
                           defaults to the current namespace.
                         type: string
                     required:
-                      - name
+                    - name
                     type: object
                   name:
                     description: Name is the name of the remote cluster as it is set
@@ -1382,7 +1382,7 @@ spec:
                     minLength: 1
                     type: string
                 required:
-                  - name
+                - name
                 type: object
               type: array
             secureSettings:
@@ -1411,14 +1411,14 @@ spec:
                             contain any ".." components.
                           type: string
                       required:
-                        - key
+                      - key
                       type: object
                     type: array
                   secretName:
                     description: SecretName is the name of the secret.
                     type: string
                 required:
-                  - secretName
+                - secretName
                 type: object
               type: array
             serviceAccountName:
@@ -1557,8 +1557,8 @@ spec:
                                 type: string
                               targetPort:
                                 anyOf:
-                                  - type: integer
-                                  - type: string
+                                - type: integer
+                                - type: string
                                 description: 'Number or name of the port to access
                                   on the pods targeted by the service. Number must
                                   be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
@@ -1570,7 +1570,7 @@ spec:
                                   omitted or set equal to the ''port'' field. More
                                   info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service'
                             required:
-                              - port
+                            - port
                             type: object
                           type: array
                         publishNotReadyAddresses:
@@ -1681,8 +1681,8 @@ spec:
               description: Version of Elasticsearch.
               type: string
           required:
-            - nodeSets
-            - version
+          - nodeSets
+          - version
           type: object
         status:
           description: ElasticsearchStatus defines the observed state of Elasticsearch
@@ -1701,15 +1701,15 @@ spec:
           type: object
   version: v1
   versions:
-    - name: v1
-      served: true
-      storage: true
-    - name: v1beta1
-      served: true
-      storage: false
-    - name: v1alpha1
-      served: false
-      storage: false
+  - name: v1
+    served: true
+    storage: true
+  - name: v1beta1
+    served: true
+    storage: false
+  - name: v1alpha1
+    served: false
+    storage: false
 status:
   acceptedNames:
     kind: ""
@@ -1726,29 +1726,29 @@ metadata:
   name: enterprisesearches.enterprisesearch.k8s.elastic.co
 spec:
   additionalPrinterColumns:
-    - JSONPath: .status.health
-      name: health
-      type: string
-    - JSONPath: .status.availableNodes
-      description: Available nodes
-      name: nodes
-      type: integer
-    - JSONPath: .spec.version
-      description: Enterprise Search version
-      name: version
-      type: string
-    - JSONPath: .metadata.creationTimestamp
-      name: age
-      type: date
+  - JSONPath: .status.health
+    name: health
+    type: string
+  - JSONPath: .status.availableNodes
+    description: Available nodes
+    name: nodes
+    type: integer
+  - JSONPath: .spec.version
+    description: Enterprise Search version
+    name: version
+    type: string
+  - JSONPath: .metadata.creationTimestamp
+    name: age
+    type: date
   group: enterprisesearch.k8s.elastic.co
   names:
     categories:
-      - elastic
+    - elastic
     kind: EnterpriseSearch
     listKind: EnterpriseSearchList
     plural: enterprisesearches
     shortNames:
-      - ent
+    - ent
     singular: enterprisesearch
   scope: Namespaced
   subresources:
@@ -1802,7 +1802,7 @@ spec:
                     to the current namespace.
                   type: string
               required:
-                - name
+              - name
               type: object
             http:
               description: HTTP holds the HTTP layer configuration for Enterprise
@@ -1936,8 +1936,8 @@ spec:
                                 type: string
                               targetPort:
                                 anyOf:
-                                  - type: integer
-                                  - type: string
+                                - type: integer
+                                - type: string
                                 description: 'Number or name of the port to access
                                   on the pods targeted by the service. Number must
                                   be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
@@ -1949,7 +1949,7 @@ spec:
                                   omitted or set equal to the ''port'' field. More
                                   info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service'
                             required:
-                              - port
+                            - port
                             type: object
                           type: array
                         publishNotReadyAddresses:
@@ -2109,9 +2109,9 @@ spec:
           type: object
   version: v1beta1
   versions:
-    - name: v1beta1
-      served: true
-      storage: true
+  - name: v1beta1
+    served: true
+    storage: true
 status:
   acceptedNames:
     kind: ""
@@ -2128,29 +2128,29 @@ metadata:
   name: kibanas.kibana.k8s.elastic.co
 spec:
   additionalPrinterColumns:
-    - JSONPath: .status.health
-      name: health
-      type: string
-    - JSONPath: .status.availableNodes
-      description: Available nodes
-      name: nodes
-      type: integer
-    - JSONPath: .spec.version
-      description: Kibana version
-      name: version
-      type: string
-    - JSONPath: .metadata.creationTimestamp
-      name: age
-      type: date
+  - JSONPath: .status.health
+    name: health
+    type: string
+  - JSONPath: .status.availableNodes
+    description: Available nodes
+    name: nodes
+    type: integer
+  - JSONPath: .spec.version
+    description: Kibana version
+    name: version
+    type: string
+  - JSONPath: .metadata.creationTimestamp
+    name: age
+    type: date
   group: kibana.k8s.elastic.co
   names:
     categories:
-      - elastic
+    - elastic
     kind: Kibana
     listKind: KibanaList
     plural: kibanas
     shortNames:
-      - kb
+    - kb
     singular: kibana
   scope: Namespaced
   subresources:
@@ -2193,7 +2193,7 @@ spec:
                     to the current namespace.
                   type: string
               required:
-                - name
+              - name
               type: object
             http:
               description: HTTP holds the HTTP layer configuration for Kibana.
@@ -2326,8 +2326,8 @@ spec:
                                 type: string
                               targetPort:
                                 anyOf:
-                                  - type: integer
-                                  - type: string
+                                - type: integer
+                                - type: string
                                 description: 'Number or name of the port to access
                                   on the pods targeted by the service. Number must
                                   be in the range 1 to 65535. Name must be an IANA_SVC_NAME.
@@ -2339,7 +2339,7 @@ spec:
                                   omitted or set equal to the ''port'' field. More
                                   info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service'
                             required:
-                              - port
+                            - port
                             type: object
                           type: array
                         publishNotReadyAddresses:
@@ -2494,14 +2494,14 @@ spec:
                             contain any ".." components.
                           type: string
                       required:
-                        - key
+                      - key
                       type: object
                     type: array
                   secretName:
                     description: SecretName is the name of the secret.
                     type: string
                 required:
-                  - secretName
+                - secretName
                 type: object
               type: array
             serviceAccountName:
@@ -2513,7 +2513,7 @@ spec:
               description: Version of Kibana.
               type: string
           required:
-            - version
+          - version
           type: object
         status:
           description: KibanaStatus defines the observed state of Kibana
@@ -2530,15 +2530,15 @@ spec:
           type: object
   version: v1
   versions:
-    - name: v1
-      served: true
-      storage: true
-    - name: v1beta1
-      served: true
-      storage: false
-    - name: v1alpha1
-      served: false
-      storage: false
+  - name: v1
+    served: true
+    storage: true
+  - name: v1beta1
+    served: true
+    storage: false
+  - name: v1alpha1
+    served: false
+    storage: false
 status:
   acceptedNames:
     kind: ""
@@ -2573,142 +2573,142 @@ kind: ClusterRole
 metadata:
   name: elastic-operator
 rules:
-  - apiGroups:
-      - "authorization.k8s.io"
-    resources:
-      - subjectaccessreviews
-    verbs:
-      - create
-  - apiGroups:
-      - ""
-    resources:
-      - pods
-      - endpoints
-      - events
-      - persistentvolumeclaims
-      - secrets
-      - services
-      - configmaps
-      - serviceaccounts
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - apps
-    resources:
-      - deployments
-      - statefulsets
-      - daemonsets
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - policy
-    resources:
-      - poddisruptionbudgets
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - elasticsearch.k8s.elastic.co
-    resources:
-      - elasticsearches
-      - elasticsearches/status
-      - elasticsearches/finalizers
-      - enterpriselicenses
-      - enterpriselicenses/status
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - kibana.k8s.elastic.co
-    resources:
-      - kibanas
-      - kibanas/status
-      - kibanas/finalizers
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - apm.k8s.elastic.co
-    resources:
-      - apmservers
-      - apmservers/status
-      - apmservers/finalizers
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - enterprisesearch.k8s.elastic.co
-    resources:
-      - enterprisesearches
-      - enterprisesearches/status
-      - enterprisesearches/finalizers
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - admissionregistration.k8s.io
-    resources:
-      - mutatingwebhookconfigurations
-      - validatingwebhookconfigurations
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - beat.k8s.elastic.co
-    resources:
-      - beats
-      - beats/status
-      - beats/finalizers
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
+- apiGroups:
+  - "authorization.k8s.io"
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - endpoints
+  - events
+  - persistentvolumeclaims
+  - secrets
+  - services
+  - configmaps
+  - serviceaccounts
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - statefulsets
+  - daemonsets
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - elasticsearch.k8s.elastic.co
+  resources:
+  - elasticsearches
+  - elasticsearches/status
+  - elasticsearches/finalizers
+  - enterpriselicenses
+  - enterpriselicenses/status
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - kibana.k8s.elastic.co
+  resources:
+  - kibanas
+  - kibanas/status
+  - kibanas/finalizers
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - apm.k8s.elastic.co
+  resources:
+  - apmservers
+  - apmservers/status
+  - apmservers/finalizers
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - enterprisesearch.k8s.elastic.co
+  resources:
+  - enterprisesearches
+  - enterprisesearches/status
+  - enterprisesearches/finalizers
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - mutatingwebhookconfigurations
+  - validatingwebhookconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - beat.k8s.elastic.co
+  resources:
+  - beats
+  - beats/status
+  - beats/finalizers
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
 ---
 # Source: eck/templates/cluster-role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2771,9 +2771,9 @@ roleRef:
   kind: ClusterRole
   name: elastic-operator
 subjects:
-  - kind: ServiceAccount
-    name: elastic-operator
-    namespace: elastic-system
+- kind: ServiceAccount
+  name: elastic-operator
+  namespace: elastic-system
 ---
 # Source: eck/templates/operator-role-binding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2786,9 +2786,9 @@ roleRef:
   kind: ClusterRole
   name: elastic-operator
 subjects:
-  - kind: ServiceAccount
-    name: elastic-operator
-    namespace: elastic-system
+- kind: ServiceAccount
+  name: elastic-operator
+  namespace: elastic-system
 ---
 # Source: eck/templates/webhook.yaml
 apiVersion: v1
@@ -2826,47 +2826,49 @@ spec:
       labels:
         control-plane: elastic-operator
     spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
       terminationGracePeriodSeconds: 10
       serviceAccountName: elastic-operator
       containers:
-        - image: "docker.elastic.co/eck/eck-operator:1.2.1"
-          imagePullPolicy: IfNotPresent
-          name: manager
-          args:
-            - "manager"
-            - "--log-verbosity=0"
-            - "--metrics-port=0"
-            - "--container-registry=docker.elastic.co"
-            - "--max-concurrent-reconciles=3"
-            - "--ca-cert-validity=8760h"
-            - "--ca-cert-rotate-before=24h"
-            - "--cert-validity=8760h"
-            - "--cert-rotate-before=24h"
-            - "--enable-webhook"
-          env:
-            - name: OPERATOR_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: OPERATOR_IMAGE
-              value: "docker.elastic.co/eck/eck-operator:1.2.1"
-            - name: WEBHOOK_SECRET
-              value: "elastic-webhook-server-cert"
-          resources:
+      - image: "docker.elastic.co/eck/eck-operator:1.2.1"
+        imagePullPolicy: IfNotPresent
+        name: manager
+        args:
+          - "manager"
+          - "--log-verbosity=0"
+          - "--metrics-port=0"
+          - "--container-registry=docker.elastic.co"
+          - "--max-concurrent-reconciles=3"
+          - "--ca-cert-validity=8760h"
+          - "--ca-cert-rotate-before=24h"
+          - "--cert-validity=8760h"
+          - "--cert-rotate-before=24h"
+          - "--enable-webhook=false"
+        env:
+          - name: OPERATOR_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: OPERATOR_IMAGE
+            value: "docker.elastic.co/eck/eck-operator:1.2.1"
+          - name: WEBHOOK_SECRET
+            value: "elastic-webhook-server-cert"
+        resources:
             limits:
               cpu: 1
               memory: 512Mi
             requests:
               cpu: 100m
               memory: 150Mi
-          ports:
-            - containerPort: 9443
-              name: https-webhook
-              protocol: TCP
-          volumeMounts:
-            - mountPath: /tmp/k8s-webhook-server/serving-certs
-              name: cert
-              readOnly: true
+        ports:
+        - containerPort: 9443
+          name: https-webhook
+          protocol: TCP
+        volumeMounts:
+          - mountPath: /tmp/k8s-webhook-server/serving-certs
+            name: cert
+            readOnly: true
       volumes:
         - name: cert
           secret:
@@ -2879,130 +2881,130 @@ kind: ValidatingWebhookConfiguration
 metadata:
   name: elastic-webhook.k8s.elastic.co
 webhooks:
-  - clientConfig:
-      caBundle: Cg==
-      service:
-        name: elastic-webhook-server
-        namespace: elastic-system
-        path: /validate-apm-k8s-elastic-co-v1-apmserver
-    failurePolicy: Ignore
-    name: elastic-apm-validation-v1.k8s.elastic.co
-    rules:
-      - apiGroups:
-          - apm.k8s.elastic.co
-        apiVersions:
-          - v1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - apmservers
-  - clientConfig:
-      caBundle: Cg==
-      service:
-        name: elastic-webhook-server
-        namespace: elastic-system
-        path: /validate-apm-k8s-elastic-co-v1beta1-apmserver
-    failurePolicy: Ignore
-    name: elastic-apm-validation-v1beta1.k8s.elastic.co
-    rules:
-      - apiGroups:
-          - apm.k8s.elastic.co
-        apiVersions:
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - apmservers
-  - clientConfig:
-      caBundle: Cg==
-      service:
-        name: elastic-webhook-server
-        namespace: elastic-system
-        path: /validate-beat-k8s-elastic-co-v1beta1-beat
-    failurePolicy: Ignore
-    name: elastic-beat-validation-v1beta1.k8s.elastic.co
-    rules:
-      - apiGroups:
-          - beat.k8s.elastic.co
-        apiVersions:
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - beats
-  - clientConfig:
-      caBundle: Cg==
-      service:
-        name: elastic-webhook-server
-        namespace: elastic-system
-        path: /validate-elasticsearch-k8s-elastic-co-v1-elasticsearch
-    failurePolicy: Ignore
-    name: elastic-es-validation-v1.k8s.elastic.co
-    rules:
-      - apiGroups:
-          - elasticsearch.k8s.elastic.co
-        apiVersions:
-          - v1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - elasticsearches
-  - clientConfig:
-      caBundle: Cg==
-      service:
-        name: elastic-webhook-server
-        namespace: elastic-system
-        path: /validate-elasticsearch-k8s-elastic-co-v1beta1-elasticsearch
-    failurePolicy: Ignore
-    name: elastic-es-validation-v1beta1.k8s.elastic.co
-    rules:
-      - apiGroups:
-          - elasticsearch.k8s.elastic.co
-        apiVersions:
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - elasticsearches
-  - clientConfig:
-      caBundle: Cg==
-      service:
-        name: elastic-webhook-server
-        namespace: elastic-system
-        path: /validate-kibana-k8s-elastic-co-v1-kibana
-    failurePolicy: Ignore
-    name: elastic-kb-validation-v1.k8s.elastic.co
-    rules:
-      - apiGroups:
-          - kibana.k8s.elastic.co
-        apiVersions:
-          - v1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - kibanas
-  - clientConfig:
-      caBundle: Cg==
-      service:
-        name: elastic-webhook-server
-        namespace: elastic-system
-        path: /validate-kibana-k8s-elastic-co-v1beta1-kibana
-    failurePolicy: Ignore
-    name: elastic-kb-validation-v1beta1.k8s.elastic.co
-    rules:
-      - apiGroups:
-          - kibana.k8s.elastic.co
-        apiVersions:
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - kibanas
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: elastic-webhook-server
+      namespace: elastic-system
+      path: /validate-apm-k8s-elastic-co-v1-apmserver
+  failurePolicy: Ignore
+  name: elastic-apm-validation-v1.k8s.elastic.co
+  rules:
+  - apiGroups:
+    - apm.k8s.elastic.co
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - apmservers
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: elastic-webhook-server
+      namespace: elastic-system
+      path: /validate-apm-k8s-elastic-co-v1beta1-apmserver
+  failurePolicy: Ignore
+  name: elastic-apm-validation-v1beta1.k8s.elastic.co
+  rules:
+  - apiGroups:
+    - apm.k8s.elastic.co
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - apmservers
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: elastic-webhook-server
+      namespace: elastic-system
+      path: /validate-beat-k8s-elastic-co-v1beta1-beat
+  failurePolicy: Ignore
+  name: elastic-beat-validation-v1beta1.k8s.elastic.co
+  rules:
+  - apiGroups:
+    - beat.k8s.elastic.co
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - beats
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: elastic-webhook-server
+      namespace: elastic-system
+      path: /validate-elasticsearch-k8s-elastic-co-v1-elasticsearch
+  failurePolicy: Ignore
+  name: elastic-es-validation-v1.k8s.elastic.co
+  rules:
+  - apiGroups:
+    - elasticsearch.k8s.elastic.co
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - elasticsearches
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: elastic-webhook-server
+      namespace: elastic-system
+      path: /validate-elasticsearch-k8s-elastic-co-v1beta1-elasticsearch
+  failurePolicy: Ignore
+  name: elastic-es-validation-v1beta1.k8s.elastic.co
+  rules:
+  - apiGroups:
+    - elasticsearch.k8s.elastic.co
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - elasticsearches
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: elastic-webhook-server
+      namespace: elastic-system
+      path: /validate-kibana-k8s-elastic-co-v1-kibana
+  failurePolicy: Ignore
+  name: elastic-kb-validation-v1.k8s.elastic.co
+  rules:
+  - apiGroups:
+    - kibana.k8s.elastic.co
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - kibanas
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: elastic-webhook-server
+      namespace: elastic-system
+      path: /validate-kibana-k8s-elastic-co-v1beta1-kibana
+  failurePolicy: Ignore
+  name: elastic-kb-validation-v1beta1.k8s.elastic.co
+  rules:
+  - apiGroups:
+    - kibana.k8s.elastic.co
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - kibanas
 

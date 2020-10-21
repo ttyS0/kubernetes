@@ -1,7 +1,7 @@
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
-  name: es
+  name: web
   namespace: elastic-system
 spec:
   version: 7.9.2
@@ -13,6 +13,11 @@ spec:
         node.ingest: true
         node.ml: true
         node.store.allow_mmap: false
+        xpack.security.authc:
+          anonymous:
+            username: anonymous
+            roles: superuser
+            authz_exception: true
       podTemplate:
         spec:
           containers:
@@ -25,22 +30,19 @@ spec:
               env:
                 - name: ES_JAVA_OPTS
                   value: "-Xms2g -Xmx2g"
-      count: 3
+      count: 1
       volumeClaimTemplates:
         - metadata:
-            name: elasticsearch-data
+            name: web-data
           spec:
             accessModes:
               - ReadWriteOnce
             resources:
               requests:
-                storage: 50Gi
+                storage: 30Gi
             storageClassName: fast
   http:
-    service:
-      spec:
-        type: LoadBalancer
     tls:
-      certificate:
-        secretName: elastic-tls
+      selfSignedCertificate:
+        disabled: true
 
