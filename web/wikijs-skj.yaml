@@ -39,7 +39,7 @@ spec:
             value: "1"
       containers:
         - name: wikijs
-          image: "hub.skj.dev/img/wikijs:2.5.159"
+          image: "hub.skj.dev/img/wikijs:2.5.168"
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_TYPE
@@ -118,7 +118,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.kubernetes.io/ssl-redirect: "true"
     kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    #cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: "skj.wiki"
@@ -145,7 +145,7 @@ metadata:
     kubernetes.io/ingress.class: nginx-external
     nginx.kubernetes.io/ssl-redirect: "true"
     kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    #cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: "skj.wiki"
