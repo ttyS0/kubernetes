@@ -126,11 +126,9 @@ spec:
                     values:
                       - static-web
               topologyKey: "kubernetes.io/hostname"
-      imagePullSecrets:
-        - name: home-registry
       containers:
         - name: static-web
-          image: ttys0/staticweb:v1.0-1
+          image: hub.skj.dev/img/staticweb:1
           command: ["/home/auto-reload-nginx.sh"]
           ports:
             - containerPort: 80

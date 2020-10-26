@@ -29,7 +29,7 @@ spec:
         app: beezuscomplex
     spec:
       containers:
-        - image: ghost:3.21.0
+        - image: ghost:3.36.0
           name: ghost-beezuscomplex
           env:
             - name: AWS_ACCESS_KEY_ID
@@ -149,7 +149,7 @@ metadata:
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    #cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: beezuscomplex.com
@@ -180,7 +180,7 @@ metadata:
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    #cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: beezuscomplex.com
