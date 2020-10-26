@@ -60,7 +60,7 @@ spec:
     - port: 8181
       name: tautulli
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: tautulli
@@ -69,7 +69,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    #cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: tautulli.ttys0.net
@@ -77,8 +77,11 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: tautulli
-              servicePort: 8181
+              service:
+                name: tautulli
+                port:
+                  number: 8181
+
   tls:
     - hosts:
         - tautulli.ttys0.net
