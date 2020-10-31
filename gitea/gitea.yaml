@@ -110,8 +110,8 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.kubernetes.io/ssl-redirect: "true"
     nginx.kubernetes.io/proxy-body-size: "50m"
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    acme.kubernetes.io/enable: "true"
+    acme.kubernetes.io/dns: "dns_cf"
 spec:
   rules:
     - host: git.skj.dev
@@ -128,7 +128,7 @@ spec:
   tls:
     - hosts:
         - git.skj.dev
-      secretName: gitea-tls
+      secretName: gitskjdev-tls
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -139,8 +139,6 @@ metadata:
     kubernetes.io/ingress.class: nginx-external
     nginx.kubernetes.io/ssl-redirect: "true"
     nginx.kubernetes.io/proxy-body-size: "50m"
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: git.skj.dev
@@ -153,4 +151,4 @@ spec:
   tls:
     - hosts:
         - git.skj.dev
-      secretName: gitea-tls
+      secretName: gitskjdev-tls

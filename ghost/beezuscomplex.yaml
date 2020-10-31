@@ -148,8 +148,8 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-    kubernetes.io/tls-acme: "true"
-    #cert-manager.io/cluster-issuer: "letsencrypt"
+    acme.kubernetes.io/enable: "true"
+    acme.kubernetes.io/dns: "dns_cf"
 spec:
   rules:
     - host: beezuscomplex.com
@@ -167,7 +167,7 @@ spec:
     - hosts:
         - beezuscomplex.com
         - www.beezuscomplex.com
-      secretName: beezuscomplex-com-tls
+      secretName: beezuscomplexcom-tls
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -179,8 +179,6 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-    kubernetes.io/tls-acme: "true"
-    #cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: beezuscomplex.com
@@ -198,4 +196,4 @@ spec:
     - hosts:
         - beezuscomplex.com
         - www.beezuscomplex.com
-      secretName: beezuscomplex-com-tls
+      secretName: beezuscomplexcom-tls

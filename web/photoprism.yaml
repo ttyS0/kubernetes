@@ -66,7 +66,7 @@ spec:
         kubernetes.io/arch: "amd64"
       containers:
         - name: photoprism
-          image: photoprism/photoprism:20201013
+          image: photoprism/photoprism:20201021
           imagePullPolicy: IfNotPresent
           env:
             - name: PHOTOPRISM_DEBUG
@@ -154,8 +154,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.kubernetes.io/ssl-redirect: "true"
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    acme.kubernetes.io/enable: "true"
+    acme.kubernetes.io/dns: "dns_cf"
 spec:
   rules:
     - host: "photos.ttys0.net"
@@ -168,7 +168,7 @@ spec:
   tls:
     - hosts:
         - photos.ttys0.net
-      secretName: photoprism-tls
+      secretName: photos-tls
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -180,8 +180,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx-external
     nginx.kubernetes.io/ssl-redirect: "true"
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: "photos.ttys0.net"
@@ -194,4 +192,4 @@ spec:
   tls:
     - hosts:
         - photos.ttys0.net
-      secretName: photoprism-tls
+      secretName: photos-tls
