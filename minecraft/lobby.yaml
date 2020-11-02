@@ -22,7 +22,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: lobby
-          image: hub.skj.dev/img/spigot:1.16.2
+          image: hub.skj.dev/img/spigot:1.16.3
           workingDir: "/minecraft/worlds/lobby"
           resources:
             limits:
