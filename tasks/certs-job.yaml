@@ -1,0 +1,46 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: certs
+  namespace: tasks
+  labels:
+    app: certs
+spec:
+  backoffLimit: 1
+  activeDeadlineSeconds: 600
+  ttlSecondsAfterFinished: 120
+  template:
+    metadata:
+      labels:
+        app: certs
+    spec:
+      serviceAccountName: certs
+      containers:
+        - name: certs
+          image: hub.skj.dev/img/certs:1.1.8
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ACME_MANAGE_ALL_NAMESPACES
+              value: "true"
+            - name: ACME_DEMO_ENABLED
+              value: "false"
+            - name: ACME_DEBUG
+              value: "false"
+            - name: CF_Key
+              valueFrom:
+                secretKeyRef:
+                  key: "cfkey"
+                  name: cloudflare-api
+            - name: CF_Email
+              valueFrom:
+                secretKeyRef:
+                  key: "cfemail"
+                  name: cloudflare-api
+      restartPolicy: Never
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 1.1.1.1
+        options:
+          - name: edns0
