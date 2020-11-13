@@ -10,3 +10,16 @@ spec:
     requests:
       storage: 600Gi
   storageClassName: cephfs
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: transcode
+  namespace: tasks
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Ti
+  storageClassName: cephfs-bulk

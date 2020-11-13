@@ -23,15 +23,15 @@ spec:
           - backend:
               serviceName: hub-harbor-core
               servicePort: 80
-            path: /service/
+            path: /service
           - backend:
               serviceName: hub-harbor-core
               servicePort: 80
-            path: /v2/
+            path: /v2
           - backend:
               serviceName: hub-harbor-core
               servicePort: 80
-            path: /chartrepo/
+            path: /chartrepo
           - backend:
               serviceName: hub-harbor-core
               servicePort: 80

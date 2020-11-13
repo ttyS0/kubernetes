@@ -7,7 +7,6 @@ metadata:
     app.kubernetes.io/part-of: ingress-nginx
 
 ---
-
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -287,7 +286,7 @@ spec:
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
         - name: nginx-ingress-controller
-          image: us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller:v0.35.0
+          image: us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller:v0.41.2
           args:
             - /nginx-ingress-controller
             - --default-backend-service=ghost/static-web

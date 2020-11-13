@@ -100,7 +100,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: hub.skj.dev/img/ttrss:20200927
+        - image: hub.skj.dev/img/ttrss:20201027
           name: ttrss
           resources:
             requests:
@@ -136,7 +136,7 @@ spec:
           volumeMounts:
             - mountPath: /var/www/html
               name: ttrss-data
-        - image: hub.skj.dev/img/ttrss:20200927
+        - image: hub.skj.dev/img/ttrss:20201027
           name: ttrss-updater
           command: ["/updater.sh"]
           resources:
@@ -217,8 +217,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.kubernetes.io/ssl-redirect: "true"
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: feeds.ttys0.net
@@ -241,8 +239,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx-external
     nginx.kubernetes.io/ssl-redirect: "true"
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
     - host: feeds.ttys0.net
