@@ -24,7 +24,7 @@ spec:
             - "/usr/bin/bash"
           args:
             - "-c"
-            - "/usr/local/bin/other-transcode --all-eac3 --keep-ac3-stereo --pass-dts --target 1080p=6000 src/*.mkv"
+            - "/usr/local/bin/other-transcode --all-eac3 --keep-ac3-stereo --pass-dts --target 1080p=6000 --main-audio 1=stereo --burn-subtitle auto src/*.mkv"
           env:
             - name: LIBVA_DRIVER_NAME
               value: "iHD"
