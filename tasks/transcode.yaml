@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: transcode-
+  generateName: transcode1-
   namespace: tasks
   labels:
     app: transcode
@@ -24,7 +24,49 @@ spec:
             - "/usr/bin/bash"
           args:
             - "-c"
-            - "/usr/local/bin/other-transcode --all-eac3 --keep-ac3-stereo --pass-dts --target 1080p=6000 --main-audio 1=stereo --burn-subtitle auto src/*.mkv"
+            - "/usr/local/bin/other-transcode --all-eac3 --keep-ac3-stereo --pass-dts --target 1080p=6000 --main-audio 1=stereo --burn-subtitle auto src/1/*.mkv"
+          env:
+            - name: LIBVA_DRIVER_NAME
+              value: "iHD"
+          resources:
+            limits:
+              gpu.intel.com/i915: 1
+          volumeMounts:
+            - mountPath: "/transcode"
+              name: transcode
+      volumes:
+        - name: transcode
+          persistentVolumeClaim:
+            claimName: transcode
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: transcode2-
+  namespace: tasks
+  labels:
+    app: transcode
+spec:
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 120
+  template:
+    metadata:
+      labels:
+        app: transcode
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: transcode
+          image: hub.skj.dev/img/other-transcode:qsv-0.4.0
+          imagePullPolicy: IfNotPresent
+          workingDir: "/transcode"
+          command:
+            - "/usr/bin/bash"
+          args:
+            - "-c"
+            - "/usr/local/bin/other-transcode --all-eac3 --keep-ac3-stereo --pass-dts --target 1080p=6000 --main-audio 1=stereo --burn-subtitle auto src/2/*.mkv"
           env:
             - name: LIBVA_DRIVER_NAME
               value: "iHD"
