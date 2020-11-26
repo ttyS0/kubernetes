@@ -8,7 +8,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 15T
+      storage: 21Ti
   storageClassName: bulk
 ---
 apiVersion: v1
@@ -55,7 +55,7 @@ spec:
         app: plex
     spec:
       containers:
-        - image: plexinc/pms-docker:1.20.5.3600-47c0d9038
+        - image: plexinc/pms-docker:1.21.0.3616-d87012962
           name: plex
           env:
             - name: HOSTNAME
