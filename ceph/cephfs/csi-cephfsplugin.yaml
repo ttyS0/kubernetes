@@ -52,7 +52,7 @@ spec:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v3.1.1
+          image: quay.io/cephcsi/cephcsi:v3.1.2
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
@@ -82,8 +82,6 @@ spec:
               value: unix:///csi/csi.sock
           imagePullPolicy: "IfNotPresent"
           volumeMounts:
-            - name: mount-cache-dir
-              mountPath: /mount-cache-dir
             - name: socket-dir
               mountPath: /csi
             - name: mountpoint-dir
@@ -108,7 +106,7 @@ spec:
         - name: liveness-prometheus
           securityContext:
             privileged: true
-          image: quay.io/cephcsi/cephcsi:v3.1.1
+          image: quay.io/cephcsi/cephcsi:v3.1.2
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
@@ -128,8 +126,6 @@ spec:
               mountPath: /csi
           imagePullPolicy: "IfNotPresent"
       volumes:
-        - name: mount-cache-dir
-          emptyDir: {}
         - name: socket-dir
           hostPath:
             path: /var/lib/kubelet/plugins/cephfs.csi.ceph.com/
