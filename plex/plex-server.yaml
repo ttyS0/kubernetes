@@ -54,8 +54,18 @@ spec:
       labels:
         app: plex
     spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - radagast
+              weight: 1
       containers:
-        - image: plexinc/pms-docker:1.21.0.3616-d87012962
+        - image: plexinc/pms-docker:1.21.0.3711-b509cc236
           name: plex
           env:
             - name: HOSTNAME

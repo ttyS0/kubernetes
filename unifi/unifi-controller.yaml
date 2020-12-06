@@ -27,13 +27,11 @@ spec:
       labels:
         app: unifi-controller
     spec:
-      nodeSelector:
-        kubernetes.io/arch: amd64
       securityContext:
         runAsUser: 999
         fsGroup: 999
       containers:
-        - image: jacobalberty/unifi:5.13.32
+        - image: jacobalberty/unifi:6.0.41
           env:
             - name: RUNAS_UID0
               value: "false"
@@ -62,8 +60,11 @@ spec:
             - name: unifi-key
               mountPath: /unifi/cert/privkey.pem
               subPath: privkey.pem
+            - name: unifi-ca
+              mountPath: /unifi/cert/chain.pem
+              subPath: chain.pem
       volumes:
-      - name: unifi-data
+        - name: unifi-data
         persistentVolumeClaim:
           claimName: unifi-data
       - name: unifi-cert
@@ -72,15 +73,21 @@ spec:
           items:
             - key: tls.crt
               path: cert.pem
-      - name: unifi-key
-        secret:
-          secretName: unifi-tls
-          items:
-            - key: tls.key
-              path: privkey.pem
-      - name: unifi-log
-        emptyDir:
-          {}
+        - name: unifi-key
+          secret:
+            secretName: unifi-tls
+            items:
+              - key: tls.key
+                path: privkey.pem
+        - name: unifi-ca
+          secret:
+            secretName: unifi-tls
+            items:
+              - key: ca.crt
+                path: chain.pem
+        - name: unifi-log
+          emptyDir:
+            { }
 ---
 apiVersion: v1
 kind: Service
@@ -123,3 +130,30 @@ spec:
   - name: unifi-stun
     port: 3478
     protocol: UDP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: unifi
+  namespace: unifi
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.kubernetes.io/ssl-redirect: "true"
+    acme.kubernetes.io/enable: "true"
+    acme.kubernetes.io/dns: "dns_cf"
+spec:
+  rules:
+    - host: unifi.ttys0.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: unifi-controller
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - unifi.ttys0.net
+      secretName: unifi-tls

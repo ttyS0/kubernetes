@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: transcode1-
+  generateName: transcode3-
   namespace: tasks
   labels:
     app: transcode
@@ -30,7 +30,7 @@ spec:
             - "/usr/bin/bash"
           args:
             - "-c"
-            - "/usr/local/bin/other-transcode --all-eac3 --keep-ac3-stereo --pass-dts --target 1080p=6000 --main-audio 1=stereo --add-subtitle auto --burn-subtitle auto --decode all --qsv-decoder --preset veryslow src/1/*"
+            - "/usr/local/bin/other-transcode --all-eac3 --keep-ac3-stereo --pass-dts --target 1080p=6000 --main-audio 1=stereo --add-subtitle auto --burn-subtitle auto --decode all --qsv-decoder --preset veryslow src/3/*"
           env:
             - name: LIBVA_DRIVER_NAME
               value: "iHD"
