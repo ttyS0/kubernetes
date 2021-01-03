@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: vault-backup-
+  namespace: tasks
+  labels:
+    app: vault-backup
+spec:
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 120
+  template:
+    metadata:
+      labels:
+        app: vault-backup
+    spec:
+      containers:
+        - name: vault-backup
+          image: hub.skj.dev/img/vault-backup:2
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: VAULT_ROLEID
+              valueFrom:
+                secretKeyRef:
+                  key: roleid
+                  name: vault-role
+            - name: VAULT_SECRETID
+              valueFrom:
+                secretKeyRef:
+                  key: secretid
+                  name: vault-role
+            - name: VAULT_ADDR
+              valueFrom:
+                secretKeyRef:
+                  key: addr
+                  name: vault-role
+          volumeMounts:
+            - mountPath: "/vault/snapshots"
+              name: cephfs
+      volumes:
+        - name: cephfs
+          persistentVolumeClaim:
+            claimName: dbbackup
+      restartPolicy: Never
+

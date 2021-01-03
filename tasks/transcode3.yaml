@@ -23,14 +23,14 @@ spec:
         QSV: "true"
       containers:
         - name: transcode
-          image: hub.skj.dev/img/other-transcode:qsv-0.5.0
+          image: hub.skj.dev/img/other-transcode:qsv-0.6.0
           imagePullPolicy: IfNotPresent
           workingDir: "/transcode"
           command:
             - "/usr/bin/bash"
           args:
             - "-c"
-            - "/usr/local/bin/other-transcode --all-eac3 --keep-ac3-stereo --pass-dts --target 1080p=6000 --main-audio 1=stereo --add-subtitle auto --burn-subtitle auto --decode all --qsv-decoder --preset veryslow src/3/*"
+            - "/usr/local/bin/other-transcode --all-eac3 --surround-bitrate 384 --stereo-bitrate 192 --target 1080p=6000 --main-audio 1=stereo --add-subtitle auto --burn-subtitle auto --decode all --qsv-decoder --preset veryslow src/3/*"
           env:
             - name: LIBVA_DRIVER_NAME
               value: "iHD"
