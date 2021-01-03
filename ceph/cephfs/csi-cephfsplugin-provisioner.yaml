@@ -31,20 +31,29 @@ spec:
       labels:
         app: csi-cephfsplugin-provisioner
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - csi-cephfsplugin-provisioner
+              topologyKey: "kubernetes.io/hostname"
       serviceAccount: cephfs-csi-provisioner
       nodeSelector:
         kubernetes.io/arch: amd64
       containers:
         - name: csi-provisioner
-          image: quay.io/k8scsi/csi-provisioner:v1.6.0
+          image: k8s.gcr.io/sig-storage/csi-provisioner:v2.0.4
           args:
             - "--csi-address=$(ADDRESS)"
             - "--v=5"
             - "--timeout=150s"
-            - "--enable-leader-election=true"
-            - "--leader-election-type=leases"
+            - "--leader-election"
             - "--retry-interval-start=500ms"
-            - "--feature-gates=Topology=true"
+            - "--feature-gates=Topology=false"
           env:
             - name: ADDRESS
               value: unix:///csi/csi-provisioner.sock
@@ -53,13 +62,14 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-resizer
-          image: quay.io/k8scsi/csi-resizer:v0.5.0
+          image: k8s.gcr.io/sig-storage/csi-resizer:v1.0.1
           args:
             - "--csi-address=$(ADDRESS)"
             - "--v=5"
-            - "--csiTimeout=150s"
+            - "--timeout=150s"
             - "--leader-election"
             - "--retry-interval-start=500ms"
+            - "--handle-volume-inuse-error=false"
           env:
             - name: ADDRESS
               value: unix:///csi/csi-provisioner.sock
@@ -68,7 +78,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-snapshotter
-          image: quay.io/k8scsi/csi-snapshotter:v2.1.1
+          image: k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.2
           args:
             - "--csi-address=$(ADDRESS)"
             - "--v=5"
@@ -84,7 +94,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-cephfsplugin-attacher
-          image: quay.io/k8scsi/csi-attacher:v2.1.1
+          image: k8s.gcr.io/sig-storage/csi-attacher:v3.0.2
           args:
             - "--v=5"
             - "--csi-address=$(ADDRESS)"
@@ -103,7 +113,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v3.1.2
+          image: quay.io/cephcsi/cephcsi:v3.2.0
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
@@ -143,7 +153,7 @@ spec:
             - name: keys-tmp-dir
               mountPath: /tmp/csi/keys
         - name: liveness-prometheus
-          image: quay.io/cephcsi/cephcsi:v3.1.2
+          image: quay.io/cephcsi/cephcsi:v3.2.0
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
