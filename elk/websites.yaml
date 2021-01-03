@@ -4,7 +4,7 @@ metadata:
   name: websites
   namespace: elk
 spec:
-  version: 7.10.0
+  version: 7.10.1
   nodeSets:
     - name: es
       config:
@@ -33,13 +33,13 @@ spec:
       count: 1
       volumeClaimTemplates:
         - metadata:
-            name: data
+            name: elasticsearch-data
           spec:
             accessModes:
               - ReadWriteOnce
             resources:
               requests:
-                storage: 30Gi
+                storage: 50Gi
             storageClassName: fast
   http:
     tls:
