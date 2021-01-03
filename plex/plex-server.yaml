@@ -65,7 +65,7 @@ spec:
                       - radagast
               weight: 1
       containers:
-        - image: plexinc/pms-docker:1.21.0.3711-b509cc236
+        - image: plexinc/pms-docker:1.21.1.3830-6c22540d5
           name: plex
           env:
             - name: HOSTNAME
