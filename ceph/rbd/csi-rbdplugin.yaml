@@ -28,7 +28,7 @@ spec:
           # created by privileged CSI driver container.
           securityContext:
             privileged: true
-          image: hub.skj.dev/img/node-driver-registrar:2.0.0
+          image: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.0.1
           args:
             - "--v=5"
             - "--csi-address=/csi/csi.sock"
