@@ -23,17 +23,18 @@ spec:
         QSV: "true"
       containers:
         - name: transcode
-          image: hub.skj.dev/img/other-transcode:qsv-0.7.0
+          image: hub.skj.dev/img/other-transcode:qsv-0.7.0-1
           imagePullPolicy: IfNotPresent
           workingDir: "/transcode"
           command:
-            - "/usr/bin/bash"
-          args:
-            - "-c"
-            - "/usr/local/bin/other-transcode --eac3 --main-audio 1=stereo --add-subtitle auto --burn-subtitle auto --decode all --qsv-decoder --preset veryslow src/3/*"
+            - "/usr/local/bin/mytranscode.sh"
           env:
             - name: LIBVA_DRIVER_NAME
               value: "iHD"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           resources:
             limits:
               gpu.intel.com/i915: "1"
