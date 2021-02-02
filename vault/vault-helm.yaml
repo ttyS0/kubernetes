@@ -28,9 +28,20 @@ injector:
   # True if you want to enable vault agent injection.
   enabled: true
 
+  replicas: 1
+
+  # If multiple replicas are specified, by default a leader-elector side-car
+  # will be created so that only one injector attempts to create TLS certificates.
+  leaderElector:
+    enabled: true
+    image:
+      repository: "gcr.io/google_containers/leader-elector"
+      tag: "0.4"
+    ttl: 60s
+
   # If true, will enable a node exporter metrics endpoint at /metrics.
   metrics:
-    enabled: false
+    enabled: true
 
   # External vault server address for the injector to use. Setting this will
   # disable deployment of a vault server along with the injector.
@@ -47,13 +58,13 @@ injector:
   # required.
   agentImage:
     repository: "hub.skj.dev/img/vault"
-    tag: "1.6.1"
+    tag: "1.6.2"
 
   # Mount Path of the Vault Kubernetes Auth Method.
   authPath: "auth/kubernetes"
 
   # Configures the log verbosity of the injector. Supported log levels: Trace, Debug, Error, Warn, Info
-  logLevel: "info"
+  logLevel: "debug"
 
   # Configures the log format of the injector. Supported log formats: "standard", "json".
   logFormat: "standard"
@@ -128,7 +139,7 @@ server:
 
   image:
     repository: "hub.skj.dev/img/vault"
-    tag: "1.6.1"
+    tag: "1.6.2"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
