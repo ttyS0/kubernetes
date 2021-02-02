@@ -31,7 +31,7 @@ spec:
         runAsUser: 999
         fsGroup: 999
       containers:
-        - image: jacobalberty/unifi:6.0.41
+        - image: jacobalberty/unifi:6.0.45
           env:
             - name: RUNAS_UID0
               value: "false"
@@ -65,14 +65,14 @@ spec:
               subPath: chain.pem
       volumes:
         - name: unifi-data
-        persistentVolumeClaim:
-          claimName: unifi-data
-      - name: unifi-cert
-        secret:
-          secretName: unifi-tls
-          items:
-            - key: tls.crt
-              path: cert.pem
+          persistentVolumeClaim:
+            claimName: unifi-data
+        - name: unifi-cert
+          secret:
+            secretName: unifi-tls
+            items:
+              - key: tls.crt
+                path: cert.pem
         - name: unifi-key
           secret:
             secretName: unifi-tls
