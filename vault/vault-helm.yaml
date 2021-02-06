@@ -50,7 +50,7 @@ injector:
   # image sets the repo and tag of the vault-k8s image to use for the injector.
   image:
     repository: "hub.skj.dev/img/vault-k8s"
-    tag: "0.6.0"
+    tag: "0.8.0"
     pullPolicy: IfNotPresent
 
   # agentImage sets the repo and tag of the Vault image to use for the Vault Agent
@@ -81,6 +81,14 @@ injector:
   #    matchLabels:
   #      sidecar-injector: enabled
   namespaceSelector: {}
+
+  # Configures failurePolicy of the webhook. The "unspecified" default behaviour deoends on the
+  # API Version of the WebHook.
+  # To block pod creation while webhook is unavailable, set the policy to `Fail` below.
+  # See https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#failure-policy
+  #
+  # failurePolcy: Fail
+  failurePolicy: Ignore
 
   certs:
     # secretName is the name of the secret that has the TLS certificate and
@@ -288,9 +296,9 @@ server:
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
             matchLabels:
-              app.kubernetes.io/name: {{ template "vault.name" . }}
+              app.kubernetes.io/name: {{ template "vault.name" . }}-agent-injector
               app.kubernetes.io/instance: "{{ .Release.Name }}"
-              component: server
+              component: webhook
           topologyKey: kubernetes.io/hostname
 
   # Toleration Settings for server pods
