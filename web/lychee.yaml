@@ -64,7 +64,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: lychee
-          image: lycheeorg/lychee:v4.1.0
+          image: lycheeorg/lychee:v4.2.2
           env:
             - name: PGID
               value: "1000"
