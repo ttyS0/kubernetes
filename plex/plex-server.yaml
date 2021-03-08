@@ -16,7 +16,7 @@ spec:
         app: plex
     spec:
       containers:
-        - image: plexinc/pms-docker:1.21.2.3943-a91458577
+        - image: plexinc/pms-docker:1.21.4.4079-1b7748a7b
           name: plex
           env:
             - name: HOSTNAME
@@ -30,10 +30,10 @@ spec:
               mountPath: /config
             - name: plex-transcode
               mountPath: /transcode
-            - name: plex-data
-              mountPath: /data
-            - name: plex-import
-              mountPath: /incoming
+            - name: plex-files
+              mountPath: /files
+            - name: plex-rips
+              mountPath: /rips
           resources:
             limits:
               gpu.intel.com/i915: 1
@@ -43,14 +43,14 @@ spec:
         - name: plex-server
           persistentVolumeClaim:
             claimName: plex-server
-        - name: plex-data
-          persistentVolumeClaim:
-            claimName: plex-data
         - name: plex-transcode
           emptyDir: {}
-        - name: plex-import
+        - name: plex-files
           persistentVolumeClaim:
-            claimName: plex-import
+            claimName: plex-files
+        - name: plex-rips
+          persistentVolumeClaim:
+            claimName: plex-rips
 ---
 apiVersion: v1
 kind: Service
