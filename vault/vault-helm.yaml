@@ -58,7 +58,7 @@ injector:
   # required.
   agentImage:
     repository: "hub.skj.dev/img/vault"
-    tag: "1.6.2"
+    tag: "1.6.3"
 
   # Mount Path of the Vault Kubernetes Auth Method.
   authPath: "auth/kubernetes"
@@ -147,7 +147,7 @@ server:
 
   image:
     repository: "hub.skj.dev/img/vault"
-    tag: "1.6.2"
+    tag: "1.6.3"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
