@@ -16,7 +16,7 @@ spec:
         app: plex
     spec:
       containers:
-        - image: plexinc/pms-docker:1.21.4.4079-1b7748a7b
+        - image: plexinc/pms-docker:1.22.0.4163-d8c4875dd
           name: plex
           env:
             - name: HOSTNAME
