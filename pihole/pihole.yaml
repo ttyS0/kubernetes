@@ -1,0 +1,178 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pihole
+  namespace: pihole
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: fast
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-local-overrides
+  namespace: pihole
+data:
+  02-local-overrides.conf: |
+    rebind-domain-ok=/plex.direct/
+    server=/108minutes.net/10.0.1.1
+    server=/skj.dev/10.0.1.1
+    server=/videotranscoding.wiki/10.0.1.1
+    server=/skj.wiki/10.0.1.1
+    server=/beezuscomplex.com/10.0.1.1
+    server=/skj.photos/10.0.1.1
+    server=/splashof.ink/10.0.1.1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+  namespace: pihole
+  labels:
+    app: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+        name: pihole
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: pihole
+          image: pihole/pihole:v5.7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: pihole-ui
+            - containerPort: 53
+              name: dns-tcp
+              protocol: TCP
+            - containerPort: 53
+              name: dns-udp
+              protocol: UDP
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: WEBPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: webpassword
+                  name: webadmin
+            - name: DNS1
+              value: 127.0.0.1#5054
+            - name: DNS2
+              value: 127.0.0.1#5054
+          volumeMounts:
+            - name: pihole
+              mountPath: "/etc/pihole"
+            - name: local-overrides
+              mountPath: /etc/dnsmasq.d/02-local-overrides.conf
+              subPath: 02-local-overrides.conf
+        - name: cloudflared
+          image: hub.skj.dev/img/cloudflared:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5054
+              name: dns-tcp
+              protocol: TCP
+            - containerPort: 5054
+              name: dns-udp
+              protocol: UDP
+      volumes:
+        - name: pihole
+          persistentVolumeClaim:
+            claimName: pihole
+        - name: local-overrides
+          configMap:
+            defaultMode: 420
+            name: pihole-local-overrides
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-dns-tcp
+  namespace: pihole
+  labels:
+    app: pihole
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "pihole"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.0.1.206
+  externalTrafficPolicy: Local
+  selector:
+    app: pihole
+  ports:
+    - port: 53
+      name: dns-tcp
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-dns-udp
+  namespace: pihole
+  labels:
+    app: pihole
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "pihole"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.0.1.206
+  externalTrafficPolicy: Local
+  selector:
+    app: pihole
+  ports:
+    - port: 53
+      name: dns-udp
+      protocol: UDP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-ui
+  namespace: pihole
+  labels:
+    app: pihole
+spec:
+  selector:
+    app: pihole
+  ports:
+    - port: 80
+      name: pihole-ui
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pihole
+  namespace: pihole
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.kubernetes.io/ssl-redirect: "true"
+    acme.kubernetes.io/enable: "true"
+    acme.kubernetes.io/dns: "dns_cf"
+spec:
+  rules:
+    - host: pihole.ttys0.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pihole-ui
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - pihole.ttys0.net
+      secretName: piholettys0net-tls
