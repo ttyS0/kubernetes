@@ -50,7 +50,7 @@ injector:
   # image sets the repo and tag of the vault-k8s image to use for the injector.
   image:
     repository: "hub.skj.dev/img/vault-k8s"
-    tag: "0.8.0"
+    tag: "0.9.0"
     pullPolicy: IfNotPresent
 
   # agentImage sets the repo and tag of the Vault image to use for the Vault Agent
@@ -296,9 +296,8 @@ server:
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
             matchLabels:
-              app.kubernetes.io/name: {{ template "vault.name" . }}-agent-injector
+              app.kubernetes.io/name: {{ template "vault.name" . }}
               app.kubernetes.io/instance: "{{ .Release.Name }}"
-              component: webhook
           topologyKey: kubernetes.io/hostname
 
   # Toleration Settings for server pods
