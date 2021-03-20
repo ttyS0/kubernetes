@@ -1,0 +1,141 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nextcloud
+  namespace: web
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+  storageClassName: cephfs-bulk
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud
+  namespace: web
+  labels:
+    app.kubernetes.io/name: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nextcloud
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nextcloud
+    spec:
+      securityContext:
+        fsGroup: 1000
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      containers:
+        - name: nextcloud
+          image: library/nextcloud:21.0.0-apache
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OVERWRITEPROTOCOL
+              value: "https"
+            - name: POSTGRES_HOST
+              value: "postgres.postgres.svc.cluster.local"
+            - name: POSTGRES_DB
+              value: "nextcloud"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: "user"
+                  name: nextcloud-db
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-db
+                  key: "passwd"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              memory: "2Gi"
+            limits:
+              memory: "3Gi"
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: nextcloud
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud
+  namespace: web
+  labels:
+    app.kubernetes.io/name: nextcloud
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: nextcloud
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: nextcloud
+  namespace: web
+  labels:
+    app.kubernetes.io/name: nextcloud
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.kubernetes.io/ssl-redirect: "true"
+    acme.kubernetes.io/enable: "true"
+    acme.kubernetes.io/dns: "dns_cf"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+spec:
+  rules:
+    - host: "nc.skj.dev"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: nextcloud
+              servicePort: 80
+  tls:
+    - hosts:
+        - nc.skj.dev
+      secretName: nextcloud-tls
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: nextcloud-ext
+  namespace: web
+  labels:
+    app.kubernetes.io/name: nextcloud
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: "nc.skj.dev"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: nextcloud
+              servicePort: 80
+  tls:
+    - hosts:
+        - nc.skj.dev
+      secretName: nextcloud-tls
