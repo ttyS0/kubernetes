@@ -33,7 +33,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: gitea/gitea:1.13.6
+        - image: gitea/gitea:1.14.0
           name: gitea
           resources:
             requests:
@@ -101,7 +101,7 @@ spec:
   selector:
     app: gitea
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: gitea
@@ -118,18 +118,25 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: gitea
-              servicePort: 3000
+              service:
+                name: gitea
+                port:
+                  number: 3000
           - backend:
-              serviceName: gitea
-              servicePort: 22
+              service:
+                name: gitea
+                port:
+                  number: 22
+            path: /
+            pathType: Prefix
   tls:
     - hosts:
         - git.skj.dev
       secretName: gitskjdev-tls
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: gitea-ext
@@ -144,9 +151,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: gitea
-              servicePort: 3000
+              service:
+                name: gitea
+                port:
+                  number: 3000
 
   tls:
     - hosts:

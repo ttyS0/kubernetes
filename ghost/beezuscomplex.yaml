@@ -29,7 +29,7 @@ spec:
         app: beezuscomplex
     spec:
       containers:
-        - image: library/ghost:4.1.2
+        - image: library/ghost:4.2.0
           name: ghost-beezuscomplex
           env:
             - name: AWS_ACCESS_KEY_ID
@@ -138,7 +138,7 @@ data:
     }
 
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: beezuscomplex
@@ -156,20 +156,26 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: beezuscomplex
-              servicePort: 80
+              service:
+                name: beezuscomplex
+                port:
+                  number: 80
           - path: /.well-known
+            pathType: Prefix
             backend:
-              serviceName: static-web
-              servicePort: 80
+              service:
+                name: static-web
+                port:
+                  number: 80
   tls:
     - hosts:
         - beezuscomplex.com
         - www.beezuscomplex.com
       secretName: beezuscomplexcom-tls
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: beezuscomplex-ext
@@ -185,13 +191,19 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: beezuscomplex
-              servicePort: 80
+              service:
+                name: beezuscomplex
+                port:
+                  number: 80
           - path: /.well-known
+            pathType: Prefix
             backend:
-              serviceName: static-web
-              servicePort: 80
+              service:
+                name: static-web
+                port:
+                  number: 80
   tls:
     - hosts:
         - beezuscomplex.com

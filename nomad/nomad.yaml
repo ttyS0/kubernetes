@@ -1,0 +1,148 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: nomad
+  name: nomad-conf
+data:
+  server.hcl: |
+    datacenter = "home"
+    bind_addr = "0.0.0.0"
+    data_dir = "/nomad/data"
+    leave_on_interrupt = true
+    leave_on_terminate = true
+
+    advertise {
+      http = "nomad.srv.ttys0.net"
+      rpc = "nomad.srv.ttys0.net"
+    }
+
+    server {
+      enabled = true
+      bootstrap_expect = 3
+      server_join {
+        retry_join = [
+          "nomad-0.nomad.nomad.svc.cluster.local",
+          "nomad-1.nomad.nomad.svc.cluster.local",
+          "nomad-2.nomad.nomad.svc.cluster.local"
+        ]
+        retry_max = 3
+        retry_interval = "15s"
+      }
+    }
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nomad
+  namespace: nomad
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nomad
+  serviceName: nomad
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nomad
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - nomad
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: nomad
+          image: hub.skj.dev/img/nomad:1.0.4-1
+          args:
+            - "agent"
+            - "-config=/etc/nomad/server.hcl"
+          ports:
+            - name: http
+              containerPort: 4646
+              protocol: "TCP"
+            - name: rpc
+              containerPort: 4647
+              protocol: "TCP"
+            - name: serf-tcp
+              containerPort: 4648
+              protocol: "TCP"
+            - name: serf-udp
+              containerPort: 4648
+              protocol: "UDP"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+          volumeMounts:
+            - name: nomad-conf
+              mountPath: /etc/nomad
+            - name: data
+              mountPath: /nomad/data
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 1000
+      volumes:
+        - name: nomad-conf
+          configMap:
+            name: nomad-conf
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nomad
+  namespace: nomad
+  labels:
+    app.kubernetes.io/name: nomad
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 4646
+      protocol: "TCP"
+    - name: rpc
+      port: 4647
+      protocol: "TCP"
+  selector:
+    app.kubernetes.io/name: nomad
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: nomad-ui
+  namespace: nomad
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    acme.kubernetes.io/enable: "true"
+    acme.kubernetes.io/dns: "dns_cf"
+spec:
+  rules:
+    - host: nomad.ttys0.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: nomad
+              servicePort: 4646
+  tls:
+    - hosts:
+        - nomad.ttys0.net
+      secretName: nomad-tls

@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hub-harbor-ext
@@ -16,25 +16,41 @@ spec:
     - host: hub.skj.dev
       http:
         paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hub-harbor-portal
+                port:
+                  number: 80
           - backend:
-              serviceName: hub-harbor-portal
-              servicePort: 80
-            path: /
-          - backend:
-              serviceName: hub-harbor-core
-              servicePort: 80
+              service:
+                name: hub-harbor-core
+                port:
+                  number: 80
             path: /service
+            pathType: Prefix
           - backend:
-              serviceName: hub-harbor-core
-              servicePort: 80
+              service:
+                name: hub-harbor-core
+                port:
+                  number: 80
             path: /v2
+            pathType: Prefix
           - backend:
-              serviceName: hub-harbor-core
-              servicePort: 80
+              service:
+                name: hub-harbor-core
+                port:
+                  number: 80
             path: /chartrepo
+            pathType: Prefix
           - backend:
-              serviceName: hub-harbor-core
-              servicePort: 80
+              service:
+                name: hub-harbor-core
+                port:
+                  number: 80
+            pathType: Prefix
+            path: /c
   tls:
     - hosts:
         - hub.skj.dev
