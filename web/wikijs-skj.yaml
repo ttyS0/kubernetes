@@ -39,7 +39,7 @@ spec:
             value: "1"
       containers:
         - name: wikijs
-          image: hub.skj.dev/img/wikijs:2.5.197
+          image: hub.skj.dev/img/wikijs:2.5.201
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_TYPE
