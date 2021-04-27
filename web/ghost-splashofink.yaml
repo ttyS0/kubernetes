@@ -73,7 +73,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: library/ghost:4.2.0
+        - image: library/ghost:4.3.2
           name: splashofink
           env:
             - name: database__connection__user
@@ -131,7 +131,7 @@ spec:
   selector:
     app: ghost-splashofink
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ghost-splashofink
@@ -149,15 +149,18 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: ghost-splashofink
-              servicePort: 80
+              service:
+                name: ghost-splashofink
+                port:
+                  number: 80
   tls:
     - hosts:
         - splashof.ink
       secretName: splashofink-tls
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ghost-splashofink-ext
@@ -172,9 +175,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: ghost-splashofink
-              servicePort: 80
+              service:
+                name: ghost-splashofink
+                port:
+                  number: 80
   tls:
     - hosts:
         - splashof.ink
