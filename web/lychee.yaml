@@ -64,7 +64,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: lychee
-          image: lycheeorg/lychee:v4.2.2
+          image: hub.skj.dev/img/lychee:4.3.0-2
           env:
             - name: PGID
               value: "1000"
@@ -134,7 +134,7 @@ spec:
   selector:
     app.kubernetes.io/name: lychee
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: lychee
@@ -153,15 +153,18 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: lychee
-              servicePort: 80
+              service:
+                name: lychee
+                port:
+                  number: 80
   tls:
     - hosts:
         - skj.photos
       secretName: skjphotos-tls
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: lychee-ext
@@ -177,9 +180,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: lychee
-              servicePort: 80
+              service:
+                name: lychee
+                port:
+                  number: 80
   tls:
     - hosts:
         - skj.photos

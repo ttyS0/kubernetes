@@ -82,7 +82,7 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - static-web
+                      - hugo
               topologyKey: "kubernetes.io/hostname"
       containers:
         - name: hugo
