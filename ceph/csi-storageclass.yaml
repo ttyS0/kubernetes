@@ -1,27 +1,6 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: bulk
-provisioner: rbd.csi.ceph.com
-parameters:
-  clusterID: c3d06c94-bb66-4f84-bf78-470a2364b667
-  pool: k8s-bulk
-  imageFeatures: layering
-  csi.storage.k8s.io/fstype: xfs
-  csi.storage.k8s.io/provisioner-secret-name: csi-rbd-secret
-  csi.storage.k8s.io/provisioner-secret-namespace: ceph
-  csi.storage.k8s.io/node-stage-secret-name: csi-rbd-secret
-  csi.storage.k8s.io/node-stage-secret-namespace: ceph
-  csi.storage.k8s.io/controller-expand-secret-name: csi-rbd-secret
-  csi.storage.k8s.io/controller-expand-secret-namespace: ceph
-allowVolumeExpansion: true
-reclaimPolicy: Delete
-mountOptions:
-  - discard
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
   name: fast
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
@@ -81,28 +60,6 @@ reclaimPolicy: Delete
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: media
-provisioner: rbd.csi.ceph.com
-parameters:
-  clusterID: c3d06c94-bb66-4f84-bf78-470a2364b667
-  pool: k8s-media
-  dataPool: k8s-media-data
-  imageFeatures: layering
-  csi.storage.k8s.io/fstype: xfs
-  csi.storage.k8s.io/provisioner-secret-name: csi-rbd-secret
-  csi.storage.k8s.io/provisioner-secret-namespace: ceph
-  csi.storage.k8s.io/node-stage-secret-name: csi-rbd-secret
-  csi.storage.k8s.io/node-stage-secret-namespace: ceph
-  csi.storage.k8s.io/controller-expand-secret-name: csi-rbd-secret
-  csi.storage.k8s.io/controller-expand-secret-namespace: ceph
-allowVolumeExpansion: true
-reclaimPolicy: Delete
-mountOptions:
-  - discard
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
   name: cephfs-media
 provisioner: cephfs.csi.ceph.com
 parameters:
@@ -117,3 +74,25 @@ parameters:
   csi.storage.k8s.io/controller-expand-secret-namespace: ceph
 allowVolumeExpansion: true
 reclaimPolicy: Delete
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: bulk
+provisioner: rbd.csi.ceph.com
+parameters:
+  clusterID: c3d06c94-bb66-4f84-bf78-470a2364b667
+  pool: k8s-bulk
+  dataPool: k8s-bulk_data
+  imageFeatures: layering
+  csi.storage.k8s.io/fstype: xfs
+  csi.storage.k8s.io/provisioner-secret-name: csi-rbd-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: ceph
+  csi.storage.k8s.io/node-stage-secret-name: csi-rbd-secret
+  csi.storage.k8s.io/node-stage-secret-namespace: ceph
+  csi.storage.k8s.io/controller-expand-secret-name: csi-rbd-secret
+  csi.storage.k8s.io/controller-expand-secret-namespace: ceph
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+mountOptions:
+  - discard
