@@ -35,7 +35,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: amber
-          image: hub.skj.dev/img/spigot:1.16.5
+          image: hub.skj.dev/img/spigot:1.17
           workingDir: "/minecraft/worlds/amber"
           resources:
             limits:

@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: minecraft
@@ -14,15 +14,18 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: amber
-              servicePort: 8123
+              service:
+                name: amber
+                port:
+                  number: 8123
   tls:
     - hosts:
         - minecraft.ttys0.net
       secretName: minecraftttys0net-tls
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: minecraft-ext
@@ -36,9 +39,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: amber
-              servicePort: 8123
+              service:
+                name: amber
+                port:
+                  number: 8123
   tls:
     - hosts:
         - minecraft.ttys0.net
