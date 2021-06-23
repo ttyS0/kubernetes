@@ -73,7 +73,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: library/ghost:4.6.4
+        - image: library/ghost:4.8.0
           name: splashofink
           env:
             - name: database__connection__user
