@@ -33,7 +33,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: gitea/gitea:1.14.2
+        - image: gitea/gitea:1.14.3
           name: gitea
           resources:
             requests:
@@ -53,7 +53,7 @@ spec:
             - name: DB_TYPE
               value: "postgres"
             - name: DB_HOST
-              value: "postgres.postgres.svc.cluster.local"
+              value: "postgres.db.svc.cluster.local"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:

@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: dbbackup
@@ -48,7 +48,7 @@ spec:
                       key: mysqluser
                       name: dbdata
               name: dbbackup
-              image: hub.skj.dev/img/dbbackup:latest
+              image: hub.skj.dev/img/dbbackup:7
               volumeMounts:
                 - mountPath: "/backup"
                   name: cephfs
