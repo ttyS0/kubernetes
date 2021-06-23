@@ -15,8 +15,12 @@ spec:
       labels:
         app: plex
     spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
       containers:
-        - image: plexinc/pms-docker:1.23.1.4571-6119e8eed
+        - image: plexinc/pms-docker:1.23.3.4707-ebb5fe9f3
           name: plex
           env:
             - name: HOSTNAME
