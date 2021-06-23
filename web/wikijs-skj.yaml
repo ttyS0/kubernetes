@@ -45,7 +45,7 @@ spec:
             - name: DB_TYPE
               value: postgres
             - name: DB_HOST
-              value: "postgres.postgres.svc.cluster.local"
+              value: "postgres.db.svc.cluster.local"
             - name: DB_PORT
               value: "5432"
             - name: DB_NAME
@@ -106,7 +106,7 @@ spec:
     app.kubernetes.io/name: wikijs
     app.kubernetes.io/instance: skj
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: wikijs-skj
@@ -125,15 +125,18 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: wikijs-skj
-              servicePort: 80
+              service:
+                name: wikijs-skj
+                port:
+                  number: 80
   tls:
     - hosts:
         - skj.wiki
       secretName: skjwiki-tls
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: wikijs-skj-ext
@@ -150,9 +153,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: wikijs-skj
-              servicePort: 80
+              service:
+                name: wikijs-skj
+                port:
+                  number: 80
   tls:
     - hosts:
         - skj.wiki

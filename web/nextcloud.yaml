@@ -36,13 +36,13 @@ spec:
             value: "1"
       containers:
         - name: nextcloud
-          image: library/nextcloud:21.0.1-apache
+          image: library/nextcloud:21.0.2-apache
           imagePullPolicy: IfNotPresent
           env:
             - name: OVERWRITEPROTOCOL
               value: "https"
             - name: POSTGRES_HOST
-              value: "postgres.postgres.svc.cluster.local"
+              value: "postgres.db.svc.cluster.local"
             - name: POSTGRES_DB
               value: "nextcloud"
             - name: POSTGRES_USER
@@ -89,7 +89,7 @@ spec:
   selector:
     app.kubernetes.io/name: nextcloud
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nextcloud
@@ -110,15 +110,18 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: nextcloud
-              servicePort: 80
+              service:
+                name: nextcloud
+                port:
+                  number: 80
   tls:
     - hosts:
         - nc.skj.dev
       secretName: nextcloud-tls
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nextcloud-ext
@@ -134,9 +137,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: nextcloud
-              servicePort: 80
+              service:
+                name: nextcloud
+                port:
+                  number: 80
   tls:
     - hosts:
         - nc.skj.dev

@@ -47,7 +47,7 @@ spec:
             - name: DB_TYPE
               value: postgres
             - name: DB_HOST
-              value: "postgres.postgres.svc.cluster.local"
+              value: "postgres.db.svc.cluster.local"
             - name: DB_PORT
               value: "5432"
             - name: DB_NAME
@@ -108,7 +108,7 @@ spec:
     app.kubernetes.io/name: wikijs
     app.kubernetes.io/instance: videotranscoding
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: wikijs-videotranscoding
@@ -127,15 +127,18 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: wikijs-videotranscoding
-              servicePort: 80
+              service:
+                name: wikijs-videotranscoding
+                port:
+                  number: 80
   tls:
     - hosts:
         - videotranscoding.wiki
       secretName: videotranscodingwiki-tls
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: wikijs-videotranscoding-ext
@@ -152,9 +155,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: wikijs-videotranscoding
-              servicePort: 80
+              service:
+                name: wikijs-videotranscoding
+                port:
+                  number: 80
   tls:
     - hosts:
         - videotranscoding.wiki
