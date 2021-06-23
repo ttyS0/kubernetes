@@ -29,6 +29,9 @@ injector:
   enabled: true
 
   replicas: 1
+  # Configures the port the injector should listen on
+
+  port: 8080
 
   # If multiple replicas are specified, by default a leader-elector side-car
   # will be created so that only one injector attempts to create TLS certificates.
@@ -50,7 +53,7 @@ injector:
   # image sets the repo and tag of the vault-k8s image to use for the injector.
   image:
     repository: "hub.skj.dev/img/vault-k8s"
-    tag: "0.9.0"
+    tag: "0.10.2"
     pullPolicy: IfNotPresent
 
   # agentImage sets the repo and tag of the Vault image to use for the Vault Agent
@@ -58,12 +61,26 @@ injector:
   # required.
   agentImage:
     repository: "hub.skj.dev/img/vault"
-    tag: "1.7.0"
+    tag: "1.7.3"
+
+  # The default values for the injected Vault Agent containers.
+  agentDefaults:
+    # For more information on configuring resources, see the K8s documentation:
+    # https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+    cpuLimit: "500m"
+    cpuRequest: "250m"
+    memLimit: "128Mi"
+    memRequest: "64Mi"
+
+    # Default template type for secrets when no custom template is specified.
+    # Possible values include: "json" and "map".
+    template: "map"
 
   # Mount Path of the Vault Kubernetes Auth Method.
   authPath: "auth/kubernetes"
 
-  # Configures the log verbosity of the injector. Supported log levels: Trace, Debug, Error, Warn, Info
+  # Configures the log verbosity of the injector.
+  # Supported log levels include: trace, debug, info, warn, error
   logLevel: "info"
 
   # Configures the log format of the injector. Supported log formats: "standard", "json".
@@ -167,19 +184,38 @@ injector:
   # This should be a YAML map of the labels to apply to the injector
   extraLabels: {}
 
+  # Should the injector pods run on the host network (useful when using
+  # an alternate CNI in EKS)
+  hostNetwork: false
+
   # Injector service specific config
   service:
     # Extra annotations to attach to the injector service
     annotations: {}
 
 server:
+  # If not set to true, Vault server will not be installed. See vault.mode in _helpers.tpl for implementation details
+  enabled: true
+
+  # [Enterprise Only] This value refers to a Kubernetes secret that you have
+  # created that contains your enterprise license. If you are not using an
+  # enterprise image or if you plan to introduce the license key via another
+  # route, then leave secretName blank ("") or set it to null.
+  # Requires Vault Enterprise 1.8 or later.
+  enterpriseLicense:
+    # The name of the Kubernetes secret that holds the enterprise license. The
+    # secret must be in the same namespace that Vault is installed into.
+    secretName: ""
+    # The key within the Kubernetes secret that holds the enterprise license.
+    secretKey: "license"
+
   # Resource requests, limits, etc. for the server cluster placement. This
   # should map directly to the value of the resources field for a PodSpec.
   # By default no direct resource request is made.
 
   image:
     repository: "hub.skj.dev/img/vault"
-    tag: "1.7.0"
+    tag: "1.7.3"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
@@ -187,6 +223,15 @@ server:
   # See https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   updateStrategyType: "OnDelete"
 
+  # Configure the logging verbosity for the Vault server.
+  # Supported log levels include: trace, debug, info, warn, error
+  logLevel: ""
+
+  # Configure the logging format for the Vault server.
+  # Supported log formats include: standard, json
+  logFormat: ""
+
+  resources: {}
   # resources:
   resources:
     requests:
@@ -196,6 +241,8 @@ server:
 
   # Ingress allows ingress services to be created to allow external access
   # from Kubernetes to access Vault pods.
+  # If deployment is on OpenShift, the following block is ignored.
+  # In order to expose the service, use the route section below
   ingress:
     enabled: true
     labels: {}
@@ -636,6 +683,7 @@ ui:
   serviceType: "ClusterIP"
   serviceNodePort: null
   externalPort: 8200
+  targetPort: 8200
 
   # loadBalancerSourceRanges:
   #   - 10.0.0.0/16
@@ -705,6 +753,11 @@ csi:
     # to the pod.
     annotations: {}
 
+    # Toleration Settings for provider pods
+    # This should be a multi-line string matching the Toleration array
+    # in a PodSpec.
+    tolerations: null
+
   serviceAccount:
     # Extra annotations for the serviceAccount definition. This can either be
     # YAML or a YAML-formatted multi-line templated string map of the
@@ -738,3 +791,6 @@ csi:
 
   # Enables debug logging.
   debug: false
+
+  # Pass arbitrary additional arguments to vault-csi-provider.
+  extraArgs: []
