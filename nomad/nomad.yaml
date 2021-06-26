@@ -60,7 +60,7 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
         - name: nomad
-          image: hub.skj.dev/img/nomad:1.0.4-1
+          image: hub.skj.dev/img/nomad:1.1.2
           args:
             - "agent"
             - "-config=/etc/nomad/server.hcl"
@@ -122,7 +122,7 @@ spec:
   selector:
     app.kubernetes.io/name: nomad
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nomad-ui
@@ -139,9 +139,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: nomad
-              servicePort: 4646
+              service:
+                name: nomad
+                port:
+                  number: 4646
   tls:
     - hosts:
         - nomad.ttys0.net
