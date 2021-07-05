@@ -1,0 +1,173 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: victoria-metrics-data
+  namespace: monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: fast
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 10s
+
+    scrape_configs:
+      - job_name: 'victoriametrics'
+        static_configs:
+          - targets: ['victoria-metrics:8428']
+      - job_name: 'node'
+        static_configs:
+          - targets:
+              - 'frodo:9100'
+              - 'nazgul:9100'
+              - 'radagast:9100'
+              - 'pallando:9100'
+              - 'mithrandir:9100'
+              - 'bilbo:9100'
+              - 'thorin:9100'
+              - 'durin:9100'
+              - 'balin:9100'
+              - 'alatar:9100'
+              - 'saruman:9100'
+              - 'gandalf:9100'
+              - 'gimli:9100'
+              - 'gollum:9100'
+      - job_name: 'ceph'
+        scheme: https
+        scrape_interval: 15s
+        static_configs:
+          - targets: ['ceph.ttys0.net']
+      - job_name: 'nginx-ingress'
+        scheme: http
+        honor_timestamps: true
+        scrape_interval: 1m
+        scrape_timeout: 1m
+        metrics_path: /metrics
+        static_configs:
+          - targets:
+              - 'ingress-nginx.ingress-nginx.svc:10254'
+              - 'ingress-nginx-external.ingress-nginx.svc:10254'
+      - job_name: 'kube-state-metrics'
+        scheme: http
+        static_configs:
+          - targets: ['kube-state-metrics.kube-system.svc:8080']
+      - job_name: "kubernetes-apiservers"
+        kubernetes_sd_configs:
+          - role: endpoints
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        authorization:
+          credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        relabel_configs:
+          - source_labels:
+              [
+                  __meta_kubernetes_namespace,
+                  __meta_kubernetes_service_name,
+                  __meta_kubernetes_endpoint_port_name,
+              ]
+            action: keep
+            regex: default;kubernetes;https
+      - job_name: "kubernetes-nodes"
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        authorization:
+          credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+          - role: node
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+      - job_name: "kubernetes-cadvisor"
+        scheme: https
+        metrics_path: /metrics/cadvisor
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        authorization:
+          credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+          - role: node
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: victoria-metrics
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: victoria-metrics
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: victoria-metrics
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: victoria-metrics
+    spec:
+      serviceAccountName: victoria-metrics
+      securityContext:
+        fsGroup: 1000
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      containers:
+        - name: victoria-metrics
+          image: victoriametrics/victoria-metrics:v1.62.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "-retentionPeriod=12"
+            - "-promscrape.config=/config/prometheus.yml"
+          ports:
+            - name: victoriametrics
+              containerPort: 8428
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /victoria-metrics-data
+              name: data
+            - mountPath: /config
+              name: prometheus-config
+      volumes:
+        - name: prometheus-config
+          configMap:
+            name: prometheus-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: victoria-metrics-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: victoria-metrics
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: victoria-metrics
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8428
+      targetPort: victoriametrics
+      protocol: TCP
+      name: victoriametrics
+  selector:
+    app.kubernetes.io/name: victoria-metrics
+
