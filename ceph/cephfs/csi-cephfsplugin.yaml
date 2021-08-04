@@ -23,7 +23,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: driver-registrar
-          image: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.0.1
+          image: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.2.0
           args:
             - "--v=5"
             - "--csi-address=/csi/csi.sock"
@@ -45,7 +45,7 @@ spec:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v3.3.1
+          image: quay.io/cephcsi/cephcsi:v3.4.0
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=cephfs"
@@ -53,6 +53,7 @@ spec:
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--v=5"
             - "--drivername=cephfs.csi.ceph.com"
+            - "--enableprofiling=false"
             # If topology based provisioning is desired, configure required
             # node labels representing the nodes topology domain
             # and pass the label names below, for CSI to consume and advertise
@@ -99,7 +100,7 @@ spec:
         - name: liveness-prometheus
           securityContext:
             privileged: true
-          image: quay.io/cephcsi/cephcsi:v3.3.1
+          image: quay.io/cephcsi/cephcsi:v3.4.0
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"

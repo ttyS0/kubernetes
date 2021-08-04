@@ -45,7 +45,7 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
         - name: csi-provisioner
-          image: k8s.gcr.io/sig-storage/csi-provisioner:v2.0.5
+          image: k8s.gcr.io/sig-storage/csi-provisioner:v2.2.2
           args:
             - "--csi-address=$(ADDRESS)"
             - "--v=5"
@@ -65,7 +65,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-snapshotter
-          image: k8s.gcr.io/sig-storage/csi-snapshotter:v4.0.0
+          image: k8s.gcr.io/sig-storage/csi-snapshotter:v4.1.1
           args:
             - "--csi-address=$(ADDRESS)"
             - "--v=5"
@@ -81,7 +81,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-attacher
-          image: k8s.gcr.io/sig-storage/csi-attacher:v3.0.2
+          image: k8s.gcr.io/sig-storage/csi-attacher:v3.2.1
           args:
             - "--v=5"
             - "--csi-address=$(ADDRESS)"
@@ -99,7 +99,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-resizer
-          image: k8s.gcr.io/sig-storage/csi-resizer:v1.0.1
+          image: k8s.gcr.io/sig-storage/csi-resizer:v1.2.0
           args:
             - "--csi-address=$(ADDRESS)"
             - "--v=5"
@@ -120,7 +120,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v3.3.1
+          image: quay.io/cephcsi/cephcsi:v3.4.0
           args:
             - "--nodeid=$(NODE_ID)"
             - "--type=rbd"
@@ -131,6 +131,7 @@ spec:
             - "--pidlimit=-1"
             - "--rbdhardmaxclonedepth=8"
             - "--rbdsoftmaxclonedepth=4"
+            - "--enableprofiling=false"
           env:
             - name: POD_IP
               valueFrom:
@@ -169,7 +170,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
           # for stable functionality replace canary with latest release version
-          image: quay.io/cephcsi/cephcsi:v3.3.1
+          image: quay.io/cephcsi/cephcsi:v3.4.0
           args:
             - "--type=controller"
             - "--v=5"
@@ -187,7 +188,7 @@ spec:
             - name: keys-tmp-dir
               mountPath: /tmp/csi/keys
         - name: liveness-prometheus
-          image: quay.io/cephcsi/cephcsi:v3.3.1
+          image: quay.io/cephcsi/cephcsi:v3.4.0
           args:
             - "--type=liveness"
             - "--endpoint=$(CSI_ENDPOINT)"
