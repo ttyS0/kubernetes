@@ -18,6 +18,8 @@ spec:
             - 'gutenpress.org'
             - 'videotranscoding.wiki'
             - 'skj.wiki'
+            - 'skj.photos'
+            - 'splashof.ink'
         dns01:
           cloudflare:
             email: sean@ttys0.net
