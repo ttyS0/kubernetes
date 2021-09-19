@@ -43,6 +43,7 @@ data:
               - 'gimli:9100'
               - 'gollum:9100'
               - 'pfsense:9100'
+              - 'samwise:9100'
       - job_name: 'ceph'
         scheme: https
         scrape_interval: 15s
@@ -124,6 +125,20 @@ spec:
       labels:
         app.kubernetes.io/name: victoria-metrics
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - plex
+                namespaces:
+                  - plex
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       serviceAccountName: victoria-metrics
       securityContext:
         fsGroup: 1000
@@ -133,7 +148,7 @@ spec:
             value: "1"
       containers:
         - name: victoria-metrics
-          image: victoriametrics/victoria-metrics:v1.63.0
+          image: victoriametrics/victoria-metrics:v1.65.0
           imagePullPolicy: IfNotPresent
           args:
             - "-retentionPeriod=12"
@@ -182,8 +197,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: victoria-metrics.skj.dev
@@ -199,4 +213,4 @@ spec:
   tls:
     - hosts:
         - victoria-metrics.skj.dev
-      secretName: victoriametricsskjdev-tls
+      secretName: victoria-metrics-skj-dev-cert

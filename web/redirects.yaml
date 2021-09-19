@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: videotranscoding-dev
@@ -10,7 +10,7 @@ spec:
   rules:
     - host: videotranscoding.dev
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ttys0-net
@@ -22,7 +22,7 @@ spec:
   rules:
     - host: ttys0.net
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ttys0-net
@@ -34,7 +34,7 @@ spec:
   rules:
     - host: ttys0.net
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: wiki-skj
@@ -46,7 +46,7 @@ spec:
   rules:
     - host: wiki.skj.dev
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: pics-ttys0-net
@@ -58,7 +58,7 @@ spec:
   rules:
     - host: pics.ttys0.net
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: code-pasta-dev

@@ -20,7 +20,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: plexinc/pms-docker:1.23.6.4881-e2e58f321
+        - image: plexinc/pms-docker:1.24.2.4973-2b1b51db9
           name: plex
           env:
             - name: HOSTNAME
@@ -34,10 +34,8 @@ spec:
               mountPath: /config
             - name: plex-transcode
               mountPath: /transcode
-            - name: plex-files
-              mountPath: /files
-            - name: plex-rips
-              mountPath: /rips
+            - name: plex-data
+              mountPath: /media
           resources:
             limits:
               gpu.intel.com/i915: 1
@@ -49,12 +47,9 @@ spec:
             claimName: plex-server
         - name: plex-transcode
           emptyDir: {}
-        - name: plex-files
+        - name: plex-data
           persistentVolumeClaim:
-            claimName: plex-files
-        - name: plex-rips
-          persistentVolumeClaim:
-            claimName: plex-rips
+            claimName: plex-data
 ---
 apiVersion: v1
 kind: Service

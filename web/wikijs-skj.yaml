@@ -39,7 +39,7 @@ spec:
             value: "1"
       containers:
         - name: wikijs
-          image: hub.skj.dev/img/wikijs:2.5.201
+          image: requarks/wiki:2.5.214
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_TYPE
@@ -117,8 +117,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.kubernetes.io/ssl-redirect: "true"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: "skj.wiki"
@@ -134,7 +133,7 @@ spec:
   tls:
     - hosts:
         - skj.wiki
-      secretName: skjwiki-tls
+      secretName: skj-wiki-cert
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -162,4 +161,4 @@ spec:
   tls:
     - hosts:
         - skj.wiki
-      secretName: skjwiki-tls
+      secretName: skj-wiki-cert

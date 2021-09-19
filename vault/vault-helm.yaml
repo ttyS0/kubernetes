@@ -5,8 +5,8 @@ global:
   # will enable or disable all the components within this chart by default.
   enabled: true
   # Image pull secret to use for registry authentication.
-  imagePullSecrets:
-    - name: home
+  # Alternatively, the value may be specified as an array of strings.
+  imagePullSecrets: []
   # imagePullSecrets:
   #   - name: image-pull-secret
   # TLS for end-to-end encrypted transport
@@ -29,14 +29,20 @@ injector:
   enabled: true
 
   replicas: 1
-  # Configures the port the injector should listen on
 
+  # Configures the port the injector should listen on
   port: 8080
 
-  # If multiple replicas are specified, by default a leader-elector side-car
-  # will be created so that only one injector attempts to create TLS certificates.
+  # If multiple replicas are specified, by default a leader will be determined
+  # so that only one injector attempts to create TLS certificates.
   leaderElector:
     enabled: true
+    # Note: The deployment of the leader-elector container will soon be removed
+    # from this chart since vault-k8s now uses an internal mechanism to
+    # determine leadership.
+    # To enable the deployment of the leader-elector container for use with
+    # vault-k8s 0.12.0 and earlier, set `useContainer=true`
+    useContainer: false
     image:
       repository: "gcr.io/google_containers/leader-elector"
       tag: "0.4"
@@ -53,7 +59,7 @@ injector:
   # image sets the repo and tag of the vault-k8s image to use for the injector.
   image:
     repository: "hashicorp/vault-k8s"
-    tag: "0.11.0"
+    tag: "0.13.0"
     pullPolicy: IfNotPresent
 
   # agentImage sets the repo and tag of the Vault image to use for the Vault Agent
@@ -61,7 +67,7 @@ injector:
   # required.
   agentImage:
     repository: "hashicorp/vault"
-    tag: "1.8.0"
+    tag: "1.8.2"
 
   # The default values for the injected Vault Agent containers.
   agentDefaults:
@@ -119,6 +125,9 @@ injector:
   #
   failurePolicy: Ignore
 
+  # Extra annotations to attach to the webhook
+  webhookAnnotations: {}
+
   certs:
     # secretName is the name of the secret that has the TLS certificate and
     # private key to serve the injector webhook. If this is null, then the
@@ -126,9 +135,10 @@ injector:
     # a service account to the injector to generate its own certificates.
     secretName: null
 
-    # caBundle is a base64-encoded PEM-encoded certificate bundle for the
-    # CA that signed the TLS certificate that the webhook serves. This must
-    # be set if secretName is non-null.
+    # caBundle is a base64-encoded PEM-encoded certificate bundle for the CA
+    # that signed the TLS certificate that the webhook serves. This must be set
+    # if secretName is non-null, unless an external service like cert-manager is
+    # keeping the caBundle updated.
     caBundle: ""
 
     # certName and keyName are the names of the files within the secret for
@@ -218,7 +228,7 @@ server:
 
   image:
     repository: "hashicorp/vault"
-    tag: "1.8.0"
+    tag: "1.8.2"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
@@ -251,8 +261,7 @@ server:
     annotations: |
       kubernetes.io/ingress.class: nginx
       nginx.kubernetes.io/ssl-redirect: "true"
-      acme.kubernetes.io/enable: "true"
-      acme.kubernetes.io/dns: "dns_cf"
+      kubernetes.io/tls-acme: "true"
 
     # When HA mode is enabled and K8s service registration is being used,
     # configure the ingress to point to the Vault active service.
@@ -267,7 +276,7 @@ server:
     #     serviceName: ssl-redirect
     #     servicePort: use-annotation
     tls:
-      - secretName: vaultttys0net-tls
+      - secretName: vault-ttys0-net-cert
         hosts:
           - vault.ttys0.net
     #  - secretName: chart-example-tls
@@ -765,6 +774,10 @@ csi:
     # YAML-formatted multi-line templated string map of the annotations to apply
     # to the daemonSet.
     annotations: {}
+    # Provider host path (must match the CSI provider's path)
+    providersDir: "/etc/kubernetes/secrets-store-csi-providers"
+    # Kubelet host path
+    kubeletRootDir: "/var/lib/kubelet"
 
   pod:
     # Extra annotations for the provider pods. This can either be YAML or a

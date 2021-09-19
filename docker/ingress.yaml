@@ -9,8 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: hub.skj.dev
@@ -54,4 +53,4 @@ spec:
   tls:
     - hosts:
         - hub.skj.dev
-      secretName: hubskjdev-tls
+      secretName: hub-skj-dev-cert

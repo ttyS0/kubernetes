@@ -14,25 +14,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: plex-rips
+  name: plex-data
   namespace: plex
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 50Ti
-  storageClassName: cephfs-media
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: plex-files
-  namespace: plex
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 50Ti
-  storageClassName: cephfs-media
+      storage: 100Ti
+  storageClassName: cephfs-plex

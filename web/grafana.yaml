@@ -20,6 +20,8 @@ metadata:
   name: grafana
   namespace: web
 spec:
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: grafana
@@ -34,7 +36,7 @@ spec:
           - 0
       containers:
         - name: grafana
-          image: grafana/grafana:8.0.3
+          image: grafana/grafana:8.1.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
@@ -91,10 +93,9 @@ metadata:
   namespace: web
   annotations:
     kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
 spec:
   rules:
     - host: graphs.skj.dev
@@ -110,4 +111,4 @@ spec:
   tls:
     - hosts:
         - graphs.skj.dev
-      secretName: graphsskjdev-tls
+      secretName: graph-skj-dev-cert

@@ -29,7 +29,7 @@ spec:
         app: beezuscomplex
     spec:
       containers:
-        - image: library/ghost:4.8.3
+        - image: library/ghost:4.14.0
           name: ghost-beezuscomplex
           env:
             - name: AWS_ACCESS_KEY_ID
@@ -147,8 +147,7 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: beezuscomplex.com
@@ -172,7 +171,7 @@ spec:
     - hosts:
         - beezuscomplex.com
         - www.beezuscomplex.com
-      secretName: beezuscomplexcom-tls
+      secretName: beezuscomplex-com-cert
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -207,4 +206,4 @@ spec:
     - hosts:
         - beezuscomplex.com
         - www.beezuscomplex.com
-      secretName: beezuscomplexcom-tls
+      secretName: beezuscomplex-com-cert

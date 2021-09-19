@@ -29,7 +29,7 @@ spec:
         app: tautulli
     spec:
       containers:
-        - image: tautulli/tautulli:v2.7.5
+        - image: tautulli/tautulli:v2.7.6
           name: tautulli
           env:
             - name: TZ
@@ -68,8 +68,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.kubernetes.io/ssl-redirect: "true"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: tautulli.ttys0.net
@@ -86,4 +85,4 @@ spec:
   tls:
     - hosts:
         - tautulli.ttys0.net
-      secretName: tautullittys0net-tls
+      secretName: tautulli-ttys0-net-cert

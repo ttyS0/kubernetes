@@ -41,7 +41,7 @@ spec:
             value: "1"
       containers:
         - name: wikijs
-          image: hub.skj.dev/img/wikijs:2.5.201
+          image: requarks/wiki:2.5.214
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_TYPE
@@ -119,8 +119,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.kubernetes.io/ssl-redirect: "true"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: "videotranscoding.wiki"
@@ -136,7 +135,7 @@ spec:
   tls:
     - hosts:
         - videotranscoding.wiki
-      secretName: videotranscodingwiki-tls
+      secretName: videotranscoding-wiki-cert
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -164,4 +163,4 @@ spec:
   tls:
     - hosts:
         - videotranscoding.wiki
-      secretName: videotranscodingwiki-tls
+      secretName: videotranscoding-wiki-cert

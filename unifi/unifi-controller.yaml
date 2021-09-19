@@ -139,8 +139,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.kubernetes.io/ssl-redirect: "true"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: unifi.ttys0.net
@@ -156,4 +155,4 @@ spec:
   tls:
     - hosts:
         - unifi.ttys0.net
-      secretName: unifi-tls
+      secretName: unifi-ttys0-net-cert

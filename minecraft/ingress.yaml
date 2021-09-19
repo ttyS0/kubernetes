@@ -6,8 +6,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: minecraft.ttys0.net
@@ -23,7 +22,7 @@ spec:
   tls:
     - hosts:
         - minecraft.ttys0.net
-      secretName: minecraftttys0net-tls
+      secretName: minecraft-ttys0-net-cert
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -48,4 +47,4 @@ spec:
   tls:
     - hosts:
         - minecraft.ttys0.net
-      secretName: minecraftttys0net-tls
+      secretName: minecraft-ttys0-net-cert

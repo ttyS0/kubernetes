@@ -1,0 +1,26 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: sean@ttys0.net
+    privateKeySecretRef:
+      name: letsencrypt
+    solvers:
+      - selector:
+          dnsZones:
+            - 'ttys0.net'
+            - 'skj.dev'
+            - 'beezuscomplex.com'
+            - '108minutes.net'
+            - 'gutenpress.org'
+            - 'videotranscoding.wiki'
+            - 'skj.wiki'
+        dns01:
+          cloudflare:
+            email: sean@ttys0.net
+            apiKeySecretRef:
+              name: cloudflare-api-key
+              key: api-key

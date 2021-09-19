@@ -1,15 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: harbor-service
-  namespace: docker
+  name: argocd-server
+  namespace: argo
 spec:
-  secretName: hub-skj-dev-cert
+  secretName: argocd-server-tls
+  dnsNames:
+    - argocd.skj.dev
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
     group: cert-manager.io
-  commonName: hub.skj.dev
-  dnsNames:
-    - hub.skj.dev
-    - notary.skj.dev
