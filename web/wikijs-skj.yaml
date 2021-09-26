@@ -39,7 +39,7 @@ spec:
             value: "1"
       containers:
         - name: wikijs
-          image: requarks/wiki:2.5.214
+          image: requarks/wiki:2.5.219
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_TYPE

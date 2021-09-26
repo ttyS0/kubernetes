@@ -30,7 +30,7 @@ spec:
         app: postgres
     spec:
       containers:
-        - image: postgres:13.3
+        - image: postgres:13.4
           name: postgres
           resources:
             limits:

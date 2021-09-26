@@ -33,16 +33,18 @@ spec:
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
+      nodeSelector:
+        kubernetes.io/arch: "amd64"
       containers:
         - name: amber
-          image: hub.skj.dev/img/spigot:1.17
+          image: hub.skj.dev/img/spigot:1.17.1
           workingDir: "/minecraft/worlds/amber"
           resources:
             limits:
-              memory: "4Gi"
+              memory: "6Gi"
             requests:
               cpu: 1
-              memory: "3Gi"
+              memory: "4Gi"
           ports:
             - containerPort: 25565
             - containerPort: 8123
@@ -52,7 +54,7 @@ spec:
               mountPath: /minecraft/worlds
           env:
             - name: JVM_OPTS
-              value: "-Xms2G -Xmx2G"
+              value: "-Xms4G -Xmx4G"
             - name: SPIGOT_DIR
               value: "/minecraft/worlds/amber"
       volumes:

@@ -33,7 +33,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: gitea/gitea:1.15.2
+        - image: gitea/gitea:1.15.3
           name: gitea
           resources:
             requests:

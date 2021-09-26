@@ -286,7 +286,7 @@ spec:
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
         - name: nginx-ingress-controller
-          image: k8s.gcr.io/ingress-nginx/controller:v0.47.0@sha256:a1e4efc107be0bb78f32eaec37bef17d7a0c81bec8066cdf2572508d21351d0b
+          image: k8s.gcr.io/ingress-nginx/controller:v1.0.1@sha256:26bbd57f32bac3b30f90373005ef669aae324a4de4c19588a13ddba399c6664e
           args:
             - /nginx-ingress-controller
             - --default-backend-service=ghost/static-web
@@ -296,7 +296,6 @@ spec:
             - --publish-service=$(POD_NAMESPACE)/ingress-nginx
             - --annotations-prefix=nginx.ingress.kubernetes.io
             - --enable-ssl-passthrough
-            - --maxmind-license-key=b82vAILUd8Cc7WL3
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:

@@ -21,7 +21,7 @@ spec:
       containers:
         - imagePullPolicy: IfNotPresent
           name: bungeecord
-          image: hub.skj.dev/img/bungeecord:1585
+          image: hub.skj.dev/img/bungeecord:1598
           workingDir: "/minecraft/worlds/bungeecord"
           resources:
             limits:

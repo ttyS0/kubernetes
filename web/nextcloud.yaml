@@ -8,7 +8,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 2Ti
+      storage: 5Ti
   storageClassName: cephfs-bulk
 ---
 apiVersion: apps/v1
@@ -61,9 +61,9 @@ spec:
               protocol: TCP
           resources:
             requests:
-              memory: "2Gi"
-            limits:
               memory: "3Gi"
+            limits:
+              memory: "4Gi"
           volumeMounts:
             - mountPath: /var/www/html
               name: data
@@ -99,8 +99,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.kubernetes.io/ssl-redirect: "true"
-    acme.kubernetes.io/enable: "true"
-    acme.kubernetes.io/dns: "dns_cf"
+    kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
@@ -119,7 +118,7 @@ spec:
   tls:
     - hosts:
         - nc.skj.dev
-      secretName: nextcloud-tls
+      secretName: nc-skj-dev-cert
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -146,4 +145,4 @@ spec:
   tls:
     - hosts:
         - nc.skj.dev
-      secretName: nextcloud-tls
+      secretName: nc-skj-dev-cert
