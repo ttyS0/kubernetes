@@ -36,7 +36,9 @@ data:
         "transport": "SMTP",
         "options": {
           "service": "Mailgun",
-          "host": "smtp.mailgun.org"
+          "host": "smtp.mailgun.org",
+          "port": 465,
+          "secureConnection": true
         }
       },
       "logging": {
