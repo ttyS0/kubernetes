@@ -36,7 +36,7 @@ spec:
             value: "1"
       containers:
         - name: nextcloud
-          image: library/nextcloud:22.1.1-apache
+          image: library/nextcloud:22.2.0-apache
           imagePullPolicy: IfNotPresent
           env:
             - name: OVERWRITEPROTOCOL
