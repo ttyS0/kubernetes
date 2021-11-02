@@ -59,7 +59,7 @@ injector:
   # image sets the repo and tag of the vault-k8s image to use for the injector.
   image:
     repository: "hashicorp/vault-k8s"
-    tag: "0.13.0"
+    tag: "0.14.0"
     pullPolicy: IfNotPresent
 
   # agentImage sets the repo and tag of the Vault image to use for the Vault Agent
@@ -67,7 +67,7 @@ injector:
   # required.
   agentImage:
     repository: "hashicorp/vault"
-    tag: "1.8.2"
+    tag: "1.8.4"
 
   # The default values for the injected Vault Agent containers.
   agentDefaults:
@@ -157,7 +157,7 @@ injector:
   # extraEnvironmentVars is a list of extra environment variables to set in the
   # injector deployment.
   extraEnvironmentVars: {}
-  # KUBERNETES_SERVICE_HOST: kubernetes.default.svc
+    # KUBERNETES_SERVICE_HOST: kubernetes.default.svc
 
   # Affinity Settings for injector pods
   # This can either be multi-line string or YAML matching the PodSpec's affinity field.
@@ -228,7 +228,7 @@ server:
 
   image:
     repository: "hashicorp/vault"
-    tag: "1.8.2"
+    tag: "1.8.4"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
@@ -263,6 +263,14 @@ server:
       nginx.kubernetes.io/ssl-redirect: "true"
       kubernetes.io/tls-acme: "true"
 
+    # Optionally use ingressClassName instead of deprecated annotation.
+    # See: https://kubernetes.io/docs/concepts/services-networking/ingress/#deprecated-annotation
+    ingressClassName: ""
+
+    # As of Kubernetes 1.19, all Ingress Paths must have a pathType configured. The default value below should be sufficient in most cases.
+    # See: https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types for other possible values.
+    pathType: Prefix
+
     # When HA mode is enabled and K8s service registration is being used,
     # configure the ingress to point to the Vault active service.
     activeService: true
@@ -273,8 +281,10 @@ server:
     extraPaths: []
     # - path: /*
     #   backend:
-    #     serviceName: ssl-redirect
-    #     servicePort: use-annotation
+    #     service:
+    #       name: ssl-redirect
+    #       port:
+    #         number: use-annotation
     tls:
       - secretName: vault-ttys0-net-cert
         hosts:
@@ -377,8 +387,8 @@ server:
   # used to include variables required for auto-unseal.
   extraEnvironmentVars: {}
     # GOOGLE_REGION: global
-  # GOOGLE_PROJECT: myproject
-  # GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/myproject/myproject-creds.json
+    # GOOGLE_PROJECT: myproject
+    # GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/myproject/myproject-creds.json
 
   # extraSecretEnvironmentVars is a list of extra environment variables to set with the stateful set.
   # These variables take value from existing Secret objects.
@@ -388,7 +398,7 @@ server:
       secretKey: token
     # - envName: AWS_SECRET_ACCESS_KEY
     #   secretName: vault
-  #   secretKey: AWS_SECRET_ACCESS_KEY
+    #   secretKey: AWS_SECRET_ACCESS_KEY
 
   # Deprecated: please use 'volumes' instead.
   # extraVolumes is a list of extra volumes to mount. These will be exposed
@@ -396,8 +406,8 @@ server:
   # an array of objects, examples are shown below.
   extraVolumes: []
     # - type: secret (or "configMap")
-  #   name: my-secret
-  #   path: null # default is `/vault/userconfig`
+    #   name: my-secret
+    #   path: null # default is `/vault/userconfig`
 
   # volumes is a list of volumes made available to all containers. These are rendered
   # via toYaml rather than pre-processed like the extraVolumes value.
@@ -479,6 +489,12 @@ server:
     # or NodePort.
     #type: ClusterIP
 
+    # The externalTrafficPolicy can be set to either Cluster or Local
+    # and is only valid for LoadBalancer and NodePort service types.
+    # The default value is Cluster.
+    # ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-traffic-policy
+    externalTrafficPolicy: Cluster
+
     # If type is set to "NodePort", a specific nodePort value can be configured,
     # will be random if left blank.
     #nodePort: 30000
@@ -551,9 +567,9 @@ server:
     # and store data there. This is only used when using a Replica count of 1, and
     # using a stateful set. This should be HCL.
 
-    # Note: Configuration files are stored in ConfigMaps so sensitive data 
+    # Note: Configuration files are stored in ConfigMaps so sensitive data
     # such as passwords should be either mounted through extraSecretEnvironmentVars
-    # or through a Kube secret.  For more information see: 
+    # or through a Kube secret.  For more information see:
     # https://www.vaultproject.io/docs/platform/k8s/helm/run#protecting-sensitive-vault-configurations
     config: |
       ui = true
@@ -601,10 +617,10 @@ server:
       enabled: true
       # Set the Node Raft ID to the name of the pod
       setNodeId: false
-    
-      # Note: Configuration files are stored in ConfigMaps so sensitive data 
+
+      # Note: Configuration files are stored in ConfigMaps so sensitive data
       # such as passwords should be either mounted through extraSecretEnvironmentVars
-      # or through a Kube secret.  For more information see: 
+      # or through a Kube secret.  For more information see:
       # https://www.vaultproject.io/docs/platform/k8s/helm/run#protecting-sensitive-vault-configurations
       config: |
         ui = true
@@ -636,10 +652,10 @@ server:
     # config is a raw string of default configuration when using a Stateful
     # deployment. Default is to use a Consul for its HA storage backend.
     # This should be HCL.
-    
-    # Note: Configuration files are stored in ConfigMaps so sensitive data 
+
+    # Note: Configuration files are stored in ConfigMaps so sensitive data
     # such as passwords should be either mounted through extraSecretEnvironmentVars
-    # or through a Kube secret.  For more information see: 
+    # or through a Kube secret.  For more information see:
     # https://www.vaultproject.io/docs/platform/k8s/helm/run#protecting-sensitive-vault-configurations
     config: |
       ui = true
@@ -712,7 +728,13 @@ ui:
   externalPort: 8200
   targetPort: 8200
 
-  # loadBalancerSourceRanges:
+  # The externalTrafficPolicy can be set to either Cluster or Local
+  # and is only valid for LoadBalancer and NodePort service types.
+  # The default value is Cluster.
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-traffic-policy
+  externalTrafficPolicy: Cluster
+
+  #loadBalancerSourceRanges:
   #   - 10.0.0.0/16
   #   - 1.78.23.3/32
 
