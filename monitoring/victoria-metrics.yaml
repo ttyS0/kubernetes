@@ -148,7 +148,7 @@ spec:
             value: "1"
       containers:
         - name: victoria-metrics
-          image: victoriametrics/victoria-metrics:v1.65.0
+          image: victoriametrics/victoria-metrics:v1.68.0
           imagePullPolicy: IfNotPresent
           args:
             - "-retentionPeriod=12"
