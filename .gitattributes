@@ -1,1 +1,2 @@
 docker/harbor-helm.yaml filter=git-crypt diff=git-crypt
+cert-manager/cluster-issuer.yaml filter=git-crypt diff=git-crypt
