@@ -1,0 +1,187 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ghost-stereopinions
+  namespace: web
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: fast
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: web
+  name: ghost-stereopinions-conf
+data:
+  production.json: |
+    {
+      "url": "https://stereopinions.net",
+      "server": {
+        "port": 2368,
+        "host": "0.0.0.0"
+      },
+      "database": {
+        "client": "mysql",
+        "connection": {
+          "host": "mariadb.mariadb.svc.cluster.local",
+          "port": 3306,
+          "database": "ghost_stereopinions"
+        }
+      },
+      "mail": {
+        "transport": "SMTP",
+        "options": {
+          "service": "Mailgun",
+          "host": "smtp.mailgun.org",
+          "port": 465,
+          "secureConnection": true
+        }
+      },
+      "logging": {
+        "transports": [
+          "stdout"
+        ]
+      },
+      "paths": {
+        "contentPath": "/var/lib/ghost/content"
+      }
+    }
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ghost-stereopinions
+  namespace: web
+spec:
+  selector:
+    matchLabels:
+      app: ghost-stereopinions
+  replicas : 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ghost-stereopinions
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      containers:
+        - image: library/ghost:4.21.0
+          name: stereopinions
+          env:
+            - name: database__connection__user
+              valueFrom:
+                secretKeyRef:
+                  name: stereopinions-db
+                  key: dbuser
+            - name: database__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: stereopinions-db
+                  key: dbpass
+            - name: mail__options__auth__user
+              valueFrom:
+                secretKeyRef:
+                  name: mailgun-stereopinions
+                  key: user
+            - name: mail__options__auth__pass
+              valueFrom:
+                secretKeyRef:
+                  key: pass
+                  name: mailgun-stereopinions
+          ports:
+            - containerPort: 2368
+          volumeMounts:
+            - name: stereopinions
+              mountPath: /var/lib/ghost/content
+            - name: stereopinions-conf
+              mountPath: /var/lib/ghost/config.production.json
+              subPath: config.production.json
+      volumes:
+        - name: stereopinions
+          persistentVolumeClaim:
+            claimName: ghost-stereopinions
+        - name: stereopinions-conf
+          configMap:
+            name: ghost-stereopinions-conf
+            items:
+              - key: production.json
+                path: config.production.json
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ghost-stereopinions
+  namespace: web
+  labels:
+    app: ghost-stereopinions
+spec:
+  ports:
+    - name: server
+      port: 80
+      targetPort: 2368
+  selector:
+    app: ghost-stereopinions
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ghost-stereopinions
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: stereopinions.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ghost-stereopinions
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - stereopinions.net
+      secretName: stereopinions-net-cert
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ghost-stereopinions-ext
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx-external
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+spec:
+  rules:
+    - host: stereopinions.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ghost-stereopinions
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - stereopinions.net
+      secretName: stereopinions-net-cert
