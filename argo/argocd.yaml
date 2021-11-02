@@ -254,6 +254,10 @@ spec:
                                   type: string
                               type: object
                             type: array
+                          passCredentials:
+                            description: PassCredentials pass credentials to all domains
+                              (Helm's --pass-credentials)
+                            type: boolean
                           releaseName:
                             description: ReleaseName is the Helm release name to use.
                               If omitted it will use the application name
@@ -606,6 +610,10 @@ spec:
                               type: string
                           type: object
                         type: array
+                      passCredentials:
+                        description: PassCredentials pass credentials to all domains
+                          (Helm's --pass-credentials)
+                        type: boolean
                       releaseName:
                         description: ReleaseName is the Helm release name to use.
                           If omitted it will use the application name
@@ -972,6 +980,10 @@ spec:
                                     type: string
                                 type: object
                               type: array
+                            passCredentials:
+                              description: PassCredentials pass credentials to all
+                                domains (Helm's --pass-credentials)
+                              type: boolean
                             releaseName:
                               description: ReleaseName is the Helm release name to
                                 use. If omitted it will use the application name
@@ -1353,6 +1365,10 @@ spec:
                                           type: string
                                       type: object
                                     type: array
+                                  passCredentials:
+                                    description: PassCredentials pass credentials
+                                      to all domains (Helm's --pass-credentials)
+                                    type: boolean
                                   releaseName:
                                     description: ReleaseName is the Helm release name
                                       to use. If omitted it will use the application
@@ -1713,6 +1729,10 @@ spec:
                                       type: string
                                   type: object
                                 type: array
+                              passCredentials:
+                                description: PassCredentials pass credentials to all
+                                  domains (Helm's --pass-credentials)
+                                type: boolean
                               releaseName:
                                 description: ReleaseName is the Helm release name
                                   to use. If omitted it will use the application name
@@ -2060,6 +2080,10 @@ spec:
                                       type: string
                                   type: object
                                 type: array
+                              passCredentials:
+                                description: PassCredentials pass credentials to all
+                                  domains (Helm's --pass-credentials)
+                                type: boolean
                               releaseName:
                                 description: ReleaseName is the Helm release name
                                   to use. If omitted it will use the application name
@@ -3065,7 +3089,7 @@ spec:
       - command:
         - /shared/argocd-dex
         - rundex
-        image: ghcr.io/dexidp/dex:v2.27.0
+        image: ghcr.io/dexidp/dex:v2.30.0
         imagePullPolicy: Always
         name: dex
         ports:
@@ -3087,7 +3111,7 @@ spec:
         - -n
         - /usr/local/bin/argocd
         - /shared/argocd-dex
-        image: quay.io/argoproj/argocd:v2.1.1
+        image: quay.io/argoproj/argocd:v2.1.6
         imagePullPolicy: Always
         name: copyutil
         volumeMounts:
@@ -3268,7 +3292,13 @@ spec:
               key: reposerver.default.cache.expiration
               name: argocd-cmd-params-cm
               optional: true
-        image: quay.io/argoproj/argocd:v2.1.1
+        - name: HELM_CACHE_HOME
+          value: /helm-working-dir
+        - name: HELM_CONFIG_HOME
+          value: /helm-working-dir
+        - name: HELM_DATA_HOME
+          value: /helm-working-dir
+        image: quay.io/argoproj/argocd:v2.1.6
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
@@ -3307,6 +3337,8 @@ spec:
           name: argocd-repo-server-tls
         - mountPath: /tmp
           name: tmp
+        - mountPath: /helm-working-dir
+          name: helm-working-dir
       volumes:
       - configMap:
           name: argocd-ssh-known-hosts-cm
@@ -3321,6 +3353,8 @@ spec:
         name: gpg-keyring
       - emptyDir: {}
         name: tmp
+      - emptyDir: {}
+        name: helm-working-dir
       - name: argocd-repo-server-tls
         secret:
           items:
@@ -3516,7 +3550,13 @@ spec:
               key: server.default.cache.expiration
               name: argocd-cmd-params-cm
               optional: true
-        image: quay.io/argoproj/argocd:v2.1.1
+        - name: ARGOCD_MAX_COOKIE_NUMBER
+          valueFrom:
+            configMapKeyRef:
+              key: server.http.cookie.maxnumber
+              name: argocd-cmd-params-cm
+              optional: true
+        image: quay.io/argoproj/argocd:v2.1.6
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
@@ -3709,7 +3749,7 @@ spec:
               key: controller.default.cache.expiration
               name: argocd-cmd-params-cm
               optional: true
-        image: quay.io/argoproj/argocd:v2.1.1
+        image: quay.io/argoproj/argocd:v2.1.6
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
