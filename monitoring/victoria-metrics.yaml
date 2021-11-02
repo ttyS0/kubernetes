@@ -43,7 +43,6 @@ data:
               - 'gimli:9100'
               - 'gollum:9100'
               - 'pfsense:9100'
-              - 'samwise:9100'
       - job_name: 'ceph'
         scheme: https
         scrape_interval: 15s
