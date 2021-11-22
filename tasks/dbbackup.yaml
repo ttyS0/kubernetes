@@ -1,62 +1,62 @@
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: dbbackup
-  namespace: tasks
-spec:
-  schedule: "0 * * * *"
-  successfulJobsHistoryLimit: 4
-  failedJobsHistoryLimit: 2
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          dnsConfig:
-            options:
-              - name: ndots
-                value: "1"
-          containers:
-            - env:
-                - name: PGHOST
-                  valueFrom:
-                    secretKeyRef:
-                      key: pghost
-                      name: dbdata
-                - name: PGUSER
-                  valueFrom:
-                    secretKeyRef:
-                      key: pguser
-                      name: dbdata
-                - name: PGPASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: pgpass
-                      name: dbdata
-                - name: MYSQL_HOST
-                  valueFrom:
-                    secretKeyRef:
-                      key: mysqlhost
-                      name: dbdata
-                - name: MYSQLPASS
-                  valueFrom:
-                    secretKeyRef:
-                      key: mysqlpass
-                      name: dbdata
-                - name: MYSQLUSER
-                  valueFrom:
-                    secretKeyRef:
-                      key: mysqluser
-                      name: dbdata
-              name: dbbackup
-              image: hub.skj.dev/img/dbbackup:7
-              volumeMounts:
-                - mountPath: "/backup"
-                  name: cephfs
-          volumes:
-            - name: cephfs
-              persistentVolumeClaim:
-                claimName: dbbackup
-          restartPolicy: Never
+#apiVersion: batch/v1
+#kind: CronJob
+#metadata:
+#  name: dbbackup
+#  namespace: tasks
+#spec:
+#  schedule: "0 * * * *"
+#  successfulJobsHistoryLimit: 4
+#  failedJobsHistoryLimit: 2
+#  jobTemplate:
+#    spec:
+#      template:
+#        spec:
+#          dnsConfig:
+#            options:
+#              - name: ndots
+#                value: "1"
+#          containers:
+#            - env:
+#                - name: PGHOST
+#                  valueFrom:
+#                    secretKeyRef:
+#                      key: pghost
+#                      name: dbdata
+#                - name: PGUSER
+#                  valueFrom:
+#                    secretKeyRef:
+#                      key: pguser
+#                      name: dbdata
+#                - name: PGPASSWORD
+#                  valueFrom:
+#                    secretKeyRef:
+#                      key: pgpass
+#                      name: dbdata
+#                - name: MYSQL_HOST
+#                  valueFrom:
+#                    secretKeyRef:
+#                      key: mysqlhost
+#                      name: dbdata
+#                - name: MYSQLPASS
+#                  valueFrom:
+#                    secretKeyRef:
+#                      key: mysqlpass
+#                      name: dbdata
+#                - name: MYSQLUSER
+#                  valueFrom:
+#                    secretKeyRef:
+#                      key: mysqluser
+#                      name: dbdata
+#              name: dbbackup
+#              image: hub.skj.dev/img/dbbackup:7
+#              volumeMounts:
+#                - mountPath: "/backup"
+#                  name: cephfs
+#          volumes:
+#            - name: cephfs
+#              persistentVolumeClaim:
+#                claimName: dbbackup
+#          restartPolicy: Never
 ---
 #apiVersion: batch/v1
 #kind: Job

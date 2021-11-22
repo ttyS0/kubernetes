@@ -254,10 +254,6 @@ spec:
                                   type: string
                               type: object
                             type: array
-                          passCredentials:
-                            description: PassCredentials pass credentials to all domains
-                              (Helm's --pass-credentials)
-                            type: boolean
                           releaseName:
                             description: ReleaseName is the Helm release name to use.
                               If omitted it will use the application name
@@ -610,10 +606,6 @@ spec:
                               type: string
                           type: object
                         type: array
-                      passCredentials:
-                        description: PassCredentials pass credentials to all domains
-                          (Helm's --pass-credentials)
-                        type: boolean
                       releaseName:
                         description: ReleaseName is the Helm release name to use.
                           If omitted it will use the application name
@@ -980,10 +972,6 @@ spec:
                                     type: string
                                 type: object
                               type: array
-                            passCredentials:
-                              description: PassCredentials pass credentials to all
-                                domains (Helm's --pass-credentials)
-                              type: boolean
                             releaseName:
                               description: ReleaseName is the Helm release name to
                                 use. If omitted it will use the application name
@@ -1365,10 +1353,6 @@ spec:
                                           type: string
                                       type: object
                                     type: array
-                                  passCredentials:
-                                    description: PassCredentials pass credentials
-                                      to all domains (Helm's --pass-credentials)
-                                    type: boolean
                                   releaseName:
                                     description: ReleaseName is the Helm release name
                                       to use. If omitted it will use the application
@@ -1729,10 +1713,6 @@ spec:
                                       type: string
                                   type: object
                                 type: array
-                              passCredentials:
-                                description: PassCredentials pass credentials to all
-                                  domains (Helm's --pass-credentials)
-                                type: boolean
                               releaseName:
                                 description: ReleaseName is the Helm release name
                                   to use. If omitted it will use the application name
@@ -2080,10 +2060,6 @@ spec:
                                       type: string
                                   type: object
                                 type: array
-                              passCredentials:
-                                description: PassCredentials pass credentials to all
-                                  domains (Helm's --pass-credentials)
-                                type: boolean
                               releaseName:
                                 description: ReleaseName is the Helm release name
                                   to use. If omitted it will use the application name
@@ -2559,7 +2535,6 @@ metadata:
     app.kubernetes.io/name: argocd-application-controller
     app.kubernetes.io/part-of: argocd
   name: argocd-application-controller
-  namespace: argo
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -2569,7 +2544,6 @@ metadata:
     app.kubernetes.io/name: argocd-dex-server
     app.kubernetes.io/part-of: argocd
   name: argocd-dex-server
-  namespace: argo
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -2579,7 +2553,6 @@ metadata:
     app.kubernetes.io/name: argocd-redis
     app.kubernetes.io/part-of: argocd
   name: argocd-redis
-  namespace: argo
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -2589,7 +2562,6 @@ metadata:
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
   name: argocd-server
-  namespace: argo
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -2599,7 +2571,6 @@ metadata:
     app.kubernetes.io/name: argocd-application-controller
     app.kubernetes.io/part-of: argocd
   name: argocd-application-controller
-  namespace: argo
 rules:
 - apiGroups:
   - ""
@@ -2639,7 +2610,6 @@ metadata:
     app.kubernetes.io/name: argocd-dex-server
     app.kubernetes.io/part-of: argocd
   name: argocd-dex-server
-  namespace: argo
 rules:
 - apiGroups:
   - ""
@@ -2659,7 +2629,6 @@ metadata:
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
   name: argocd-server
-  namespace: argo
 rules:
 - apiGroups:
   - ""
@@ -2754,7 +2723,6 @@ metadata:
     app.kubernetes.io/name: argocd-application-controller
     app.kubernetes.io/part-of: argocd
   name: argocd-application-controller
-  namespace: argo
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -2771,7 +2739,6 @@ metadata:
     app.kubernetes.io/name: argocd-dex-server
     app.kubernetes.io/part-of: argocd
   name: argocd-dex-server
-  namespace: argo
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -2788,7 +2755,6 @@ metadata:
     app.kubernetes.io/name: argocd-redis
     app.kubernetes.io/part-of: argocd
   name: argocd-redis
-  namespace: argo
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -2805,7 +2771,6 @@ metadata:
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
   name: argocd-server
-  namespace: argo
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -2829,7 +2794,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: argocd-application-controller
-  namespace: argo
+  namespace: argocd
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -2846,7 +2811,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: argocd-server
-  namespace: argo
+  namespace: argocd
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -2855,10 +2820,6 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
   name: argocd-cm
-  namespace: argo
-data:
-  accounts.sean: apiKey, login
-  admin.enabled: "false"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -2867,7 +2828,6 @@ metadata:
     app.kubernetes.io/name: argocd-cmd-params-cm
     app.kubernetes.io/part-of: argocd
   name: argocd-cmd-params-cm
-  namespace: argo
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -2876,7 +2836,6 @@ metadata:
     app.kubernetes.io/name: argocd-gpg-keys-cm
     app.kubernetes.io/part-of: argocd
   name: argocd-gpg-keys-cm
-  namespace: argo
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -2885,11 +2844,6 @@ metadata:
     app.kubernetes.io/name: argocd-rbac-cm
     app.kubernetes.io/part-of: argocd
   name: argocd-rbac-cm
-  namespace: argo
-data:
-  policy.default: role:readonly
-  policy.csv: |
-    g, sean, role:admin
 ---
 apiVersion: v1
 data:
@@ -2901,16 +2855,12 @@ data:
     gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
     ssh.dev.azure.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
     vs-ssh.visualstudio.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
-    git.skj.dev ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/XCqjqJ4LNeNbRopmmUgEOHie53NIvsfQwalIPsbwX11sVmflh0Cwlf+sxU8K8kUfoCyDbAPvLCcFaXHl0RfEoVwtrzRMLcJXYKxQ8Tv66afOb42tjfqvew3NzfxHqWdOiNC2g24Kf44QeRy3c5XRTQOzwq4rF+GxppqkYjjTv3wAWC22j+o/6vA8B7EG8YrgvtPo6vJSDF+vvdDtEURryTjHWTtFafDbGY8AVo1vNeubVXZ2FYwjya7nL1DfoKCl8Cln02V8PXVdurPN63dKEkbPkhKq0GcVDIUwlA4eYsZEzCxFG8wVvJ7uGs1hW279ZTr/K5QRin32D1CHAKbZ
-    git.skj.dev ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDf0iA2L+07cVq/GCSFVddGPImdciXYySEF8HxrbvMPsoVT8o1iAVSgsapKnUAUb/0mylARa7A/46VW98iVp3sc=
-    git.skj.dev ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEDmvXT5BfQ3QDIb1enb5fp4QfO9byQAseDNPYfxqp81
 kind: ConfigMap
 metadata:
   labels:
     app.kubernetes.io/name: argocd-ssh-known-hosts-cm
     app.kubernetes.io/part-of: argocd
   name: argocd-ssh-known-hosts-cm
-  namespace: argo
 ---
 apiVersion: v1
 data: null
@@ -2920,7 +2870,6 @@ metadata:
     app.kubernetes.io/name: argocd-tls-certs-cm
     app.kubernetes.io/part-of: argocd
   name: argocd-tls-certs-cm
-  namespace: argo
 ---
 apiVersion: v1
 kind: Secret
@@ -2929,7 +2878,6 @@ metadata:
     app.kubernetes.io/name: argocd-secret
     app.kubernetes.io/part-of: argocd
   name: argocd-secret
-  namespace: argo
 type: Opaque
 ---
 apiVersion: v1
@@ -2940,7 +2888,6 @@ metadata:
     app.kubernetes.io/name: argocd-dex-server
     app.kubernetes.io/part-of: argocd
   name: argocd-dex-server
-  namespace: argo
 spec:
   ports:
   - name: http
@@ -2966,7 +2913,6 @@ metadata:
     app.kubernetes.io/name: argocd-metrics
     app.kubernetes.io/part-of: argocd
   name: argocd-metrics
-  namespace: argo
 spec:
   ports:
   - name: metrics
@@ -2984,7 +2930,6 @@ metadata:
     app.kubernetes.io/name: argocd-redis
     app.kubernetes.io/part-of: argocd
   name: argocd-redis
-  namespace: argo
 spec:
   ports:
   - name: tcp-redis
@@ -3001,7 +2946,6 @@ metadata:
     app.kubernetes.io/name: argocd-repo-server
     app.kubernetes.io/part-of: argocd
   name: argocd-repo-server
-  namespace: argo
 spec:
   ports:
   - name: server
@@ -3023,9 +2967,7 @@ metadata:
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
   name: argocd-server
-  namespace: argo
 spec:
-  type: LoadBalancer
   ports:
   - name: http
     port: 80
@@ -3046,7 +2988,6 @@ metadata:
     app.kubernetes.io/name: argocd-server-metrics
     app.kubernetes.io/part-of: argocd
   name: argocd-server-metrics
-  namespace: argo
 spec:
   ports:
   - name: metrics
@@ -3064,7 +3005,6 @@ metadata:
     app.kubernetes.io/name: argocd-dex-server
     app.kubernetes.io/part-of: argocd
   name: argocd-dex-server
-  namespace: argo
 spec:
   selector:
     matchLabels:
@@ -3089,7 +3029,7 @@ spec:
       - command:
         - /shared/argocd-dex
         - rundex
-        image: ghcr.io/dexidp/dex:v2.30.0
+        image: ghcr.io/dexidp/dex:v2.27.0
         imagePullPolicy: Always
         name: dex
         ports:
@@ -3134,7 +3074,6 @@ metadata:
     app.kubernetes.io/name: argocd-redis
     app.kubernetes.io/part-of: argocd
   name: argocd-redis
-  namespace: argo
 spec:
   selector:
     matchLabels:
@@ -3144,8 +3083,6 @@ spec:
       labels:
         app.kubernetes.io/name: argocd-redis
     spec:
-      nodeSelector:
-        kubernetes.io/arch: amd64
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -3185,7 +3122,6 @@ metadata:
     app.kubernetes.io/name: argocd-repo-server
     app.kubernetes.io/part-of: argocd
   name: argocd-repo-server
-  namespace: argo
 spec:
   selector:
     matchLabels:
@@ -3375,7 +3311,6 @@ metadata:
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
   name: argocd-server
-  namespace: argo
 spec:
   selector:
     matchLabels:
@@ -3550,12 +3485,6 @@ spec:
               key: server.default.cache.expiration
               name: argocd-cmd-params-cm
               optional: true
-        - name: ARGOCD_MAX_COOKIE_NUMBER
-          valueFrom:
-            configMapKeyRef:
-              key: server.http.cookie.maxnumber
-              name: argocd-cmd-params-cm
-              optional: true
         image: quay.io/argoproj/argocd:v2.1.6
         imagePullPolicy: Always
         livenessProbe:
@@ -3626,7 +3555,6 @@ metadata:
     app.kubernetes.io/name: argocd-application-controller
     app.kubernetes.io/part-of: argocd
   name: argocd-application-controller
-  namespace: argo
 spec:
   replicas: 1
   selector:
@@ -3799,7 +3727,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: argocd-application-controller-network-policy
-  namespace: argo
 spec:
   ingress:
   - from:
@@ -3816,7 +3743,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: argocd-dex-server-network-policy
-  namespace: argo
 spec:
   ingress:
   - from:
@@ -3843,7 +3769,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: argocd-redis-network-policy
-  namespace: argo
 spec:
   ingress:
   - from:
@@ -3869,7 +3794,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: argocd-repo-server-network-policy
-  namespace: argo
 spec:
   ingress:
   - from:
@@ -3899,7 +3823,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: argocd-server-network-policy
-  namespace: argo
 spec:
   ingress:
   - {}
