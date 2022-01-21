@@ -1,3 +1,4 @@
 docker/harbor-helm.yaml filter=git-crypt diff=git-crypt
 cert-manager/cluster-issuer.yaml filter=git-crypt diff=git-crypt
 metallb-system/secret.yaml filter=git-crypt diff=git-crypt
+kube-system/cilium-values.yaml filter=git-crypt diff=git-crypt
