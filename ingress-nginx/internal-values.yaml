@@ -1,0 +1,11 @@
+# helm template ingress-nginx-internal ingress-nginx/ingress-nginx \
+#  --namespace ingress-nginx-internal \
+#  --version 4.0.16 \
+#  --values internal-values.yaml > internal.yaml
+
+controller:
+  ingressClassResource:
+    name: nginx-internal
+    controllerValue: "k8s.io/ingress-nginx-internal"
+    enabled: true
+  ingressClassByName: true
