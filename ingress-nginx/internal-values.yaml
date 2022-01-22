@@ -8,4 +8,5 @@ controller:
     name: nginx-internal
     controllerValue: "k8s.io/ingress-nginx-internal"
     enabled: true
+    default: true
   ingressClassByName: true
