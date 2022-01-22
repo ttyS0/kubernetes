@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ingress-nginx-external-controller
+  namespace: ingress-nginx-external
+data:
+  use-forwarded-headers: "true"
+  ssl-redirect: "true"

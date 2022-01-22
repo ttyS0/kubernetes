@@ -1,0 +1,7 @@
+resources:
+  - ../base/internal
+
+patchesStrategicMerge:
+  - controller-configmap.yaml
+
+
