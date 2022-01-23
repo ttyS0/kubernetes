@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+  labels:
+    app.kubernetes.io/name: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nextcloud
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nextcloud
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: nextcloud
+          image: library/nextcloud:23.0.0-apache
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OVERWRITEPROTOCOL
+              value: "https"
+            - name: POSTGRES_HOST
+              value: "postgres.db.svc"
+            - name: POSTGRES_DB
+              value: "nextcloud"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: "user"
+                  name: ncdb
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ncdb
+                  key: "passwd"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: nextcloud-data
