@@ -1,0 +1,30 @@
+# helm install vault hashicorp/vault \
+#  --namespace vault \
+#  --version 0.19.0
+#  --values vault-values.yaml
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx-internal"
+    annotations: |
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: vault.skj.dev
+    tls:
+      - secretName: vault-skj-dev-cert
+        hosts:
+          - vault.skj.dev
+  standalone:
+    enabled: false
+  ha:
+    enabled: true
+    replicas: 3
+    raft:
+      enabled: true
+    disruptionBudget:
+      maxUnavailable: 2
+csi:
+  enabled: true
+injector:
+  enabled: false
