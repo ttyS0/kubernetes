@@ -10,3 +10,5 @@ controller:
     enabled: true
     default: true
   ingressClassByName: true
+  admissionWebhooks:
+    enabled: false

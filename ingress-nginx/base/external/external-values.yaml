@@ -9,4 +9,6 @@ controller:
     controllerValue: "k8s.io/ingress-nginx-external"
     enabled: true
   ingressClassByName: true
+  admissionWebhooks:
+    enabled: false
 
