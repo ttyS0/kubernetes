@@ -15,12 +15,8 @@ spec:
       labels:
         app: plex
     spec:
-      dnsConfig:
-        options:
-          - name: ndots
-            value: "1"
       containers:
-        - image: plexinc/pms-docker:1.24.5.5173-8dcc73a59
+        - image: plexinc/pms-docker:1.25.3.5409-f11334058
           name: plex
           env:
             - name: HOSTNAME
@@ -30,26 +26,28 @@ spec:
           ports:
             - containerPort: 32400
           volumeMounts:
-            - name: plex-server
+            - name: plex-config
               mountPath: /config
             - name: plex-transcode
               mountPath: /transcode
-            - name: plex-data
+            - name: plex-media
               mountPath: /media
+              readOnly: true
           resources:
             limits:
               gpu.intel.com/i915: 1
       securityContext:
         fsGroup: 1000
       volumes:
-        - name: plex-server
+        - name: plex-config
           persistentVolumeClaim:
-            claimName: plex-server
+            claimName: plex-config
         - name: plex-transcode
           emptyDir: {}
-        - name: plex-data
+        - name: plex-media
           persistentVolumeClaim:
-            claimName: plex-data
+            claimName: plex-media
+            readOnly: true
 ---
 apiVersion: v1
 kind: Service
