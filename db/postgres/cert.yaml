@@ -4,7 +4,7 @@ metadata:
   name: postgresql
   namespace: db
 spec:
-  secretName: postgresql-server-tls
+  secretName: pg-skj-dev-cert
   dnsNames:
     - pg.skj.dev
   issuerRef:
