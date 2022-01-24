@@ -4,3 +4,4 @@ kube-system/cilium-values.yaml filter=git-crypt diff=git-crypt
 cert-manager/secret.yaml filter=git-crypt diff=git-crypt
 db/postgres/secret.yaml filter=git-crypt diff=git-crypt
 nextcloud/secret.yaml filter=git-crypt diff=git-crypt
+gitea/secret.yaml filter=git-crypt diff=git-crypt

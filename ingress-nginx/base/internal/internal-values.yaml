@@ -12,3 +12,5 @@ controller:
   ingressClassByName: true
   admissionWebhooks:
     enabled: false
+tcp:
+  22: gitea/gitea:22

@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitea
+  namespace: gitea
+spec:
+  selector:
+    matchLabels:
+      app: gitea
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: gitea
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      containers:
+        - image: gitea/gitea:1.15.10
+          name: gitea
+          resources:
+            requests:
+              cpu: 1
+              memory: 1Gi
+            limits:
+              memory: 4Gi
+          env:
+            - name: RUN_MODE
+              value: "prod"
+            - name: DOMAIN
+              value: "skj.dev"
+            - name: SSH_DOMAIN
+              value: "skj.dev"
+            - name: ROOT_URL
+              value: "https://git.skj.dev"
+            - name: DB_TYPE
+              value: "postgres"
+            - name: DB_HOST
+              value: "postgres.db.svc.cluster.local"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: giteadb
+            - name: DB_PASSWD
+              valueFrom:
+                secretKeyRef:
+                  key: passwd
+                  name: giteadb
+            - name: DB_NAME
+              value: "gitea"
+            - name: USER_UID
+              value: "1000"
+            - name: USER_GID
+              value: "1000"
+          ports:
+            - containerPort: 3000
+              name: gitea
+            - containerPort: 22
+              name: git-ssh
+          volumeMounts:
+            - mountPath: /data
+              name: gitea-data
+      volumes:
+        - name: gitea-data
+          persistentVolumeClaim:
+            claimName: gitea-data

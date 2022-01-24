@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gitea
+  namespace: gitea
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    nginx.kubernetes.io/proxy-body-size: "50m"
+spec:
+  rules:
+    - host: git.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gitea
+                port:
+                  number: 3000
+          - backend:
+              service:
+                name: gitea
+                port:
+                  number: 22
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - git.skj.dev
+      secretName: git-skj-dev-cert
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gitea-ext
+  namespace: gitea
+  annotations:
+    nginx.kubernetes.io/proxy-body-size: "50m"
+spec:
+  ingressClassName: nginx-external
+  rules:
+    - host: git.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gitea
+                port:
+                  number: 3000
+
+  tls:
+    - hosts:
+        - git.skj.dev
+      secretName: git-skj-dev-cert
