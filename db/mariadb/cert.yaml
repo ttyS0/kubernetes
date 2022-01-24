@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mariadb
+  namespace: db
+spec:
+  secretName: mariadb-skj-dev-cert
+  dnsNames:
+    - mariadb.skj.dev
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+    group: cert-manager.io

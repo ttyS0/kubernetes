@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: db
+  labels:
+    app: mariadb
+spec:
+  selector:
+    matchLabels:
+      app: mariadb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - image: mariadb:10.7.1
+          name: mariadb
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadbroot
+                  key: mariadbroot
+          ports:
+            - containerPort: 3306
+              name: mariadb
+          volumeMounts:
+            - name: mariadb
+              mountPath: /var/lib/mysql
+            - name: config
+              mountPath: "/etc/mysql/conf.d/custom.cnf"
+              subPath: "custom.cnf"
+      volumes:
+        - name: mariadb
+          persistentVolumeClaim:
+            claimName: mariadb
+        - name: config
+          configMap:
+            name: mariadb
