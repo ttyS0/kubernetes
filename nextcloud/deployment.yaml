@@ -21,6 +21,12 @@ spec:
         - name: nextcloud
           image: library/nextcloud:23.0.0-apache
           imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: "6Gi"
+            requests:
+              memory: "4Gi"
+              cpu: 1
           env:
             - name: OVERWRITEPROTOCOL
               value: "https"
