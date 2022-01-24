@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unifi-controller
+  namespace: unifi
+spec:
+  selector:
+    matchLabels:
+      app: unifi-controller
+  replicas : 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: unifi-controller
+    spec:
+      securityContext:
+        fsGroup: 999
+      containers:
+        - image: jacobalberty/unifi:v6.5.55
+          env:
+            - name: RUNAS_UID0
+              value: "false"
+            - name: CERT_IS_CHAIN
+              value: "true"
+          name: unifi-controller
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+            - containerPort: 8443
+            - containerPort: 8880
+            - containerPort: 8843
+            - containerPort: 3478
+              protocol: UDP
+            - containerPort: 6789
+            - containerPort: 10001
+              protocol: UDP
+          volumeMounts:
+            - name: unifi-data
+              mountPath: /unifi/data
+            - name: unifi-log
+              mountPath: /unifi/log
+            - name: unifi-cert
+              mountPath: /unifi/cert/cert.pem
+              subPath: cert.pem
+            - name: unifi-key
+              mountPath: /unifi/cert/privkey.pem
+              subPath: privkey.pem
+      volumes:
+        - name: unifi-data
+          persistentVolumeClaim:
+            claimName: unifi-data
+        - name: unifi-cert
+          secret:
+            secretName: unifi-cert
+            items:
+              - key: tls.crt
+                path: cert.pem
+        - name: unifi-key
+          secret:
+            secretName: unifi-cert
+            items:
+              - key: tls.key
+                path: privkey.pem
+        - name: unifi-log
+          emptyDir:
+            { }

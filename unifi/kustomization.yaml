@@ -1,0 +1,7 @@
+resources:
+  - cert.yaml
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+
+
