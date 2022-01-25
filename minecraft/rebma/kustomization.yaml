@@ -1,0 +1,29 @@
+namespace: minecraft
+
+resources:
+  - ../base/world
+  - ingress.yaml
+
+patchesJson6902:
+  - target:
+      kind: PersistentVolumeClaim
+      name: world-data
+      version: v1
+    path: pvcNamePatch.yaml
+  - target:
+      kind: Deployment
+      name: world
+      version: v1
+    path: deployPatch.yaml
+  - target:
+      kind: Service
+      name: world
+      version: v1
+    path: servicePatch.yaml
+
+images:
+  - name: ghcr.io/ttys0/spigot
+    newTag: 1.18.1
+
+commonLabels:
+  world: rebma

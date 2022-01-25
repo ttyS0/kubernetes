@@ -1,0 +1,29 @@
+- op: replace
+  path: /metadata/name
+  value: amber
+- op: add
+  path: /spec/template/spec/containers
+  value:
+    - name: amber
+      image: ghcr.io/ttys0/spigot:latest
+      workingDir: "/minecraft/world"
+      ports:
+        - containerPort: 25565
+        - containerPort: 8123
+        - containerPort: 25575
+      volumeMounts:
+        - name: world-data
+          mountPath: /minecraft/world
+      env:
+        - name: JVM_OPTS
+          value: "-Xms4G -Xmx4G -Djava.util.concurrent.ForkJoinPool.common.parallelism=1"
+        - name: SPIGOT_DIR
+          value: "/minecraft/world"
+        - name: SPIGOT_OPTS
+          value: "nogui --noconsole"
+- op: add
+  path: /spec/template/spec/volumes
+  value:
+    - name: world-data
+      persistentVolumeClaim:
+        claimName: amber-data

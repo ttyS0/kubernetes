@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: map-rebma
+  namespace: minecraft
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  rules:
+    - host: minecraft-rebma.ttys0.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rebma
+                port:
+                  number: 8123
+  tls:
+    - hosts:
+        - minecraft-rebma.ttys0.net
+      secretName: minecraft-rebma-ttys0-net-cert
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: map-rebma-ext
+  namespace: minecraft
+spec:
+  ingressClassName: "nginx-external"
+  rules:
+    - host: minecraft-rebma.ttys0.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rebma
+                port:
+                  number: 8123
+  tls:
+    - hosts:
+        - minecraft-rebma.ttys0.net
+      secretName: minecraft-rebma-ttys0-net-cert

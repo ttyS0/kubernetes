@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: world
+  namespace: minecraft
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minecraft
+      world: world
+  template:
+    metadata:
+      labels:
+        app: minecraft
+        world: world
+    spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+

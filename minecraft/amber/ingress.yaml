@@ -1,15 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minecraft
+  name: map-amber
   namespace: minecraft
   annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     kubernetes.io/tls-acme: "true"
 spec:
+  ingressClassName: "nginx-internal"
   rules:
-    - host: minecraft.ttys0.net
+    - host: minecraft-amber.ttys0.net
       http:
         paths:
           - path: /
@@ -21,20 +20,18 @@ spec:
                   number: 8123
   tls:
     - hosts:
-        - minecraft.ttys0.net
-      secretName: minecraft-ttys0-net-cert
+        - minecraft-amber.ttys0.net
+      secretName: minecraft-amber-ttys0-net-cert
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minecraft-ext
+  name: map-amber-ext
   namespace: minecraft
-  annotations:
-    kubernetes.io/ingress.class: nginx-external
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
+  ingressClassName: "nginx-external"
   rules:
-    - host: minecraft.ttys0.net
+    - host: minecraft-amber.ttys0.net
       http:
         paths:
           - path: /
@@ -46,5 +43,5 @@ spec:
                   number: 8123
   tls:
     - hosts:
-        - minecraft.ttys0.net
-      secretName: minecraft-ttys0-net-cert
+        - minecraft-amber.ttys0.net
+      secretName: minecraft-amber-ttys0-net-cert

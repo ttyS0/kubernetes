@@ -1,0 +1,8 @@
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+
+images:
+  - name: ghcr.io/ttys0/bungeecord
+    newTag: "1628"
