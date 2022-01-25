@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: openfaas-ingress
+  namespace: "openfaas"
+  labels:
+    app: openfaas
+    chart: openfaas-9.0.2
+    release: openfaas
+    heritage: Helm
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  rules:
+    - host: gw.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gateway
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - gw.skj.dev
+      secretName: openfaas-cert

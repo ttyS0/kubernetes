@@ -1,0 +1,5 @@
+resources:
+  - secret.yaml
+  - openfaas.yaml
+  - ingress.yaml
+

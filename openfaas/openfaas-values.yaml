@@ -1,0 +1,15 @@
+#helm template openfaas openfaas/openfaas \
+#  --namespace openfaas \
+#  --version 9.0.2 \
+#  --values openfaas-values.yaml > openfaas.yaml
+
+functionNamespace: openfaas-fn
+generateBasicAuth: false
+clusterRole: true
+exposeServices: false
+openfaasImagePullPolicy: IfNotPresent
+nats:
+  metrics:
+    enabled: true
+
+
