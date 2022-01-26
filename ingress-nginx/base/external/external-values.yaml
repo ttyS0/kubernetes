@@ -11,4 +11,6 @@ controller:
   ingressClassByName: true
   admissionWebhooks:
     enabled: false
+  extraArgs:
+    default-backend-service: "ghost/static"
 

@@ -313,6 +313,7 @@ spec:
             - --controller-class=k8s.io/ingress-nginx-external
             - --configmap=$(POD_NAMESPACE)/ingress-nginx-external-controller
             - --ingress-class-by-name=true
+            - --default-backend-service=ghost/static
           securityContext: 
             capabilities:
               drop:

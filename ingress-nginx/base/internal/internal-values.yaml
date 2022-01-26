@@ -12,5 +12,7 @@ controller:
   ingressClassByName: true
   admissionWebhooks:
     enabled: false
+  extraArgs:
+    default-backend-service: "ghost/static"
 tcp:
   22: gitea/gitea:22
