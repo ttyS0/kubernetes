@@ -7,3 +7,4 @@ nextcloud/secret.yaml filter=git-crypt diff=git-crypt
 gitea/secret.yaml filter=git-crypt diff=git-crypt
 db/mariadb/secret.yaml filter=git-crypt diff=git-crypt
 openfaas/secret.yaml filter=git-crypt diff=git-crypt
+ghost/beezuscomplex/secret.yaml filter=git-crypt diff=git-crypt

@@ -1,0 +1,39 @@
+- op: replace
+  path: /metadata/name
+  value: beezuscomplex
+- op: add
+  path: /spec/template/spec/containers
+  value:
+    - name: beezuscomplex
+      image: library/ghost:4.24.0
+      env:
+        - name: database__connection__user
+          valueFrom:
+            secretKeyRef:
+              name: beezuscomplexdb
+              key: dbuser
+        - name: database__connection__password
+          valueFrom:
+            secretKeyRef:
+              name: beezuscomplexdb
+              key: dbpass
+      ports:
+        - containerPort: 2368
+      volumeMounts:
+        - name: beezuscomplex
+          mountPath: /var/lib/ghost/content
+        - name: beezuscomplex-conf
+          mountPath: /var/lib/ghost/config.production.json
+          subPath: config.production.json
+- op: add
+  path: /spec/template/spec/volumes
+  value:
+    - name: beezuscomplex
+      persistentVolumeClaim:
+        claimName: beezuscomplex
+    - name: beezuscomplex-conf
+      configMap:
+        name: beezuscomplex-conf
+        items:
+          - key: production.json
+            path: config.production.json
