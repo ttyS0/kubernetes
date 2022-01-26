@@ -1,0 +1,33 @@
+- op: replace
+  path: /metadata/name
+  value: skj
+- op: add
+  path: /spec/template/spec/containers/0/env
+  value:
+    - name: DB_NAME
+      valueFrom:
+        secretKeyRef:
+          key: "pgdb"
+          name: skjdb
+    - name: DB_TYPE
+      value: postgres
+    - name: DB_HOST
+      value: "postgres.db.svc.cluster.local"
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_USER
+      valueFrom:
+        secretKeyRef:
+          key: "pguser"
+          name: skjdb
+    - name: DB_PASS
+      valueFrom:
+        secretKeyRef:
+          name: skjdb
+          key: "pgpass"
+- op: replace
+  path: /spec/template/spec/volumes
+  value:
+    - name: data
+      persistentVolumeClaim:
+        claimName: skj
