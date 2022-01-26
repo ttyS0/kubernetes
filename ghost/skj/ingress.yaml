@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: skj
+  namespace: ghost
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  rules:
+    - host: skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: skj
+                port:
+                  number: 2368
+  tls:
+    - hosts:
+        - skj.dev
+        - www.skj.dev
+      secretName: skj-dev-cert
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: skj-ext
+  namespace: ghost
+spec:
+  ingressClassName: "nginx-external"
+  rules:
+    - host: skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: skj
+                port:
+                  number: 2368
+  tls:
+    - hosts:
+        - skj.dev
+        - www.skj.dev
+      secretName: skj-dev-cert
