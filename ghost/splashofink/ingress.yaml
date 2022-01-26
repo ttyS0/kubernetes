@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: splashofink
+  namespace: ghost
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  rules:
+    - host: splashof.ink
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: splashofink
+                port:
+                  number: 2368
+  tls:
+    - hosts:
+        - splashof.ink
+        - www.splashof.ink
+      secretName: splashof-ink-cert
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: splashofink-ext
+  namespace: ghost
+spec:
+  ingressClassName: "nginx-external"
+  rules:
+    - host: splashofink.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: splashofink
+                port:
+                  number: 2368
+  tls:
+    - hosts:
+        - splashof.ink
+        - www.splashof.ink
+      secretName: splashof-ink-cert

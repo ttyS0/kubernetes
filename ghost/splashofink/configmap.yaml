@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: ghost
+  name: splashofink-conf
+data:
+  production.json: |
+    {
+      "url": "https://splashof.ink",
+      "server": {
+        "port": 2368,
+        "host": "0.0.0.0"
+      },
+      "database": {
+        "client": "mysql",
+        "connection": {
+          "host": "mariadb.db.svc",
+          "port": 3306,
+          "database": "ghost_splashofink"
+        }
+      },
+      "mail": {
+        "transport": "SMTP",
+        "options": {
+          "service": "Mailgun",
+          "host": "smtp.mailgun.org",
+          "port": 465,
+          "secureConnection": true
+        }
+      },
+      "logging": {
+        "transports": [
+          "stdout"
+        ]
+      },
+      "paths": {
+        "contentPath": "/var/lib/ghost/content"
+      }
+    }
