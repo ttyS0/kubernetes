@@ -13,3 +13,4 @@ ghost/splashofink/secret.yaml filter=git-crypt diff=git-crypt
 ghost/stereopinions/secret.yaml filter=git-crypt diff=git-crypt
 wikijs/skj/secret.yaml filter=git-crypt diff=git-crypt
 wikijs/videotranscoding/secret.yaml filter=git-crypt diff=git-crypt
+nocodb/secret.yaml filter=git-crypt diff=git-crypt
