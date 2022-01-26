@@ -10,3 +10,4 @@ openfaas/secret.yaml filter=git-crypt diff=git-crypt
 ghost/beezuscomplex/secret.yaml filter=git-crypt diff=git-crypt
 ghost/skj/secret.yaml filter=git-crypt diff=git-crypt
 ghost/splashofink/secret.yaml filter=git-crypt diff=git-crypt
+ghost/stereopinions/secret.yaml filter=git-crypt diff=git-crypt
