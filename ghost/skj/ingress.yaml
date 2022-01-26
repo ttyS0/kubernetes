@@ -42,6 +42,13 @@ spec:
                 name: skj
                 port:
                   number: 2368
+          - path: /.well-known
+            pathType: Prefix
+            backend:
+              service:
+                name: static
+                port:
+                  number: 80
   tls:
     - hosts:
         - skj.dev
