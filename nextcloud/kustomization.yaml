@@ -4,3 +4,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - ingress.yaml
+
+images:
+  - name: library/nextcloud
+    newTag: "23.0.0-apache"

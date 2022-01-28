@@ -17,7 +17,7 @@ spec:
         app: postgres
     spec:
       containers:
-        - image: postgres:14.1
+        - image: postgres:latest
           name: postgres
           resources:
             limits:
