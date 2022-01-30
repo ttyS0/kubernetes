@@ -4,3 +4,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - ingress.yaml
+
+images:
+  - name: gitea/gitea
+    newTag: 1.15.11

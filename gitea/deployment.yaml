@@ -20,7 +20,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: gitea/gitea:1.15.10
+        - image: gitea/gitea:latest
           name: gitea
           resources:
             requests:
