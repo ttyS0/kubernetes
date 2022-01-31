@@ -20,7 +20,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: plexinc/pms-docker:1.25.3.5409-f11334058
+        - image: plexinc/pms-docker:latest
           name: plex
           env:
             - name: HOSTNAME
@@ -52,21 +52,3 @@ spec:
           persistentVolumeClaim:
             claimName: plex-media
             readOnly: true
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: plex
-  namespace: plex
-  labels:
-    app: plex
-spec:
-  selector:
-    app: plex
-  type: LoadBalancer
-  externalTrafficPolicy: Local
-  ports:
-    - port: 32400
-      name: plex
-
-

@@ -1,0 +1,11 @@
+namespace: plex
+
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: tautulli/tautulli
+    newTag: v2.8.1

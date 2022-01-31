@@ -50,15 +50,3 @@ spec:
   resources:
     requests:
       storage: 300Gi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: tautulli
-  namespace: plex
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi

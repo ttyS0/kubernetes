@@ -1,0 +1,10 @@
+namespace: plex
+
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+
+images:
+  - name: plex-inc/pms-docker
+    newTag: 1.25.3.5409-f11334058
