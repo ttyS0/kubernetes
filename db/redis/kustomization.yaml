@@ -1,0 +1,10 @@
+namespace: db
+
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+
+images:
+  - name: library/redis
+    newTag: 6.2.6
