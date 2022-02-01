@@ -44,6 +44,8 @@ spec:
                 secretKeyRef:
                   name: ncdb
                   key: "passwd"
+            - name: REDIS_HOST
+              value: "redis.db.svc"
           ports:
             - name: http
               containerPort: 80
