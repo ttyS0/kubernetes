@@ -6,5 +6,5 @@ resources:
   - service.yaml
 
 images:
-  - name: plex-inc/pms-docker
-    newTag: 1.25.3.5409-f11334058
+  - name: plexinc/pms-docker
+    newTag: 1.25.4.5487-648a8f9f9
