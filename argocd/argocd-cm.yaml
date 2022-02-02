@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  admin.enabled: 'false'
+  statusbadge.enabled: 'true'
+  users.anonymous.enabled: 'false'
+  url: "https://argocd.skj.dev"
+  dex.config: |
+    connectors:
+    - type: github
+      id: github
+      name: GitHub
+      config:
+        clientID: b9631bcc480c8b743ab1
+        clientSecret: $argocd-github-oauth:clientSecret
+kind: ConfigMap
+metadata:
+  name: argocd-cm

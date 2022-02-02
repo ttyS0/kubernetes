@@ -1,0 +1,15 @@
+namespace: argocd
+
+resources:
+  - secret.yaml
+  - ingress.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.2.3/manifests/install.yaml
+
+configMapGenerator:
+  - name: argocd-ssh-known-hosts-cm
+    behavior: replace
+    files:
+      - ssh-known-hosts
+
+patchesStrategicMerge:
+  - argocd-cm.yaml
