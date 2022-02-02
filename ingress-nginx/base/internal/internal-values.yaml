@@ -14,5 +14,6 @@ controller:
     enabled: false
   extraArgs:
     default-backend-service: "ghost/static"
+    enable-ssl-passthrough: "true"
 tcp:
   22: gitea/gitea:22

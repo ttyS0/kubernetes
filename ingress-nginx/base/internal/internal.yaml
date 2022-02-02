@@ -336,6 +336,7 @@ spec:
             - --tcp-services-configmap=$(POD_NAMESPACE)/ingress-nginx-internal-tcp
             - --ingress-class-by-name=true
             - --default-backend-service=ghost/static
+            - --enable-ssl-passthrough=true
           securityContext: 
             capabilities:
               drop:
