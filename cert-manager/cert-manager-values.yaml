@@ -1,7 +1,8 @@
 # helm upgrade cert-manager jetstack/cert-manager \
 #  --namespace cert-manager \
-#  --version v1.7.0 \
+#  --version v1.7.1 \
 #  --values cert-manager-values.yaml
+
 installCRDs: true
 extraArgs:
   - --dns01-recursive-nameservers=1.1.1.1:53
