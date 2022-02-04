@@ -15,3 +15,4 @@ wikijs/skj/secret.yaml filter=git-crypt diff=git-crypt
 wikijs/videotranscoding/secret.yaml filter=git-crypt diff=git-crypt
 nocodb/secret.yaml filter=git-crypt diff=git-crypt
 argocd/secret.yaml filter=git-crypt diff=git-crypt
+argocd/install/secret.yaml filter=git-crypt diff=git-crypt
