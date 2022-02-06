@@ -13,3 +13,11 @@ configMapGenerator:
 
 patchesStrategicMerge:
   - argocd-cm.yaml
+
+patchesJson6902:
+  - target:
+      kind: Deployment
+      name: argocd-repo-server
+      version: v1
+    path: deployPatch.yaml
+

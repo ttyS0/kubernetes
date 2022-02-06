@@ -1,0 +1,14 @@
+- op: replace
+  path: /spec/template/spec/volumes/2
+  value:
+    name: gpg-keys
+    projected:
+      defaultMode: 420
+      sources:
+      - secret:
+          name: argocd-gpg-keys-secret
+      - configMap:
+          name: argocd-gpg-keys-cm
+- op: replace
+  path: /spec/template/spec/containers/0/image
+  value: ghcr.io/ttys0/argocd:v2.2.3
