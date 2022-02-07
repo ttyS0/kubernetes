@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ingress-internal
+  name: cert-issuer
   namespace: argocd
 spec:
-  project: default
+  project: cert-manager
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
-    path: ingress-nginx/internal
+    path: cert-manager
     targetRevision: HEAD
   destination:
-    namespace: ingress-nginx-internal
+    namespace: cert-manager
     server: https://kubernetes.default.svc
   syncPolicy:
     syncOptions:

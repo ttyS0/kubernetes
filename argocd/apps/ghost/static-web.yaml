@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cert-issuer
+  name: static-web
   namespace: argocd
 spec:
-  project: default
+  project: ghost
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
-    path: cert-manager
+    path: ghost/static
     targetRevision: HEAD
   destination:
-    namespace: cert-manager
+    namespace: ghost
     server: https://kubernetes.default.svc
   syncPolicy:
     syncOptions:

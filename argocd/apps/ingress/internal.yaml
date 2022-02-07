@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: static-web
+  name: ingress-internal
   namespace: argocd
 spec:
-  project: default
+  project: ingress
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
-    path: ghost/static
+    path: ingress-nginx/internal
     targetRevision: HEAD
   destination:
-    namespace: ghost
+    namespace: ingress-nginx-internal
     server: https://kubernetes.default.svc
   syncPolicy:
     syncOptions:

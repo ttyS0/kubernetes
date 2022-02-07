@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: stereopinions
+  name: intel-gpu
   namespace: argocd
 spec:
-  project: default
+  project: system
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
-    path: ghost/stereopinions
+    path: kube-system/intel-gpu
     targetRevision: HEAD
   destination:
-    namespace: ghost
+    namespace: kube-system
     server: https://kubernetes.default.svc
   syncPolicy:
     syncOptions:

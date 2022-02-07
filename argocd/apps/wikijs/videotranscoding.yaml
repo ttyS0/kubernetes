@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ingress-external
+  name: videotranscoding
   namespace: argocd
 spec:
-  project: default
+  project: wikijs
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
-    path: ingress-nginx/external
+    path: wikijs/videotranscoding
     targetRevision: HEAD
   destination:
-    namespace: ingress-nginx-external
+    namespace: wikijs
     server: https://kubernetes.default.svc
   syncPolicy:
     syncOptions:

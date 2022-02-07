@@ -23,7 +23,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: intel/intel-gpu-plugin:0.23.0
+          image: intel/intel-gpu-plugin:latest
           imagePullPolicy: IfNotPresent
           securityContext:
             readOnlyRootFilesystem: true

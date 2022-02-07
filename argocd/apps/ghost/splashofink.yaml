@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: postgresql
+  name: splashof.ink
   namespace: argocd
 spec:
-  project: default
+  project: ghost
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
-    path: db/postgres
+    path: ghost/splashofink
     targetRevision: HEAD
   destination:
-    namespace: db
+    namespace: ghost
     server: https://kubernetes.default.svc
   syncPolicy:
     syncOptions:
