@@ -3,3 +3,6 @@ resources:
   - deployment.yaml
   - service.yaml
 
+images:
+  - name: xthursdayx/yacreaderlibrary-server-docker
+    newTag: v1.1.2

@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: yac
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   template:
@@ -18,7 +18,7 @@ spec:
       securityContext:
         fsGroup: 33
       containers:
-        - image: xthursdayx/yacreaderlibrary-server-docker:v1.1.2
+        - image: xthursdayx/yacreaderlibrary-server-docker:latest
           name: yac
           env:
             - name: PUID
