@@ -4,7 +4,7 @@ metadata:
   name: ingress-internal
   namespace: argocd
 spec:
-  project: ingress
+  project: default
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
     path: ingress-nginx/internal

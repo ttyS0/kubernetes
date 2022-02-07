@@ -4,7 +4,7 @@ metadata:
   name: cert-issuer
   namespace: argocd
 spec:
-  project: cert-manager
+  project: default
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
     path: cert-manager

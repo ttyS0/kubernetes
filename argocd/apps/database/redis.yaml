@@ -4,7 +4,7 @@ metadata:
   name: redis
   namespace: argocd
 spec:
-  project: database
+  project: default
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
     path: db/redis

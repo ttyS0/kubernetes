@@ -4,7 +4,7 @@ metadata:
   name: videotranscoding
   namespace: argocd
 spec:
-  project: wikijs
+  project: default
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
     path: wikijs/videotranscoding

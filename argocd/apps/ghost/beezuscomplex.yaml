@@ -4,7 +4,7 @@ metadata:
   name: beezuscomplex
   namespace: argocd
 spec:
-  project: ghost
+  project: default
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
     path: ghost/beezuscomplex
