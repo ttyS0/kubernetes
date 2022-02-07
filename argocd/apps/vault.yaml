@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vault
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://helm.releases.hashicorp.com'
+    chart: vault
+    targetRevision: 0.19.0
+    helm:
+      releaseName: vault
+      values: |
+        server:
+          ingress:
+            enabled: true
+            ingressClassName: "nginx-internal"
+            annotations: |
+              kubernetes.io/tls-acme: "true"
+            hosts:
+              - host: vault.skj.dev
+            tls:
+              - secretName: vault-skj-dev-cert
+                hosts:
+                  - vault.skj.dev
+          standalone:
+            enabled: false
+          ha:
+            enabled: true
+            replicas: 3
+            raft:
+              enabled: true
+            disruptionBudget:
+              maxUnavailable: 2
+        csi:
+          enabled: true
+        injector:
+          enabled: false
+  destination:
+    namespace: vault
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
+
