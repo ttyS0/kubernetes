@@ -6,3 +6,4 @@ data:
   policy.default: role:readonly
   policy.csv: |
     g, sean@skj.dev, role:admin
+  scopes: '[email]'
