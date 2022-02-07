@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: 'https://git.skj.dev/sean/kubernetes.git'
-    path: nocodb
+    path: db/nocodb
     targetRevision: HEAD
   destination:
     namespace: db
