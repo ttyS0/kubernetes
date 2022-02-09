@@ -35,7 +35,7 @@ metadata:
 spec:
   ingressClassName: "nginx-external"
   rules:
-    - host: splashofink.net
+    - host: splashof.ink
       http:
         paths:
           - path: /
