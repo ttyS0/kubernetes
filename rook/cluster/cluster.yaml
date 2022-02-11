@@ -166,6 +166,10 @@ spec:
 #    osd:
 #    cleanup:
 #    prepareosd:
+# clusterMetadata annotations will be applied to only `rook-ceph-mon-endpoints` configmap and the `rook-ceph-mon` and `rook-ceph-admin-keyring` secrets.
+# And clusterMetadata annotations will not be merged with `all` annotations.
+#    clusterMetadata:
+#       kubed.appscode.com/sync: "true"
 # If no mgr annotations are set, prometheus scrape annotations will be set by default.
 #    mgr:
   labels:
@@ -207,6 +211,7 @@ spec:
 #    mon: rook-ceph-mon-priority-class
 #    osd: rook-ceph-osd-priority-class
 #    mgr: rook-ceph-mgr-priority-class
+#    crashcollector: rook-ceph-crashcollector-priority-class
   storage: # cluster level storage configuration and selection
     useAllNodes: true
     useAllDevices: false
