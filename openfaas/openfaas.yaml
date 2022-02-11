@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -20,7 +20,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -31,7 +31,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: alertmanager-config
     heritage: Helm
     release: openfaas
@@ -74,7 +74,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: prometheus-config
     heritage: Helm
     release: openfaas
@@ -91,9 +91,15 @@ data:
     rule_files:
         - 'alert.rules.yml'
 
+    alerting:
+      alertmanagers:
+      - static_configs:
+        - targets:
+          - alertmanager:9093
+
     scrape_configs:
       - job_name: 'prometheus'
-        scrape_interval: 5s
+        scrape_interval: 10s
         static_configs:
           - targets: ['localhost:9090']
 
@@ -128,12 +134,6 @@ data:
           source_labels:
           - __meta_kubernetes_pod_annotation_prometheus_io_path
           target_label: __metrics_path__
-
-    alerting:
-      alertmanagers:
-      - static_configs:
-        - targets:
-          - alertmanager:9093
 
   alert.rules.yml: |
     groups:
@@ -983,7 +983,7 @@ kind: ClusterRole
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1052,7 +1052,7 @@ metadata:
   name: openfaas-prometheus
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1062,7 +1062,11 @@ rules:
     - services
     - endpoints
     - pods
+    - nodes
+    - nodes/proxy
   verbs: ["get", "list", "watch"]
+- nonResourceURLs: ["/metrics"]
+  verbs: ["get"]
 ---
 # Source: openfaas/templates/controller-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1070,7 +1074,7 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1086,6 +1090,7 @@ subjects:
     namespace: "openfaas"
 ---
 # Source: openfaas/templates/prometheus-rbac.yaml
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -1093,7 +1098,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1114,7 +1119,7 @@ metadata:
   namespace: "openfaas-fn"
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1133,7 +1138,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1153,7 +1158,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: basic-auth-plugin
     heritage: Helm
     release: openfaas
@@ -1175,7 +1180,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1197,7 +1202,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: nats
     heritage: Helm
     release: openfaas
@@ -1221,7 +1226,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1241,7 +1246,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1258,7 +1263,7 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "caf179f8b97d266602c58ad66919126f88487acf6c366ed5a603ae52b37424cb"
+        checksum/alertmanager-config: "1a685f751f19e94d66eeddda51529330084e6cdc9be141a0bc4e0c7bc1295df3"
     spec:
       containers:
       - name: alertmanager
@@ -1312,7 +1317,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: basic-auth-plugin
     heritage: Helm
     release: openfaas
@@ -1375,7 +1380,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1407,7 +1412,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/gateway:0.21.1
+        image: ghcr.io/openfaas/gateway:0.21.3
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -1519,7 +1524,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: nats
     heritage: Helm
     release: openfaas
@@ -1579,7 +1584,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1596,7 +1601,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "8d7c79cb4182481fb000148a2ec046662065daf4a78616bb291073c8e2f49266"
+        checksum/prometheus-config: "c5b53b216a3d4316b8207839356e160dc382817b21fe73a028f1a198e623619f"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
@@ -1651,7 +1656,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-9.0.2
+    chart: openfaas-10.0.8
     component: queue-worker
     heritage: Helm
     release: openfaas
