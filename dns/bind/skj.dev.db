@@ -1,7 +1,7 @@
 $ORIGIN skj.dev.
 $TTL 86400
 @	    IN      SOA	ns.skj.dev.	sean.skj.dev. (
-		2001062501 ; serial
+		2022021401 ; serial
 		21600      ; refresh after 6 hours
 		3600       ; retry after 1 hour
 		604800     ; expire after 1 week
@@ -20,5 +20,5 @@ git               IN  CNAME   skj.dev.
 gw                IN  CNAME   skj.dev.
 tables            IN  CNAME   skj.dev.
 argocd            IN  CNAME   skj.dev.
-yac               IN  CNAME   skj.dev.
+yac               IN  A       10.0.1.206
 
