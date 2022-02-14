@@ -1,0 +1,20 @@
+namespace: dns
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+configMapGenerator:
+  - name: named
+    files:
+      - beezuscomplex.com.db
+      - skj.dev.db
+      - skj.wiki.db
+      - videotranscoding.wiki.db
+      - stereopinions.net.db
+      - splashof.ink.db
+      - named.conf
+
+images:
+  - name: ubuntu/bind9
+    newTag: 9.16-20.04_beta

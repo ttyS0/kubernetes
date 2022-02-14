@@ -1,0 +1,24 @@
+$ORIGIN skj.dev.
+$TTL 86400
+@	    IN      SOA	ns.skj.dev.	sean.skj.dev. (
+		2001062501 ; serial
+		21600      ; refresh after 6 hours
+		3600       ; retry after 1 hour
+		604800     ; expire after 1 week
+		86400 )    ; minimum TTL of 1 day
+;
+;
+
+                  IN  NS      ns.skj.dev.
+
+@                 IN  A       10.0.1.200
+ns                IN  A       10.0.1.208
+vault             IN  CNAME   skj.dev.
+tautulli          IN  CNAME   skj.dev.
+nc                IN  CNAME   skj.dev.
+git               IN  CNAME   skj.dev.
+gw                IN  CNAME   skj.dev.
+tables            IN  CNAME   skj.dev.
+argocd            IN  CNAME   skj.dev.
+yac               IN  CNAME   skj.dev.
+
