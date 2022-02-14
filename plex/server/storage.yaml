@@ -8,7 +8,7 @@ spec:
     storage: 100Ti
   volumeMode: Filesystem
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs
   mountOptions:
