@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: movie-classic-transcode
+  namespace: plex
+  labels:
+    type: transcode
+spec:
+  schedule: "0 0 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      parallelism: 4
+      template:
+        metadata:
+          labels:
+            type: transcode
+        spec:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: type
+                        operator: In
+                        values:
+                          - transcode
+                  topologyKey: "kubernetes.io/hostname"
+          containers:
+            - name: classic-transcode
+              image: ghcr.io/ttys0/other-transcode:sw-latest
+              command: [ "/opt/bin/transcode.sh" ]
+              imagePullPolicy: IfNotPresent
+              resources:
+                requests:
+                  cpu: "1"
+                limits:
+                  cpu: "1"
+              volumeMounts:
+                - mountPath: /opt/bin/transcode.sh
+                  subPath: transcode.sh
+                  name: transcode-script
+                - mountPath: /plex
+                  name: plex-media
+                - mountPath: /tmp/transcode
+                  name: temp-transcode
+          restartPolicy: Never
+          volumes:
+            - name: transcode-script
+              configMap:
+                name: transcode-script
+                defaultMode: 0555
+            - name: plex-media
+              persistentVolumeClaim:
+                claimName: plex-media
+            - name: temp-transcode
+              emptyDir: {}

@@ -1,0 +1,9 @@
+namespace: plex
+
+resources:
+  - cronjob.yaml
+
+configMapGenerator:
+  - name: transcode-script
+    files:
+      - transcode.sh
