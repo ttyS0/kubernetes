@@ -4,6 +4,10 @@ resources:
   - cronjob.yaml
 
 configMapGenerator:
-  - name: transcode-script
+  - name: transcode
     files:
       - transcode.sh
+
+images:
+  - name: ghcr.io/ttys0/other-transcode
+    newTag: sw-0.10.0-3

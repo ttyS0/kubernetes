@@ -6,7 +6,7 @@ metadata:
   labels:
     type: transcode
 spec:
-  schedule: "0 0 * * *"
+  schedule: "31 5 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -43,19 +43,20 @@ spec:
               volumeMounts:
                 - mountPath: /opt/bin/transcode.sh
                   subPath: transcode.sh
-                  name: transcode-script
+                  name: transcode
                 - mountPath: /plex
-                  name: plex-media
+                  name: plex
                 - mountPath: /tmp/transcode
-                  name: temp-transcode
+                  name: temp
           restartPolicy: Never
           volumes:
-            - name: transcode-script
+            - name: transcode
               configMap:
-                name: transcode-script
+                name: transcode
                 defaultMode: 0555
-            - name: plex-media
+            - name: plex
               persistentVolumeClaim:
                 claimName: plex-media
-            - name: temp-transcode
+                readOnly: false
+            - name: temp
               emptyDir: {}

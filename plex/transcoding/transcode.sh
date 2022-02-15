@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Random micro sleep to mitigate simultaneous startup race condition.
-sleep .${RANDOM:1:2}
-
 shopt -s nullglob
 FILES=(/plex/originals/inbox/*.mkv)
 shopt -u nullglob
@@ -11,7 +8,10 @@ if [ "${#FILES}" -ne 0 ]; then
 
   for SOURCE in "${FILES[@]}"; do
 
-    if [ -f "${SOURCE%.mkv}.inprogress"]; then
+    # Random micro sleep to mitigate simultaneous startup race condition.
+    sleep .${RANDOM:1:2}
+
+    if [ -f "${SOURCE%.mkv}.inprogress" ]; then
       continue
     fi
 
