@@ -6,11 +6,11 @@ metadata:
   labels:
     type: transcode
 spec:
-  schedule: "31 5 * * *"
+  schedule: "10 22 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
-      parallelism: 4
+      parallelism: 3
       template:
         metadata:
           labels:
@@ -37,9 +37,9 @@ spec:
               imagePullPolicy: IfNotPresent
               resources:
                 requests:
-                  cpu: "2"
+                  cpu: "4"
                 limits:
-                  cpu: "2"
+                  cpu: "4"
               volumeMounts:
                 - mountPath: /opt/bin/transcode.sh
                   subPath: transcode.sh
