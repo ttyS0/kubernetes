@@ -37,9 +37,9 @@ spec:
               imagePullPolicy: IfNotPresent
               resources:
                 requests:
-                  cpu: "1"
+                  cpu: "2"
                 limits:
-                  cpu: "1"
+                  cpu: "2"
               volumeMounts:
                 - mountPath: /opt/bin/transcode.sh
                   subPath: transcode.sh
