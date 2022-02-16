@@ -22,8 +22,7 @@ if [ "${#FILES}" -ne 0 ]; then
 
     if [ "$?" -eq 0 ]; then
       mv "${SOURCE##*/}" /plex/rips/movies/
-      cp "${SOURCE}" /plex/originals/movies/
-      rm "${SOURCE}"
+      mv "${SOURCE}" /plex/originals/movies/
       rm "${SOURCE%.mkv}.inprogress"
     else
       echo "something bad happened!"
