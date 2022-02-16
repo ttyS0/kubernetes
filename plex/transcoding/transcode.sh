@@ -11,7 +11,7 @@ if [ "${#FILES}" -ne 0 ]; then
     # Random micro sleep to mitigate simultaneous startup race condition.
     sleep .${RANDOM:1:2}
 
-    if [ -f "${SOURCE%.mkv}.inprogress" ]; then
+    if [ -f "${SOURCE%.mkv}.inprogress" ] || [ ! -f "${SOURCE}" ]; then
       continue
     fi
 
@@ -32,6 +32,4 @@ if [ "${#FILES}" -ne 0 ]; then
   done
 
 fi
-
-
 
