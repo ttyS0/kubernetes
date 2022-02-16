@@ -6,7 +6,7 @@ metadata:
   labels:
     type: transcode
 spec:
-  schedule: "10 22 * * *"
+  schedule: "0 5 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:

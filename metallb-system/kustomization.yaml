@@ -1,6 +1,6 @@
 namespace: metallb-system
 
 resources:
-  - github.com/metallb/metallb/manifests?ref=v0.12.0
+  - github.com/metallb/metallb/manifests?ref=v0.12.1
   - configmap.yaml
   - secret.yaml
