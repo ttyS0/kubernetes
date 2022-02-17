@@ -38,8 +38,8 @@ if [ "${#FILES}" -ne 0 ]; then
     /usr/local/bin/classic-transcode "src/${SOURCE##*/}"
 
     # The exit code can't be trusted, so do a sanity check based on duration
-    ORIG=$(/usr/local/bin/ffprobe "src/${SOURCE##*/}" | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
-    NEW=$(/usr/local/bin/ffprobe "${SOURCE##*/}" | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
+    ORIG=$(/usr/local/bin/ffprobe "src/${SOURCE##*/}" 2>&1 | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
+    NEW=$(/usr/local/bin/ffprobe "${SOURCE##*/}" 2>&1 | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
 
     # If the duration checks out, copy the transcode to Plex, and clean up
     if [ "${NEW}" == "${ORIG}" ]; then
