@@ -25,10 +25,10 @@ if [ "${#FILES}" -ne 0 ]; then
     cp "${SOURCE}" src/
 
     # Verify the copied source file
-    ORIG=$(wc -c "${SOURCE}" | cut -d' ' -f1)
-    NEW=$(wc -c "src/${SOURCE##*/}" | cut -d' ' -f1)
+    ORIG=$(md5sum "${SOURCE}" | cut -d' ' -f1)
+    NEW=$(md5sum "src/${SOURCE##*/}" | cut -d' ' -f1)
 
-    if [ "${NEW}" -ne "${ORIG}" ]; then
+    if [ "${NEW}" != "${ORIG}" ]; then
       echo "file mismatch!"
       rm "${SOURCE%.mkv}.inprogress"
       exit 1
