@@ -18,15 +18,28 @@ if [ "${#FILES}" -ne 0 ]; then
     touch "${SOURCE%.mkv}.inprogress"
 
     cd $(mktemp -d -p /tmp/transcode)
-    /usr/local/bin/classic-transcode "${SOURCE}"
+    mkdir src
+    cp "${SOURCE}" src/
 
-    if [ "$?" -eq 0 ]; then
-      mv "${SOURCE##*/}" /plex/rips/movies/
+    # Check size
+    ORIG=$(wc -c "${SOURCE}" | cut -d' ' -f1)
+    NEW=$(wc -c "src/${SOURCE##*/}" | cut -d' ' -f1)
+
+    if [ "${NEW}" -ne "${ORIG}" ]; then
+      echo "file mismatch!"
+      rm "${SOURCE%.mkv}.inprogress"
+      exit 1
+    fi
+
+    /usr/local/bin/classic-transcode "src/${SOURCE##*/}"
+
+    ORIG=$(/usr/local/bin/ffprobe "src/${SOURCE##*/}" | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
+    NEW=$(/usr/local/bin/ffprobe "${SOURCE##*/}" | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
+
+    if [ "${NEW}" == "${ORIG}" ]; then
+      cp "${SOURCE##*/}" /plex/rips/movies/
       mv "${SOURCE}" /plex/originals/movies/
       rm "${SOURCE%.mkv}.inprogress"
-    else
-      echo "something bad happened!"
-      exit 1
     fi
 
   done

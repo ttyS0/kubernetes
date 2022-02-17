@@ -1,7 +1,7 @@
 namespace: plex
 
 resources:
-  - cronjob.yaml
+  - job.yaml
 
 configMapGenerator:
   - name: transcode
