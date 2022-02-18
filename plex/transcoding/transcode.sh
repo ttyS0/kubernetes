@@ -46,7 +46,7 @@ if [ "${#FILES}" -ne 0 ]; then
       cp "${SOURCE##*/}" /plex/rips/movies/
       mv "${SOURCE}" /plex/originals/movies/
       rm "${SOURCE%.mkv}.inprogress"
-      rm -rf /tmp/tmp.*
+      rm -rf /tmp/transcode
     else
       echo "something went wrong!"
       exit 1
