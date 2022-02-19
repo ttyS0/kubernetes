@@ -12,7 +12,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs
   mountOptions:
-    - soft
+    - hard
     - timeo=600
     - retrans=3
     - proto=tcp
