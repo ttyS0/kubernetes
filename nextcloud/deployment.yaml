@@ -16,6 +16,7 @@ spec:
         app.kubernetes.io/name: nextcloud
     spec:
       securityContext:
+        runAsUser: 33
         fsGroup: 1000
       containers:
         - name: nextcloud
