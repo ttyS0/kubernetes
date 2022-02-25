@@ -12,7 +12,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs
   mountOptions:
-    - soft
+    - hard
     - timeo=600
     - retrans=3
     - proto=tcp
@@ -21,7 +21,8 @@ spec:
     - nocto
     - noatime
     - nodiratime
-    - nfsvers=3
+    - nfsvers=3.0
+    - vers=3.0
   nfs:
     path: /data/nextcloud/data/sean/files/Comics
     server: 10.0.1.15
