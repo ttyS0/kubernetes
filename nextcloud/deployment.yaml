@@ -16,7 +16,6 @@ spec:
         app.kubernetes.io/name: nextcloud
     spec:
       securityContext:
-        runAsUser: 33
         fsGroup: 1000
       containers:
         - name: nextcloud
@@ -54,12 +53,12 @@ spec:
           volumeMounts:
             - mountPath: /var/www/html
               name: nextcloud
-            - mountPath: /var/www/html/data
+            - mountPath: /var/www/html/data/sean
               name: data
       volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: nextcloud-data
         - name: nextcloud
           persistentVolumeClaim:
             claimName: nextcloud
+        - name: data
+          persistentVolumeClaim:
+            claimName: nextcloud-data
