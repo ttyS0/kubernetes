@@ -21,7 +21,7 @@ spec:
     - nocto
     - noatime
     - nodiratime
-    - nfsvers=4.1
+    - nfsvers=3
   nfs:
     path: /nextcloud/data/sean/files/Comics
     server: 10.0.1.15
