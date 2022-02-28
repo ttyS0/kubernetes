@@ -22,7 +22,7 @@ patchesJson6902:
 
 images:
   - name: requarks/wiki
-    newTag: 2.5.274
+    newTag: 2.5.276
 
 commonLabels:
   instance: videotranscoding
