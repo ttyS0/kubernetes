@@ -62,3 +62,9 @@ prometheus:
           resources:
             requests:
               storage: 50Gi
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeEtcd:
+  enabled: false
