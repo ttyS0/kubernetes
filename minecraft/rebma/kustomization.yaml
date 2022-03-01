@@ -23,7 +23,7 @@ patchesJson6902:
 
 images:
   - name: ghcr.io/ttys0/spigot
-    newTag: 1.18.1
+    newTag: 1.18.2
 
 commonLabels:
   world: rebma
