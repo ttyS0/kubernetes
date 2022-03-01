@@ -1,0 +1,70 @@
+# helm upgrade prometheus prometheus-community/kube-prometheus-stack \
+#  --install \
+#  --namespace prometheus \
+#  --version 33.1.0 \
+#  --values values.yaml
+
+defaultRules:
+  rules:
+    kubeProxy: false
+alertmanager:
+  ingress:
+    enabled: true
+    ingressClassName: nginx-internal
+    annotations:
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - alertmanager.skj.dev
+    paths:
+      - "/"
+    tls:
+      - secretName: alertmanager-skj-dev-cert
+        hosts:
+          - alertmanager.skj.dev
+  storage:
+    volumClaimTemplate:
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+grafana:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - grafana.skj.dev
+    tls:
+      - secretName: grafana-skj-dev-cert
+        hosts:
+          - grafana.skj.dev
+kubeProxy:
+  enabled: false
+prometheus:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - prometheus.skj.dev
+    paths:
+      - "/"
+    tls:
+      - secretName: prometheus.skj.dev
+        hosts:
+          - prometheus.skj.dev
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeEtcd:
+  enabled: false
