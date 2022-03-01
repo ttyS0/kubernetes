@@ -21,4 +21,7 @@ gw                IN  CNAME   skj.dev.
 tables            IN  CNAME   skj.dev.
 argocd            IN  CNAME   skj.dev.
 yac               IN  A       10.0.1.206
+alertmanager      IN  CNAME   skj.dev.
+grafana           IN  CNAME   skj.dev.
+prometheus        IN  CNAME   skj.dev.
 
