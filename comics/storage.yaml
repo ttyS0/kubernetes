@@ -23,7 +23,7 @@ spec:
     - nodiratime
     - nfsvers=4.1
   nfs:
-    path: /nextcloud/data/sean/files/Comics
+    path: /nextcloud/files/Comics
     server: 10.0.1.15
 ---
 apiVersion: v1
