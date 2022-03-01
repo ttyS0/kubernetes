@@ -21,13 +21,14 @@ alertmanager:
       - secretName: alertmanager-skj-dev-cert
         hosts:
           - alertmanager.skj.dev
-  storage:
-    volumClaimTemplate:
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 10Gi
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
 grafana:
   ingress:
     enabled: true
@@ -39,8 +40,6 @@ grafana:
       - secretName: grafana-skj-dev-cert
         hosts:
           - grafana.skj.dev
-kubeProxy:
-  enabled: false
 prometheus:
   ingress:
     enabled: true
@@ -62,6 +61,8 @@ prometheus:
           resources:
             requests:
               storage: 50Gi
+kubeProxy:
+  enabled: false
 kubeControllerManager:
   enabled: false
 kubeScheduler:
