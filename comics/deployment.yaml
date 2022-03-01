@@ -16,6 +16,7 @@ spec:
         app: yac
     spec:
       securityContext:
+        runAsUser: 33
         fsGroup: 33
       containers:
         - image: xthursdayx/yacreaderlibrary-server-docker:latest
