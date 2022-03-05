@@ -1,6 +1,6 @@
 # helm template ingress-nginx-internal ingress-nginx/ingress-nginx \
 #  --namespace ingress-nginx-internal \
-#  --version 4.0.16 \
+#  --version 4.0.18 \
 #  --values internal-values.yaml > internal.yaml
 
 controller:
@@ -10,8 +10,13 @@ controller:
     enabled: true
     default: true
   ingressClassByName: true
-  admissionWebhooks:
-    enabled: false
+  ingressClass: nginx-internal
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: "prometheus"
   extraArgs:
     default-backend-service: "ghost/static"
     enable-ssl-passthrough: "true"
