@@ -44,8 +44,8 @@ if [ "${#FILES}" -ne 0 ]; then
 
     # The exit code can't be trusted, so do a sanity check based on duration
     echo "Performing duration check ..."
-    ORIG=$(/usr/local/bin/ffprobe "src/${SOURCE##*/}" 2>&1 | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
-    NEW=$(/usr/local/bin/ffprobe "${SOURCE##*/}" 2>&1 | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
+    ORIG=$(/usr/local/bin/ffprobe "src/${SOURCE##*/}" 2>&1 | awk 'c&&!--c;/Video:\ h264/{c=4}' | cut -d':' -f2 | cut -d ' ' -f2)
+    NEW=$(/usr/local/bin/ffprobe "${SOURCE##*/}" 2>&1 | awk 'c&&!--c;/Video:\ h264/{c=4}' | cut -d':' -f2 | cut -d ' ' -f2)
 
     # If the duration checks out, backup the original,
     #   copy the transcode to the Plex library, and clean up

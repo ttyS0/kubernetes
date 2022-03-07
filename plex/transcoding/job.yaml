@@ -7,7 +7,6 @@ metadata:
     type: transcode
 spec:
   parallelism: 3
-  backoffLimit: 12
   ttlSecondsAfterFinished: 43200
   template:
     metadata:
