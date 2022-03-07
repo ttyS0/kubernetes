@@ -42,12 +42,12 @@ if [ "${#FILES}" -ne 0 ]; then
     echo "Transcoding ${SOURCE##*/} ..."
     /usr/local/bin/classic-transcode "src/${SOURCE##*/}"
 
-    # The exit code can't be trusted, so do a sanity check based on duration
+    # The exit code can't be trusted, so do a sanity check based on frame count
     echo "Performing duration check ..."
     ORIG=$(/usr/local/bin/ffprobe "src/${SOURCE##*/}" 2>&1 | awk 'c&&!--c;/Video:\ h264/{c=4}' | cut -d':' -f2 | cut -d ' ' -f2)
     NEW=$(/usr/local/bin/ffprobe "${SOURCE##*/}" 2>&1 | awk 'c&&!--c;/Video:\ h264/{c=4}' | cut -d':' -f2 | cut -d ' ' -f2)
 
-    # If the duration checks out, backup the original,
+    # If the frame count checks out, backup the original,
     #   copy the transcode to the Plex library, and clean up
     if [ "${NEW}" == "${ORIG}" ]; then
       # If original's parent directory doesn't exist, create it.
