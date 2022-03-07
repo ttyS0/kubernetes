@@ -43,9 +43,9 @@ if [ "${#FILES}" -ne 0 ]; then
     /usr/local/bin/classic-transcode "src/${SOURCE##*/}"
 
     # The exit code can't be trusted, so do a sanity check based on frame count
-    echo "Performing duration check ..."
-    ORIG=$(/usr/local/bin/ffprobe "src/${SOURCE##*/}" 2>&1 | awk 'c&&!--c;/Video:\ h264/{c=4}' | cut -d':' -f2 | cut -d ' ' -f2)
-    NEW=$(/usr/local/bin/ffprobe "${SOURCE##*/}" 2>&1 | awk 'c&&!--c;/Video:\ h264/{c=4}' | cut -d':' -f2 | cut -d ' ' -f2)
+    echo "Performing frame count check ..."
+    ORIG=$(/usr/local/bin/ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 "src/${SOURCE##*/}" )
+    NEW=$(/usr/local/bin/ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 "${SOURCE##*/}" )
 
     # If the frame count checks out, backup the original,
     #   copy the transcode to the Plex library, and clean up
