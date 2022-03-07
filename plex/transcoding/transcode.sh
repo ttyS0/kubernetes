@@ -69,7 +69,7 @@ if [ "${#FILES}" -ne 0 ]; then
       echo "Cleaning up tmp space ..."
       rm -rf /tmp/transcode/tmp.*
     else
-      echo "Transcode duration (${NEW}) doesn't match source duration (${ORIG})!"
+      echo "Transcode frame count (${NEW}) doesn't match source frame count (${ORIG})!"
       echo "Exiting!"
       rm "${SOURCE%.mkv}.inprogress"
       exit 1
