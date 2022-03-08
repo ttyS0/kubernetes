@@ -42,21 +42,17 @@ if [ "${#FILES}" -ne 0 ]; then
     echo "Transcoding ${SOURCE##*/} ..."
     /usr/local/bin/classic-transcode "src/${SOURCE##*/}"
 
-    # The exit code can't be trusted, so do a sanity check based on frame count
-    # Doing a duration check isn't reliable because of roundoff. Doing a frame
-    #  count check isn't reliable because sometimes there might be a duplicate
-    #  frame, and sometimes ffprobe sticks a comma at the end of the result.
-    #  Until I can think of a more reliable check, I'm commenting out the post-
-    #  transcode checking. In the event of a problem, I still have the source
-    #  rip, and can transcode manually.
-#    echo "Performing frame count check ..."
-#    ORIG=$(/usr/local/bin/ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 "src/${SOURCE##*/}" )
-#    NEW=$(/usr/local/bin/ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 "${SOURCE##*/}" )
+    # The exit code can't be trusted, so do a sanity check based on duration.
+    # The duration check can also generate false positives, so it's only used
+    #  here as a warning, with the discrepancy being written to the .transcoded
+    #  file just in case there's an actual issue with the transcode.
+    echo "Performing duration check ..."
+    ORIG=$(/usr/local/bin/ffprobe "src/${SOURCE##*/}" 2>&1 | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
+    NEW=$(/usr/local/bin/ffprobe "${SOURCE##*/}" 2>&1 | awk '/Duration/ { print $2 }' | cut -d'.' -f1)
 
-#    # If the frame count checks out, backup the original,
-#    #   copy the transcode to the Plex library, and clean up
-#    if [ "${NEW}" == "${ORIG}" ]; then
-      # If original's parent directory doesn't exist, create it.
+    # Copy the transcode to the Plex library, and clean up.
+
+    # If original's parent directory doesn't exist, create it.
     DIR="${SOURCE%/*}"
     if [ ! -d "${DIR/rips/originals}" ]; then
       mkdir -p "${DIR/rips/originals}"
@@ -72,14 +68,12 @@ if [ "${#FILES}" -ne 0 ]; then
     rm "${SOURCE%.mkv}.inprogress"
     touch "${SOURCE%.mkv}.transcoded"
 
+    if [ "${NEW}" != "${ORIG}" ]; then
+      echo "Transcode duration (${NEW}) doesn't match source duration (${ORIG})!" > "${SOURCE%.mkv}.transcoded"
+    fi
+
     echo "Cleaning up tmp space ..."
     rm -rf /tmp/transcode/tmp.*
-#    else
-#      echo "Transcode frame count (${NEW}) doesn't match source frame count (${ORIG})!"
-#      echo "Exiting!"
-#      rm "${SOURCE%.mkv}.inprogress"
-#      exit 1
-#    fi
 
   done
 
