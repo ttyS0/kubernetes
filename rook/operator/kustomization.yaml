@@ -4,6 +4,7 @@ resources:
   - crds.yaml
   - common.yaml
   - operator.yaml
+  - toolbox.yaml
   - monitoring/csi-metrics-service-monitor.yaml
   - monitoring/prometheus.yaml
   - monitoring/rbac.yaml

@@ -3,6 +3,5 @@ namespace: rook-ceph
 resources:
   - cluster.yaml
   - storageclass.yaml
-  - toolbox.yaml
 
 
