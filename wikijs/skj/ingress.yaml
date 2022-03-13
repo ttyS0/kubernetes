@@ -25,27 +25,27 @@ spec:
         - skj.wiki
       secretName: skj-wiki-cert
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: skj-ext
-  namespace: wikijs
-  labels:
-    instance: skj
-spec:
-  ingressClassName: "nginx-external"
-  rules:
-    - host: "skj.wiki"
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: skj
-                port:
-                  number: 80
-  tls:
-    - hosts:
-        - skj.wiki
-      secretName: skj-wiki-cert
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: skj-ext
+#  namespace: wikijs
+#  labels:
+#    instance: skj
+#spec:
+#  ingressClassName: "nginx-external"
+#  rules:
+#    - host: "skj.wiki"
+#      http:
+#        paths:
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: skj
+#                port:
+#                  number: 80
+#  tls:
+#    - hosts:
+#        - skj.wiki
+#      secretName: skj-wiki-cert
