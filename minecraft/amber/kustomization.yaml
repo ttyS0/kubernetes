@@ -16,7 +16,4 @@ patchesJson6902:
       version: v1
     path: servicePatch.yaml
 
-images:
-  - name: ghcr.io/ttys0/spigot
-    newTag: 1.18.2
 
