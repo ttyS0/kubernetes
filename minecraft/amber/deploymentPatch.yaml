@@ -1,0 +1,20 @@
+- op: replace
+  path: /metadata/name
+  value: amber
+- op: replace
+  path: /spec/template/spec/containers/0/name
+  value: amber
+- op: replace
+  path: /spec/template/spec/containers/0/workingDir
+  value: "/minecraft/worlds/amber"
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: SPIGOT_DIR
+    value: "/minecraft/worlds/amber"
+- op: replace
+  path: /spec/template/metadata/labels/world
+  value: amber
+- op: replace
+  path: /spec/selector/matchLabels/world
+  value: amber

@@ -1,0 +1,21 @@
+- op: replace
+  path: /metadata/name
+  value: rebma
+- op: replace
+  path: /spec/template/spec/containers/0/name
+  value: rebma
+- op: replace
+  path: /spec/template/spec/containers/0/workingDir
+  value: "/minecraft/worlds/rebma"
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: SPIGOT_DIR
+    value: "/minecraft/worlds/rebma"
+- op: replace
+  path: /spec/template/metadata/labels/world
+  value: rebma
+- op: replace
+  path: /spec/selector/matchLabels/world
+  value: rebma
+

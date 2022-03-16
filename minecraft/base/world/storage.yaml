@@ -1,11 +1,28 @@
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
-  name: world-data
+  name: minecraft
   namespace: minecraft
 spec:
+  capacity:
+    storage: 10Ti
+  volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
+  mountOptions:
+    - hard
+    - timeo=600
+    - retrans=3
+    - proto=tcp
+    - rsize=4096
+    - wsize=4096
+    - noacl
+    - nocto
+    - noatime
+    - nodiratime
+    - nfsvers=4.1
+  nfs:
+    path: /minecraft
+    server: 10.0.1.15

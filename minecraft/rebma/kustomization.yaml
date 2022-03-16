@@ -6,15 +6,10 @@ resources:
 
 patchesJson6902:
   - target:
-      kind: PersistentVolumeClaim
-      name: world-data
-      version: v1
-    path: pvcNamePatch.yaml
-  - target:
       kind: Deployment
       name: world
       version: v1
-    path: deployPatch.yaml
+    path: deploymentPatch.yaml
   - target:
       kind: Service
       name: world
@@ -25,5 +20,3 @@ images:
   - name: ghcr.io/ttys0/spigot
     newTag: 1.18.2
 
-commonLabels:
-  world: rebma

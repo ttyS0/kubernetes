@@ -18,6 +18,32 @@ spec:
         world: world
     spec:
       securityContext:
-        runAsUser: 1000
-        fsGroup: 1000
+        runAsUser: 1100
+        fsGroup: 1100
+      volumes:
+        - name: world-data
+          persistentVolumeClaim:
+            claimName: minecraft
+      containers:
+        - name: world
+          image: ghcr.io/ttys0/spigot:latest
+          workingDir: "/minecraft/worlds/worldname"
+          resources:
+            limits:
+              memory: "6Gi"
+            requests:
+              cpu: 1
+              memory: "4Gi"
+          ports:
+            - containerPort: 25565
+            - containerPort: 8123
+            - containerPort: 25575
+          volumeMounts:
+            - name: world-data
+              mountPath: /minecraft/worlds
+          env:
+            - name: JVM_OPTS
+              value: "-Xms4G -Xmx4G -Djava.util.concurrent.ForkJoinPool.common.parallelism=1"
+            - name: SPIGOT_OPTS
+              value: "nogui --noconsole"
 
