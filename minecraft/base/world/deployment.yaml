@@ -4,7 +4,7 @@ metadata:
   name: world
   namespace: minecraft
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:

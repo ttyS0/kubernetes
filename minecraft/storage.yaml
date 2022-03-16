@@ -26,3 +26,16 @@ spec:
   nfs:
     path: /minecraft
     server: 10.0.1.15
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minecraft
+  namespace: minecraft
+spec:
+  storageClassName: nfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Ti
