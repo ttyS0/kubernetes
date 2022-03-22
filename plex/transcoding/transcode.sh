@@ -4,10 +4,10 @@ FILES=(/plex/rips/movies/*.mkv /plex/rips/series/*/*.mkv)
 
 if [ "${#FILES}" -ne 0 ]; then
 
-  for SOURCE in "${FILES[@]}"; do
+  # Random sleep to mitigate simultaneous startup race condition.
+  sleep ${RANDOM:1:2}
 
-    # Random sleep to mitigate simultaneous startup race condition.
-    sleep ${RANDOM:1:2}
+  for SOURCE in "${FILES[@]}"; do
 
     # Find a file that isn't already in progress or transcoded
     if [ -f "${SOURCE%.mkv}.inprogress" ] || [ -f "${SOURCE%.mkv}.transcoded" ] || [ ! -f "${SOURCE}" ]; then
