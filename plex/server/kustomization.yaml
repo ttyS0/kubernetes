@@ -7,4 +7,4 @@ resources:
 
 images:
   - name: plexinc/pms-docker
-    newTag: 1.25.7.5604-980a13e02
+    newTag: 1.25.8.5663-e071c3d62
