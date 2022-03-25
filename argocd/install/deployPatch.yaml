@@ -11,4 +11,4 @@
           name: argocd-gpg-keys-cm
 - op: replace
   path: /spec/template/spec/containers/0/image
-  value: ghcr.io/ttys0/argocd:v2.2.3
+  value: ghcr.io/ttys0/argocd:v2.3.2
