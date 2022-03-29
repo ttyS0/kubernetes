@@ -18,7 +18,7 @@ spec:
       securityContext:
         fsGroup: 999
       containers:
-        - image: jacobalberty/unifi:v6.5.55
+        - image: jacobalberty/unifi:latest
           env:
             - name: RUNAS_UID0
               value: "false"

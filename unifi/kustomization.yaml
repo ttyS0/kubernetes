@@ -4,4 +4,6 @@ resources:
   - deployment.yaml
   - service.yaml
 
-
+images:
+  - name: jacobalberty/unifi
+    newTag: v7.0.23
