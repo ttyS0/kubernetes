@@ -10,7 +10,7 @@ spec:
     path: rook/operator
     targetRevision: HEAD
   destination:
-    namespace: dns
+    namespace: rook-ceph
     server: https://kubernetes.default.svc
   syncPolicy:
     syncOptions:
