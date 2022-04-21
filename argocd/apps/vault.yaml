@@ -12,9 +12,6 @@ spec:
     helm:
       releaseName: vault
       values: |
-        injector:
-          agentImage:
-            tag: "1.10.0"
         server:
           image:
             tag: "1.10.0"
