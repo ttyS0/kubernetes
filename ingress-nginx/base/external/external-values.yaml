@@ -1,6 +1,6 @@
 # helm template ingress-nginx-external ingress-nginx/ingress-nginx \
 #  --namespace ingress-nginx-external \
-#  --version 4.0.19 \
+#  --version 4.1.0 \
 #  --values external-values.yaml > external.yaml
 
 controller:
@@ -16,8 +16,6 @@ controller:
       enabled: true
       additionalLabels:
         release: "prometheus"
-  admissionWebhooks:
-    enabled: false
   extraArgs:
     default-backend-service: "ghost/static"
 
