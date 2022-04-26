@@ -1,0 +1,345 @@
+# helm template connect -n op 1password/connect \
+#  --set operator.create=true > connect.yaml
+---
+# Source: connect/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: onepassword-connect-operator
+  namespace: op
+  labels:
+    helm.sh/chart: connect-1.7.1
+    app.kubernetes.io/name: connect
+    app.kubernetes.io/instance: connect
+    app.kubernetes.io/version: "1.5.1"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: connect/templates/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: onepassword-connect-operator
+  labels:
+    helm.sh/chart: connect-1.7.1
+    app.kubernetes.io/name: connect
+    app.kubernetes.io/instance: connect
+    app.kubernetes.io/version: "1.5.1"
+    app.kubernetes.io/managed-by: Helm
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  - services/finalizers
+  - endpoints
+  - persistentvolumeclaims
+  - events
+  - configmaps
+  - secrets
+  - namespaces
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - daemonsets
+  - replicasets
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs:
+  - get
+  - create
+- apiGroups:
+  - apps
+  resourceNames:
+  - onepassword-connect-operator
+  resources:
+  - deployments/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+- apiGroups:
+  - apps
+  resources:
+  - replicasets
+  - deployments
+  verbs:
+  - get
+- apiGroups:
+  - onepassword.com
+  resources:
+  - '*'
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+---
+# Source: connect/templates/clusterrolebinding.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: onepassword-connect-operator
+  labels:
+    helm.sh/chart: connect-1.7.1
+    app.kubernetes.io/name: connect
+    app.kubernetes.io/instance: connect
+    app.kubernetes.io/version: "1.5.1"
+    app.kubernetes.io/managed-by: Helm
+subjects:
+- kind: ServiceAccount
+  name: onepassword-connect-operator
+  namespace: op
+roleRef:
+  kind: ClusterRole
+  name: onepassword-connect-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: connect/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: onepassword-connect
+  namespace: op
+  labels:
+    app.kubernetes.io/component: connect
+    helm.sh/chart: connect-1.7.1
+    app.kubernetes.io/name: connect
+    app.kubernetes.io/instance: connect
+    app.kubernetes.io/version: "1.5.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app: onepassword-connect
+  ports:
+    - port: 8081
+      name: connect-sync
+    - port: 8080
+      name: connect-api
+---
+# Source: connect/templates/connect-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onepassword-connect
+  namespace: op
+  labels:
+    app.kubernetes.io/component: connect
+    helm.sh/chart: connect-1.7.1
+    app.kubernetes.io/name: connect
+    app.kubernetes.io/instance: connect
+    app.kubernetes.io/version: "1.5.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app: onepassword-connect
+  template:
+    metadata:
+      labels:
+        app: onepassword-connect
+        version: "1.5.1"
+        app.kubernetes.io/component: connect
+    spec:
+      volumes:
+        - name: shared-data
+          emptyDir:
+            {}
+        - name: credentials
+          secret:
+            secretName: op-credentials
+      tolerations:
+        []
+      containers:
+        - name: connect-api
+          image: 1password/connect-api:1.5.1
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
+            allowPrivilegeEscalation: false
+          resources:
+            {}
+          env:
+            - name: OP_SESSION
+              valueFrom:
+                secretKeyRef:
+                  name: op-credentials
+                  key: 1password-credentials.json
+            - name: OP_BUS_PORT
+              value: "11220"
+            - name: OP_BUS_PEERS
+              value: localhost:11221
+            - name: OP_HTTP_PORT
+              value: "8080"
+          readinessProbe:
+            httpGet:
+              path: /health
+              scheme: HTTP
+              port: 8080
+            initialDelaySeconds: 15
+          
+          livenessProbe:
+            httpGet:
+              path: /heartbeat
+              scheme: HTTP
+              port: 8080
+            failureThreshold: 3
+            periodSeconds: 30
+            initialDelaySeconds: 15
+          
+          volumeMounts:
+            - mountPath: /home/opuser/.op/data
+              name: shared-data
+        - name: connect-sync
+          image: 1password/connect-sync:1.5.1
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
+            allowPrivilegeEscalation: false
+          resources:
+            {}
+          env:
+            - name: OP_HTTP_PORT
+              value: "8081"
+            - name: OP_SESSION
+              valueFrom:
+                secretKeyRef:
+                  name: op-credentials
+                  key: 1password-credentials.json
+            - name: OP_BUS_PORT
+              value: "11221"
+            - name: OP_BUS_PEERS
+              value: localhost:11220
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 15
+          
+          livenessProbe:
+            httpGet:
+              path: /heartbeat
+              port: 8081
+              scheme: HTTP
+            failureThreshold: 3
+            periodSeconds: 30
+            initialDelaySeconds: 15
+                       
+          volumeMounts:
+            - mountPath: /home/opuser/.op/data
+              name: shared-data
+---
+# Source: connect/templates/operator-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onepassword-connect-operator
+  namespace: op
+  labels:
+    app.kubernetes.io/component: operator
+    helm.sh/chart: connect-1.7.1
+    app.kubernetes.io/name: connect
+    app.kubernetes.io/instance: connect
+    app.kubernetes.io/version: "1.5.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: onepassword-connect
+  template:
+    metadata:
+      labels:
+        name: onepassword-connect
+        app.kubernetes.io/component: operator
+    spec:
+      tolerations:
+        []
+      serviceAccountName: onepassword-connect-operator
+      containers:
+        - name: onepassword-connect
+          image: 1password/onepassword-operator:1.1.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 65532
+            runAsGroup: 65532
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+          command: ["/manager"]
+          env:
+            - name: WATCH_NAMESPACE
+              value: 
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "onepassword-connect-operator"
+            - name: OP_CONNECT_HOST
+              value: "http://onepassword-connect:8080"
+            - name: POLLING_INTERVAL
+              value: "10"
+            - name: OP_CONNECT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: onepassword-token
+                  key: token
+            - name: AUTO_RESTART
+              value: "false"
+          resources:
+            {}
+---
+# Source: connect/templates/tests/health-check.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "connect-health-check"
+  namespace: op
+  labels:
+    helm.sh/chart: connect-1.7.1
+    app.kubernetes.io/name: connect
+    app.kubernetes.io/instance: connect
+    app.kubernetes.io/version: "1.5.1"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-weight: "1"
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl
+      image: curlimages/curl
+      command: ["curl", "http://onepassword-connect:8080/health"]
