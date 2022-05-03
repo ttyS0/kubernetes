@@ -69,6 +69,18 @@ data:
             try_files $uri $uri/ =404;
         }
     }
+    
+    server {
+        listen 80;
+        server_name c3p.io;
+        root /usr/share/nginx/html/c3p.io;
+        index index.html;
+        autoindex on;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
 ---
 apiVersion: apps/v1
 kind: Deployment
