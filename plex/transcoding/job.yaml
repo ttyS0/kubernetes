@@ -6,7 +6,7 @@ metadata:
   labels:
     type: transcode
 spec:
-  parallelism: 3
+  parallelism: 4
   ttlSecondsAfterFinished: 43200
   template:
     metadata:
