@@ -604,6 +604,11 @@ spec:
                     operator: In
                     values:
                       - storage-node
+      tolerations:
+        - key: storage-node
+          operator: Exists
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
       volumes:
         - name: rook-config
           emptyDir: {}
