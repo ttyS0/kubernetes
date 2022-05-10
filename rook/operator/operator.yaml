@@ -497,8 +497,8 @@ spec:
             # - name: DISCOVER_TOLERATION_KEY
             #   value: "<KeyOfTheTaintToTolerate>"
             # (Optional) Rook Discover tolerations list. Put here list of taints you want to tolerate in YAML format.
-           - name: DISCOVER_TOLERATIONS
-             value: |
+            - name: DISCOVER_TOLERATIONS
+              value: |
                - effect: NoSchedule
                  key: node-role.kubernetes.io/control-plane
                  operator: Exists
@@ -509,8 +509,8 @@ spec:
             # - name: DISCOVER_PRIORITY_CLASS_NAME
             #   value: "<PriorityClassName>"
             # (Optional) Discover Agent NodeAffinity.
-           - name: DISCOVER_AGENT_NODE_AFFINITY
-             value: "role=storage-node"
+            - name: DISCOVER_AGENT_NODE_AFFINITY
+              value: "role=storage-node"
             # (Optional) Discover Agent Pod Labels.
             # - name: DISCOVER_AGENT_POD_LABELS
             #   value: "key1=value1,key2=value2"
