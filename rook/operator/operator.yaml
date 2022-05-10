@@ -123,15 +123,18 @@ data:
   # Labels to add to the CSI NFS Deployments and DaemonSets Pods.
   # ROOK_CSI_NFS_POD_LABELS: "key1=value1,key2=value2"
 
-  # (Optional) CephCSI provisioner NodeAffinity(applied to both CephFS and RBD provisioner).
-  CSI_PROVISIONER_NODE_AFFINITY: "ceph"
+  # (Optional) CephCSI provisioner NodeAffinity (applied to both CephFS and RBD provisioner).
+  CSI_PROVISIONER_NODE_AFFINITY: "role=storage-node"
   # (Optional) CephCSI provisioner tolerations list(applied to both CephFS and RBD provisioner).
   # Put here list of taints you want to tolerate in YAML format.
   # CSI provisioner would be best to start on the same nodes as other ceph daemons.
-  # CSI_PROVISIONER_TOLERATIONS: |
-  #   - effect: NoSchedule
-  #     key: node-role.kubernetes.io/controlplane
-  #     operator: Exists
+  CSI_PROVISIONER_TOLERATIONS: |
+   - effect: NoSchedule
+     key: node-role.kubernetes.io/controlplane
+     operator: Exists
+   - effect: NoSchedule
+     key: storage-node
+     operator: Exists
   #   - effect: NoExecute
   #     key: node-role.kubernetes.io/etcd
   #     operator: Exists
@@ -140,13 +143,13 @@ data:
   # (Optional) CephCSI plugin tolerations list(applied to both CephFS and RBD plugin).
   # Put here list of taints you want to tolerate in YAML format.
   # CSI plugins need to be started on all the nodes where the clients need to mount the storage.
-  # CSI_PLUGIN_TOLERATIONS: |
-  #   - effect: NoSchedule
-  #     key: node-role.kubernetes.io/controlplane
-  #     operator: Exists
-  #   - effect: NoExecute
-  #     key: node-role.kubernetes.io/etcd
-  #     operator: Exists
+  CSI_PLUGIN_TOLERATIONS: |
+   - effect: NoSchedule
+     key: node-role.kubernetes.io/control-plane
+     operator: Exists
+   - effect: NoSchedule
+     key: storage-node
+     operator: Exists
 
   # (Optional) CephCSI RBD provisioner NodeAffinity (if specified, overrides CSI_PROVISIONER_NODE_AFFINITY).
   # CSI_RBD_PROVISIONER_NODE_AFFINITY: "role=rbd-node"
@@ -494,20 +497,20 @@ spec:
             # - name: DISCOVER_TOLERATION_KEY
             #   value: "<KeyOfTheTaintToTolerate>"
             # (Optional) Rook Discover tolerations list. Put here list of taints you want to tolerate in YAML format.
-            # - name: DISCOVER_TOLERATIONS
-            #   value: |
-            #     - effect: NoSchedule
-            #       key: node-role.kubernetes.io/controlplane
-            #       operator: Exists
-            #     - effect: NoExecute
-            #       key: node-role.kubernetes.io/etcd
-            #       operator: Exists
+             - name: DISCOVER_TOLERATIONS
+               value: |
+                 - effect: NoSchedule
+                   key: node-role.kubernetes.io/control-plane
+                   operator: Exists
+                 - effect: NoSchedule
+                   key: storage-node
+                   operator: Exists
             # (Optional) Rook Discover priority class name to set on the pod(s)
             # - name: DISCOVER_PRIORITY_CLASS_NAME
             #   value: "<PriorityClassName>"
             # (Optional) Discover Agent NodeAffinity.
-            - name: DISCOVER_AGENT_NODE_AFFINITY
-              value: "ceph"
+             - name: DISCOVER_AGENT_NODE_AFFINITY
+               value: "role=storage-node"
             # (Optional) Discover Agent Pod Labels.
             # - name: DISCOVER_AGENT_POD_LABELS
             #   value: "key1=value1,key2=value2"

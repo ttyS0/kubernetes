@@ -57,3 +57,10 @@ spec:
           operator: "Exists"
           effect: "NoExecute"
           tolerationSeconds: 5
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "storage-node"
+          operator: "Exists"
+          effect: "NoSchedule"
+
