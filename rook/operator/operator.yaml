@@ -595,6 +595,15 @@ spec:
 
       # Uncomment it to run rook operator on the host network
       #hostNetwork: true
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: role
+                    operator: In
+                    values:
+                      - storage-node
       volumes:
         - name: rook-config
           emptyDir: {}
