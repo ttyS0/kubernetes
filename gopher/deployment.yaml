@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gopher
+  namespace: gopher
+spec:
+  selector:
+    matchLabels:
+      app: gopher
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: gopher
+    spec:
+      containers:
+        - image: joshkaiju/gophernicus:latest
+          name: gopher
+          env:
+            - name: DISABLE_VHOSTS
+              value: "true"
+            - name: DISABLE_HAPROXY
+              value: "true"
+            - name: DISABLE_USERDIRS
+              value: "true"
+          ports:
+            - containerPort: 70
+              name: gopher
+          volumeMounts:
+            - mountPath: /var/gopher
+              name: gopher-data
+      volumes:
+        - name: gopher-data
+          persistentVolumeClaim:
+            claimName: gopher-data
+
