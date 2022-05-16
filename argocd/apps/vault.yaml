@@ -8,19 +8,13 @@ spec:
   source:
     repoURL: 'https://helm.releases.hashicorp.com'
     chart: vault
-    targetRevision: 0.19.0
+    targetRevision: 0.20.0
     helm:
       releaseName: vault
       values: |
         injector:
           enabled: true
-          image:
-            tag: "0.15.0"
-          agentImage:
-            tag: "1.10.2"
         server:
-          image:
-            tag: "1.10.2"
           ingress:
             enabled: true
             ingressClassName: "nginx-internal"
