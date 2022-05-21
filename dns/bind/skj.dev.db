@@ -1,7 +1,7 @@
 $ORIGIN skj.dev.
 $TTL 86400
 @	    IN      SOA	ns.skj.dev.	sean.skj.dev. (
-		2022050401 ; serial
+		2022052101 ; serial
 		21600      ; refresh after 6 hours
 		3600       ; retry after 1 hour
 		604800     ; expire after 1 week
@@ -26,4 +26,5 @@ grafana           IN  CNAME   skj.dev.
 prometheus        IN  CNAME   skj.dev.
 locutus           IN  A       150.136.49.187
 spock             IN  CNAME   locutus
+hub               IN  CNAME   skj.dev.
 
