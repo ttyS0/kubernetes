@@ -1,0 +1,7 @@
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: vault-unseal
+  namespace: vault
+spec:
+  itemPath: "vaults/HomeLab/items/vault-unseal"
