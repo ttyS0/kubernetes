@@ -26,6 +26,25 @@ spec:
               - secretName: vault-skj-dev-cert
                 hosts:
                   - vault.skj.dev
+          extraContainers:
+            - name: vault-unseal
+              image: hub.skj.dev/img/vault-unseal:latest
+              env:
+                - name: UNSEAL_KEY_1
+                  valueFrom:
+                    secretKeyRef:
+                      name: vault-unseal
+                      key: unseal1
+                - name: UNSEAL_KEY_2
+                  valueFrom:
+                    secretKeyRef:
+                      name: vault-unseal
+                      key: unseal2
+                - name: UNSEAL_KEY_3
+                  valueFrom:
+                    secretKeyRef:
+                      name: vault-unseal
+                      key: unseal3
           standalone:
             enabled: false
           ha:
@@ -62,6 +81,6 @@ spec:
     syncOptions:
       - CreateNamespace=true
     automated:
-      selfHeal: false
+      selfHeal: true
       prune: true
 
