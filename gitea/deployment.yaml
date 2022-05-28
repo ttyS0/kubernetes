@@ -54,18 +54,18 @@ spec:
             - name: DB_NAME
               value: "gitea"
             - name: USER_UID
-              value: "1000"
+              value: "1102"
             - name: USER_GID
-              value: "1000"
+              value: "1102"
           ports:
             - containerPort: 3000
               name: gitea
             - containerPort: 22
               name: git-ssh
           volumeMounts:
-            - mountPath: /data
+            - mountPath: /old
               name: gitea-data
-            - mountPath: /new
+            - mountPath: /data
               name: gitea
       volumes:
         - name: gitea-data
