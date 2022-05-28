@@ -63,14 +63,9 @@ spec:
             - containerPort: 22
               name: git-ssh
           volumeMounts:
-            - mountPath: /old
-              name: gitea-data
             - mountPath: /data
               name: gitea
       volumes:
-        - name: gitea-data
-          persistentVolumeClaim:
-            claimName: gitea-data
         - name: gitea
           persistentVolumeClaim:
             claimName: gitea
