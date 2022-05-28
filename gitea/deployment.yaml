@@ -65,7 +65,12 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: gitea-data
+            - mountPath: /new
+              name: gitea
       volumes:
         - name: gitea-data
           persistentVolumeClaim:
             claimName: gitea-data
+        - name: gitea
+          persistentVolumeClaim:
+            claimName: gitea
