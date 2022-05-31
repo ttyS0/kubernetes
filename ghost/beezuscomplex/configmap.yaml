@@ -14,7 +14,7 @@ data:
       "database": {
         "client": "mysql",
         "connection": {
-          "host": "mariadb.db.svc",
+          "host": "mysql.db.svc",
           "port": 3306,
           "database": "ghost_beezuscomplex"
         }
