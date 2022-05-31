@@ -11,7 +11,7 @@ patchesJson6902:
       kind: PersistentVolumeClaim
       name: ghost
       version: v1
-    path: namePatch.yaml
+    path: pvcPatch.yaml
   - target:
       kind: Deployment
       name: ghost
@@ -28,4 +28,4 @@ images:
     newTag: 4.37.0
 
 commonLabels:
-  app: splashofink
+  app: stereopinions
