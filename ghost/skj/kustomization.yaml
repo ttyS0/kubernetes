@@ -25,7 +25,8 @@ patchesJson6902:
 
 images:
   - name: library/ghost
-    newTag: 4.44.0
+    newName: hub.skj.dev/img/ghost
+    newTag: 5.1.1
 
 commonLabels:
   app: skj
