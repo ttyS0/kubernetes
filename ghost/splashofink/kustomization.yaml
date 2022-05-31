@@ -24,8 +24,8 @@ patchesJson6902:
     path: namePatch.yaml
 
 images:
-  - name: library/ghost
-    newTag: 4.37.0
+  - name: hub.skj.dev/img/ghost
+    newTag: 5.1.1
 
 commonLabels:
   app: splashofink
