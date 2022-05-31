@@ -1,0 +1,11 @@
+resources:
+  - cert.yaml
+  - secret.yaml
+  - configmap.yaml
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+
+images:
+  - name: mysql
+    newTag: "8.0.29"
