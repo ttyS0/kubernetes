@@ -1,6 +1,0 @@
-- op: replace
-  path: /metadata/name
-  value: stereopinions
-- op: replace
-  path: /spec/resources/requests/storage
-  value: 10Gi
