@@ -25,7 +25,7 @@ patchesJson6902:
 
 images:
   - name: library/ghost
-    newTag: 4.37.0
+    newTag: 4.44.0
 
 commonLabels:
   app: beezuscomplex
