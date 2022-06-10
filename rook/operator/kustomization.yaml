@@ -5,6 +5,7 @@ resources:
   - common.yaml
   - operator.yaml
   - toolbox.yaml
+  - direct-mount.yaml
   - monitoring/csi-metrics-service-monitor.yaml
   - monitoring/prometheus.yaml
   - monitoring/rbac.yaml
