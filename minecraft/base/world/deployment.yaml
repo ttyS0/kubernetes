@@ -26,7 +26,7 @@ spec:
             claimName: minecraft
       containers:
         - name: world
-          image: ghcr.io/ttys0/spigot:latest
+          image: ghcr.io/ttys0/spigot:1.19
           workingDir: "/minecraft/worlds/worldname"
           resources:
             limits:
