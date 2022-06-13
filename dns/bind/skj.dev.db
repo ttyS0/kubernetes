@@ -1,7 +1,7 @@
 $ORIGIN skj.dev.
 $TTL 86400
 @	    IN      SOA	ns.skj.dev.	sean.skj.dev. (
-		2022061301 ; serial
+		2022061302 ; serial
 		21600      ; refresh after 6 hours
 		3600       ; retry after 1 hour
 		604800     ; expire after 1 week
@@ -25,6 +25,6 @@ alertmanager      IN  CNAME   skj.dev.
 grafana           IN  CNAME   skj.dev.
 prometheus        IN  CNAME   skj.dev.
 hub               IN  CNAME   skj.dev.
-merry             IN  CNAME   129.213.50.5
-pippin            IN  CNAME   150.136.247.85
-bilbo             IN  CNAME   193.122.150.40
+merry             IN  A       129.213.50.5
+pippin            IN  A       150.136.247.85
+bilbo             IN  A       193.122.150.40
