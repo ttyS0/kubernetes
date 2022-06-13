@@ -45,5 +45,5 @@ spec:
             - name: JVM_OPTS
               value: "-Xms4G -Xmx4G -Djava.util.concurrent.ForkJoinPool.common.parallelism=1"
             - name: SPIGOT_OPTS
-              value: "nogui --noconsole"
+              value: "nogui --noconsole --force-upgrade"
 
