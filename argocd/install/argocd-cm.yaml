@@ -15,4 +15,3 @@ data:
       config:
         clientID: b9631bcc480c8b743ab1
         clientSecret: $argocd-github-oauth:clientSecret
-  kustomize.buildOptions: --load-restrictor LoadRestrictionsNone
