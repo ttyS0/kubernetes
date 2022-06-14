@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -20,7 +20,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -31,7 +31,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: alertmanager-config
     heritage: Helm
     release: openfaas
@@ -74,7 +74,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: prometheus-config
     heritage: Helm
     release: openfaas
@@ -983,7 +983,7 @@ kind: ClusterRole
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1052,7 +1052,7 @@ metadata:
   name: openfaas-prometheus
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1074,7 +1074,7 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1098,7 +1098,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1119,7 +1119,7 @@ metadata:
   namespace: "openfaas-fn"
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1138,7 +1138,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1158,7 +1158,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: basic-auth-plugin
     heritage: Helm
     release: openfaas
@@ -1180,7 +1180,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1202,7 +1202,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: nats
     heritage: Helm
     release: openfaas
@@ -1226,7 +1226,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1246,7 +1246,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1263,7 +1263,7 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "1a685f751f19e94d66eeddda51529330084e6cdc9be141a0bc4e0c7bc1295df3"
+        checksum/alertmanager-config: "20b7bd6c6f49453bbc170a693f24ed8010df553e02a8c569589c329c71132cf2"
     spec:
       containers:
       - name: alertmanager
@@ -1317,7 +1317,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: basic-auth-plugin
     heritage: Helm
     release: openfaas
@@ -1345,7 +1345,7 @@ spec:
             requests:
               cpu: 20m
               memory: 50Mi
-        image: ghcr.io/openfaas/basic-auth:0.21.1
+        image: ghcr.io/openfaas/basic-auth:0.21.4
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -1380,7 +1380,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1412,7 +1412,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/gateway:0.21.3
+        image: ghcr.io/openfaas/gateway:0.22.0
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -1475,11 +1475,14 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.14.1
+        image: ghcr.io/openfaas/faas-netes:0.15.0
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
+        command:
+          - ./faas-netes
+          - -operator=false
         env:
         - name: port
           value: "8081"
@@ -1524,7 +1527,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: nats
     heritage: Helm
     release: openfaas
@@ -1584,7 +1587,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1601,7 +1604,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "c5b53b216a3d4316b8207839356e160dc382817b21fe73a028f1a198e623619f"
+        checksum/prometheus-config: "73047fddca776c212c5e00127eba3a7efb2a3c3ebc0d1b6969ecaf18daf022ff"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
@@ -1656,7 +1659,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.0.8
+    chart: openfaas-10.1.1
     component: queue-worker
     heritage: Helm
     release: openfaas
@@ -1684,7 +1687,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/queue-worker:0.12.2
+        image: ghcr.io/openfaas/queue-worker:0.13.0
         imagePullPolicy: IfNotPresent
         env:
         - name: faas_nats_address
@@ -1712,7 +1715,7 @@ spec:
         - name: "initial_retry_wait"
           value: "10s"
         - name: "retry_http_codes"
-          value: "429,502,500,504,408"
+          value: "408,429,500,502,503,504"
         - name: print_request_body
           value: "false"
         - name: print_response_body
