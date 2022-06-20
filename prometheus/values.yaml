@@ -1,7 +1,7 @@
 # helm upgrade prometheus prometheus-community/kube-prometheus-stack \
 #  --install \
 #  --namespace prometheus \
-#  --version 36.0.2 \
+#  --version 36.0.3 \
 #  --values values.yaml
 
 defaultRules:
