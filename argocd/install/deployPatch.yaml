@@ -11,4 +11,4 @@
           name: argocd-gpg-keys-cm
 - op: replace
   path: /spec/template/spec/containers/0/image
-  value: hub.skj.dev/img/argocd:v2.4.0
+  value: hub.skj.dev/img/argocd:v2.4.1

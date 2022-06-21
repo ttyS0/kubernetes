@@ -5,6 +5,8 @@ metadata:
     app: harbor
   name: hub-harbor-ingress-external
   namespace: harbor
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
 spec:
   ingressClassName: nginx-external
   rules:
