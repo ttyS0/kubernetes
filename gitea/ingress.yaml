@@ -5,7 +5,7 @@ metadata:
   namespace: gitea
   annotations:
     kubernetes.io/tls-acme: "true"
-    nginx.kubernetes.io/proxy-body-size: "50m"
+    nginx.kubernetes.io/proxy-body-size: "0"
 spec:
   rules:
     - host: git.skj.dev
