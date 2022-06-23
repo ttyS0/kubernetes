@@ -1,0 +1,17 @@
+$ORIGIN 1.0.10.in-addr.arpa.
+$TTL 86400
+@	    IN      SOA	ns.skj.dev.	sean.skj.dev. (
+		2022062301 ; serial
+		21600      ; refresh after 6 hours
+		3600       ; retry after 1 hour
+		604800     ; expire after 1 week
+		86400 )    ; minimum TTL of 1 day
+;
+;
+
+@             IN  NS      ns.skj.dev.
+208           IN  PTR     ns.skj.dev.
+
+;
+
+200           IN  PTR     skj.dev.
