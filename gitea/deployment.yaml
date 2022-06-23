@@ -57,7 +57,7 @@ spec:
               value: "1102"
             - name: USER_GID
               value: "1102"
-            - name: FILE_MAX_SIZE
+            - name: MAX_SIZE
               value: "50"
           ports:
             - containerPort: 3000
