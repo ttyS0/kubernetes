@@ -13,6 +13,8 @@ configMapGenerator:
       - videotranscoding.wiki.db
       - stereopinions.net.db
       - splashof.ink.db
+      - ttys0.net.db
+      - skj.dev.rr.db
       - named.conf
 
 images:
