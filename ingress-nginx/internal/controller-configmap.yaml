@@ -6,3 +6,4 @@ metadata:
 data:
   use-forwarded-headers: "true"
   ssl-redirect: "true"
+  proxy-body-size: "0"

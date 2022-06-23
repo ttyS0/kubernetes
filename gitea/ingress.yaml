@@ -5,9 +5,6 @@ metadata:
   namespace: gitea
   annotations:
     kubernetes.io/tls-acme: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
 spec:
   rules:
     - host: git.skj.dev
@@ -37,8 +34,6 @@ kind: Ingress
 metadata:
   name: gitea-ext
   namespace: gitea
-  annotations:
-    nginx.kubernetes.io/proxy-body-size: "50m"
 spec:
   ingressClassName: nginx-external
   rules:
