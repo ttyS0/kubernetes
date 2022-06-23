@@ -18,3 +18,5 @@ db/nocodb/secret.yaml filter=git-crypt diff=git-crypt
 argocd/install/secret.yaml filter=git-crypt diff=git-crypt
 op/secrets.yaml filter=git-crypt diff=git-crypt
 harbor/values.yaml filter=git-crypt diff=git-crypt
+dns/bind/skj.dev.db filter=git-crypt diff=git-crypt
+dns/bind/skj.dev.rr.db filter=git-crypt diff=git.crypt
