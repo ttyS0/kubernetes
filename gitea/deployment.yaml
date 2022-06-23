@@ -57,8 +57,6 @@ spec:
               value: "1102"
             - name: USER_GID
               value: "1102"
-            - name: MAX_SIZE
-              value: "50"
           ports:
             - containerPort: 3000
               name: gitea
