@@ -1,7 +1,7 @@
 $ORIGIN ttys0.net.
 $TTL 86400
 @	    IN      SOA	ns.ttys0.net.	sean.ttys0.net. (
-		2022062302 ; serial
+		2022062501 ; serial
 		21600      ; refresh after 6 hours
 		3600       ; retry after 1 hour
 		604800     ; expire after 1 week
@@ -18,3 +18,10 @@ ns                IN  A       10.0.1.208
 
 pfsense           IN  A       10.0.1.1
 gollum            IN  A       10.0.1.80
+mariadb           IN  A       10.0.1.204
+minecraft-amber   IN  A       10.0.1.200
+minecraft-rebma   IN  A       10.0.1.200
+minecraft         IN  A       10.0.1.207
+mysql             IN  A       10.0.1.210
+pg                IN  A       10.0.1.203
+unifi             IN  A       10.0.1.205
