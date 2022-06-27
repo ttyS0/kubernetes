@@ -316,6 +316,7 @@ metadata:
   namespace: ingress-nginx-internal
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   ipFamilyPolicy: SingleStack
   ipFamilies: 
     - IPv4

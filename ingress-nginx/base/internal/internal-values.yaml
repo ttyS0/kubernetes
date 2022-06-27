@@ -20,5 +20,7 @@ controller:
   extraArgs:
     default-backend-service: "ghost/static"
     enable-ssl-passthrough: "true"
+  service:
+    externalTrafficPolicy: "Local"
 tcp:
   22: gitea/gitea:22
