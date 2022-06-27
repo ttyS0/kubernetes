@@ -7,3 +7,5 @@ data:
   use-forwarded-headers: "true"
   ssl-redirect: "true"
   proxy-body-size: "0"
+  enable-real-ip: "true"
+  proxy-real-ip-cidr: "10.0.1.0/24"
