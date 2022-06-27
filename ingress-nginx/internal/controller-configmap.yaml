@@ -4,9 +4,10 @@ metadata:
   name: ingress-nginx-internal-controller
   namespace: ingress-nginx-internal
 data:
-  use-forwarded-headers: "false"
+  use-forwarded-headers: "true"
   ssl-redirect: "true"
   proxy-body-size: "0"
   compute-full-forwarded-for: "true"
-  real-ip-header: "proxy_protocol"
+  enable-real-ip: "true"
+  proxy-real-ip-cidr: "10.0.1.0/24"
 
