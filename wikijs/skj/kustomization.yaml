@@ -22,7 +22,7 @@ patchesJson6902:
 
 images:
   - name: requarks/wiki
-    newTag: 2.5.284
+    newTag: 2.5.285
 
 commonLabels:
   instance: skj
