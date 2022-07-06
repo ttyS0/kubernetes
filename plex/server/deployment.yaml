@@ -30,7 +30,7 @@ spec:
           ports:
             - containerPort: 32400
           volumeMounts:
-            - name: config
+            - name: plex-config
               mountPath: /config
             - name: plex-transcode
               mountPath: /transcode
@@ -47,6 +47,6 @@ spec:
           persistentVolumeClaim:
             claimName: plex-media
             readOnly: true
-        - name: config
+        - name: plex-config
           persistentVolumeClaim:
-            claimName: config
+            claimName: plex-config
