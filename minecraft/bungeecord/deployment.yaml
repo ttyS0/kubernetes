@@ -17,7 +17,6 @@ spec:
     spec:
       securityContext:
         runAsUser: 1000
-        fsGroup: 1000
       containers:
         - imagePullPolicy: IfNotPresent
           name: bungeecord
