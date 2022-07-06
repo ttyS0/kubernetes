@@ -37,6 +37,8 @@ spec:
             - name: plex-media
               mountPath: /media
               readOnly: true
+            - name: plex-new
+              mountPath: /new
           resources:
             limits:
               gpu.intel.com/i915: 1
@@ -52,3 +54,6 @@ spec:
           persistentVolumeClaim:
             claimName: plex-media
             readOnly: true
+        - name: plex-new
+          persistentVolumeClaim:
+            claimName: config
