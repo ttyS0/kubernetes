@@ -42,19 +42,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: plex-config
-  namespace: plex
-spec:
-  volumeName: pvc-68342ba3-e57d-4ee5-b880-b6828d43de1c
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 300Gi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: config
   namespace: plex
 spec:

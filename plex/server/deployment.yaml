@@ -30,30 +30,23 @@ spec:
           ports:
             - containerPort: 32400
           volumeMounts:
-            - name: plex-config
+            - name: config
               mountPath: /config
             - name: plex-transcode
               mountPath: /transcode
             - name: plex-media
               mountPath: /media
               readOnly: true
-            - name: plex-new
-              mountPath: /new
           resources:
             limits:
               gpu.intel.com/i915: 1
-      securityContext:
-        fsGroup: 1000
       volumes:
-        - name: plex-config
-          persistentVolumeClaim:
-            claimName: plex-config
         - name: plex-transcode
           emptyDir: {}
         - name: plex-media
           persistentVolumeClaim:
             claimName: plex-media
             readOnly: true
-        - name: plex-new
+        - name: config
           persistentVolumeClaim:
             claimName: config
