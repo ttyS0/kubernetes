@@ -1,41 +1,12 @@
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: gopher-data
-  namespace: gopher
-spec:
-  capacity:
-    storage: 1Ti
-  volumeMode: Filesystem
-  accessModes:
-    - ReadOnlyMany
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs
-  mountOptions:
-    - hard
-    - timeo=600
-    - retrans=3
-    - proto=tcp
-    - rsize=4096
-    - noacl
-    - nocto
-    - noatime
-    - nodiratime
-    - nfsvers=4.1
-  nfs:
-    path: /gopher
-    server: 10.0.1.15
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: gopher-data
+  name: data
   namespace: gopher
 spec:
-  storageClassName: nfs
+  storageClassName: nfs-csi
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 1Ti
-
+      storage: 100Gi
