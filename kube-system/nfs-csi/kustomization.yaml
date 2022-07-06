@@ -1,0 +1,7 @@
+namespace: kube-system
+
+resources:
+  - rbac-csi-nfs.yaml
+  - csi-nfs-controller.yaml
+  - csi-nfs-driverinfo.yaml
+  - csi-nfs-node.yaml
