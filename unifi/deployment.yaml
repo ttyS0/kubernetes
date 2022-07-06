@@ -16,7 +16,7 @@ spec:
         app: unifi-controller
     spec:
       securityContext:
-        fsGroup: 999
+        runAsUser: 999
       containers:
         - image: jacobalberty/unifi:latest
           env:
@@ -50,7 +50,7 @@ spec:
       volumes:
         - name: unifi-data
           persistentVolumeClaim:
-            claimName: unifi-data
+            claimName: data
         - name: unifi-cert
           secret:
             secretName: unifi-cert
