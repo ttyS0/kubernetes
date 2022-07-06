@@ -116,5 +116,5 @@ spec:
             name: static-conf
         - name: data
           persistentVolumeClaim:
-            claimName: static
+            claimName: static-data
 

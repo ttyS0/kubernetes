@@ -30,7 +30,7 @@
   value:
     - name: skj
       persistentVolumeClaim:
-        claimName: skj
+        claimName: skj-data
     - name: skj-conf
       configMap:
         name: skj-conf

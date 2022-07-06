@@ -30,7 +30,7 @@
   value:
     - name: beezuscomplex
       persistentVolumeClaim:
-        claimName: beezuscomplex
+        claimName: beezuscomplex-data
     - name: beezuscomplex-conf
       configMap:
         name: beezuscomplex-conf

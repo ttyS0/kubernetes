@@ -40,7 +40,7 @@
   value:
     - name: splashofink
       persistentVolumeClaim:
-        claimName: splashofink
+        claimName: splashofink-data
     - name: splashofink-conf
       configMap:
         name: splashofink-conf
