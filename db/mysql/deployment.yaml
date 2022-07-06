@@ -16,6 +16,8 @@ spec:
       labels:
         app: mysql
     spec:
+      securityContext:
+        runAsUser: 999
       containers:
         - image: mysql:latest
           name: mysql
@@ -43,7 +45,7 @@ spec:
       volumes:
         - name: mysql
           persistentVolumeClaim:
-            claimName: mysql
+            claimName: mysql-data
         - name: config
           configMap:
             name: mysql

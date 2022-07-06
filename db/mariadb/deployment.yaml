@@ -16,6 +16,8 @@ spec:
       labels:
         app: mariadb
     spec:
+      securityContext:
+        runAsUser: 999
       containers:
         - image: mariadb:latest
           name: mariadb
@@ -43,7 +45,7 @@ spec:
       volumes:
         - name: mariadb
           persistentVolumeClaim:
-            claimName: mariadb
+            claimName: mariadb-data
         - name: config
           configMap:
             name: mariadb

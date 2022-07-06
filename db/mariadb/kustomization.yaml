@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: mariadb
-    newTag: "10.7.3"
+    newTag: "10.8.3"

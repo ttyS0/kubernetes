@@ -16,6 +16,8 @@ spec:
       labels:
         app: postgres
     spec:
+      securityContext:
+        runAsUser: 999
       containers:
         - image: postgres:latest
           name: postgres
@@ -42,4 +44,4 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: postgresql
+            claimName: pg-data
