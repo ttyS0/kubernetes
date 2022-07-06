@@ -39,15 +39,4 @@ spec:
   resources:
     requests:
       storage: 10Ti
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: nextcloud
-  namespace: nextcloud
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+

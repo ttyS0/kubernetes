@@ -17,8 +17,6 @@ spec:
       labels:
         app.kubernetes.io/name: nextcloud
     spec:
-      securityContext:
-        fsGroup: 1000
       containers:
         - name: nextcloud
           image: library/nextcloud:latest
@@ -54,13 +52,8 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /var/www/html
-              name: nextcloud
-            - mountPath: /var/www/html/data/sean
-              name: data
+              name: nextcloud-data
       volumes:
-        - name: nextcloud
-          persistentVolumeClaim:
-            claimName: nextcloud
-        - name: data
+        - name: nextcloud-data
           persistentVolumeClaim:
             claimName: nextcloud-data
