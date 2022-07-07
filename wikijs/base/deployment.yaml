@@ -22,7 +22,7 @@ spec:
           - name: ndots
             value: "1"
       securityContext:
-        fsGroup: 1000
+        runAsUser: 1000
       containers:
         - name: wikijs
           image: requarks/wiki:latest
