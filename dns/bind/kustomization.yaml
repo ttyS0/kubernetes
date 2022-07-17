@@ -19,4 +19,4 @@ configMapGenerator:
 
 images:
   - name: ubuntu/bind9
-    newTag: 9.16-20.04_beta
+    newTag: 9.18-22.04_beta
