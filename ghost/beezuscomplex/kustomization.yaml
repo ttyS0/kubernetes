@@ -25,7 +25,8 @@ patchesJson6902:
 
 images:
   - name: library/ghost
-    newTag: 5.2.3
+    newName: hub.skj.dev/img/ghost
+    newTag: 5.4.0
 
 commonLabels:
   app: beezuscomplex
