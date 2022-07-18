@@ -1,0 +1,67 @@
+#helm template vault hashicorp/vault \
+#  --namespace vault \
+#  --version 0.20.1 \
+#  --values values.yaml > vault.yaml
+---
+injector:
+  enabled: true
+server:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx-internal"
+    annotations: |
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: vault.skj.dev
+    tls:
+      - secretName: vault-skj-dev-cert
+        hosts:
+          - vault.skj.dev
+  extraContainers:
+    - name: vault-unseal
+      image: hub.skj.dev/img/vault-unseal:latest
+      env:
+        - name: UNSEAL_KEY_1
+          valueFrom:
+            secretKeyRef:
+              name: vault-unseal
+              key: unseal1
+        - name: UNSEAL_KEY_2
+          valueFrom:
+            secretKeyRef:
+              name: vault-unseal
+              key: unseal2
+        - name: UNSEAL_KEY_3
+          valueFrom:
+            secretKeyRef:
+              name: vault-unseal
+              key: unseal3
+  standalone:
+    enabled: false
+  ha:
+    enabled: true
+    replicas: 3
+    raft:
+      enabled: true
+      config: |
+        ui = true
+        
+        cluster_name = "skj"
+        
+        api_addr = "https://vault.skj.dev"
+        
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+        }
+        
+        storage "raft" {
+          path = "/vault/data"
+        }
+        
+        service_registration "kubernetes" {}
+    disruptionBudget:
+      maxUnavailable: 2
+csi:
+  enabled: false
