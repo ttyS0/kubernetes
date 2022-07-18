@@ -1,0 +1,13 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: vault
+  namespace: vault
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 100
+        $patch: replace
