@@ -1,7 +1,8 @@
 #helm template connect 1password/connect \
 #--namespace op \
-#--version 1.8.0 \
+#--version 1.8.1 \
 #--set operator.create=true > connect.yaml
+
 ---
 # Source: connect/templates/serviceaccount.yaml
 apiVersion: v1
@@ -10,10 +11,10 @@ metadata:
   name: onepassword-connect-operator
   namespace: op
   labels:
-    helm.sh/chart: connect-1.8.0
+    helm.sh/chart: connect-1.8.1
     app.kubernetes.io/name: connect
     app.kubernetes.io/instance: connect
-    app.kubernetes.io/version: "1.5.4"
+    app.kubernetes.io/version: "1.5.6"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: connect/templates/clusterrole.yaml
@@ -23,10 +24,10 @@ metadata:
   creationTimestamp: null
   name: onepassword-connect-operator
   labels:
-    helm.sh/chart: connect-1.8.0
+    helm.sh/chart: connect-1.8.1
     app.kubernetes.io/name: connect
     app.kubernetes.io/instance: connect
-    app.kubernetes.io/version: "1.5.4"
+    app.kubernetes.io/version: "1.5.6"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -111,10 +112,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: onepassword-connect-operator
   labels:
-    helm.sh/chart: connect-1.8.0
+    helm.sh/chart: connect-1.8.1
     app.kubernetes.io/name: connect
     app.kubernetes.io/instance: connect
-    app.kubernetes.io/version: "1.5.4"
+    app.kubernetes.io/version: "1.5.6"
     app.kubernetes.io/managed-by: Helm
 subjects:
 - kind: ServiceAccount
@@ -133,10 +134,10 @@ metadata:
   namespace: op
   labels:
     app.kubernetes.io/component: connect
-    helm.sh/chart: connect-1.8.0
+    helm.sh/chart: connect-1.8.1
     app.kubernetes.io/name: connect
     app.kubernetes.io/instance: connect
-    app.kubernetes.io/version: "1.5.4"
+    app.kubernetes.io/version: "1.5.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: NodePort
@@ -156,10 +157,10 @@ metadata:
   namespace: op
   labels:
     app.kubernetes.io/component: connect
-    helm.sh/chart: connect-1.8.0
+    helm.sh/chart: connect-1.8.1
     app.kubernetes.io/name: connect
     app.kubernetes.io/instance: connect
-    app.kubernetes.io/version: "1.5.4"
+    app.kubernetes.io/version: "1.5.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   selector:
@@ -169,7 +170,7 @@ spec:
     metadata:
       labels:
         app: onepassword-connect
-        version: "1.5.4"
+        version: "1.5.6"
         app.kubernetes.io/component: connect
     spec:
       volumes:
@@ -183,7 +184,7 @@ spec:
         []
       containers:
         - name: connect-api
-          image: 1password/connect-api:1.5.4
+          image: 1password/connect-api:1.5.6
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 999
@@ -223,7 +224,7 @@ spec:
             - mountPath: /home/opuser/.op/data
               name: shared-data
         - name: connect-sync
-          image: 1password/connect-sync:1.5.4
+          image: 1password/connect-sync:1.5.6
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 999
@@ -270,10 +271,10 @@ metadata:
   namespace: op
   labels:
     app.kubernetes.io/component: operator
-    helm.sh/chart: connect-1.8.0
+    helm.sh/chart: connect-1.8.1
     app.kubernetes.io/name: connect
     app.kubernetes.io/instance: connect
-    app.kubernetes.io/version: "1.5.4"
+    app.kubernetes.io/version: "1.5.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -331,10 +332,10 @@ metadata:
   name: "connect-health-check"
   namespace: op
   labels:
-    helm.sh/chart: connect-1.8.0
+    helm.sh/chart: connect-1.8.1
     app.kubernetes.io/name: connect
     app.kubernetes.io/instance: connect
-    app.kubernetes.io/version: "1.5.4"
+    app.kubernetes.io/version: "1.5.6"
     app.kubernetes.io/managed-by: Helm
   annotations:
     helm.sh/hook: test
