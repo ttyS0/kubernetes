@@ -17,8 +17,6 @@ spec:
       labels:
         app.kubernetes.io/name: nextcloud
     spec:
-      securityContext:
-        runAsUser: 33
       containers:
         - name: nextcloud
           image: library/nextcloud:latest
