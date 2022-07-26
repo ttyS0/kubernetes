@@ -1,7 +1,7 @@
-cert-manager/cluster-issuer.yaml filter=git-crypt diff=git-crypt
+cert-manager/issuer/cluster-issuer.yaml filter=git-crypt diff=git-crypt
+cert-manager/issuer/secret.yaml filter=git-crypt diff=git-crypt
 metallb-system/secret.yaml filter=git-crypt diff=git-crypt
 kube-system/cilium-values.yaml filter=git-crypt diff=git-crypt
-cert-manager/secret.yaml filter=git-crypt diff=git-crypt
 db/postgres/secret.yaml filter=git-crypt diff=git-crypt
 nextcloud/secret.yaml filter=git-crypt diff=git-crypt
 gitea/secret.yaml filter=git-crypt diff=git-crypt
