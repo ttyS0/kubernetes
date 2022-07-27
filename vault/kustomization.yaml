@@ -7,4 +7,6 @@ resources:
 patchesStrategicMerge:
   - fsGroup.patch.yaml
 
-
+images:
+  - name: hashicorp/vault
+    newTag: 1.11.1
