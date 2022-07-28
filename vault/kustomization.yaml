@@ -6,7 +6,10 @@ resources:
 
 patchesStrategicMerge:
   - fsGroup.patch.yaml
+  - vault-server-test.patch.yaml
 
 images:
   - name: hashicorp/vault
     newTag: 1.11.1
+  - name: hashicorp/vault-k8s
+    newTag: 0.17.0
