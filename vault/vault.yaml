@@ -600,7 +600,7 @@ spec:
               secretKeyRef:
                 key: unseal3
                 name: vault-unseal
-          image: hub.skj.dev/img/vault-unseal:latest
+          image: git.skj.dev/sean/vault-unseal:v1
           name: vault-unseal
       
   
