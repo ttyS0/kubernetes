@@ -37,31 +37,22 @@ server:
               name: vault-unseal
               key: unseal3
   standalone:
-    enabled: false
-  ha:
     enabled: true
-    replicas: 3
-    raft:
-      enabled: true
-      config: |
-        ui = true
-        
-        cluster_name = "skj"
-        
-        api_addr = "https://vault.skj.dev"
-        
-        listener "tcp" {
-          tls_disable = 1
-          address = "[::]:8200"
-          cluster_address = "[::]:8201"
-        }
-        
-        storage "raft" {
-          path = "/vault/data"
-        }
-        
-        service_registration "kubernetes" {}
-    disruptionBudget:
-      maxUnavailable: 2
+    config: |
+      ui = true
+      
+      cluster_name = "skj"
+      
+      api_addr = "https://vault.skj.dev"
+      
+      listener "tcp" {
+        tls_disable = 1
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+      }
+      
+      storage "file" {
+        path = "/vault/data"
+      }
 csi:
   enabled: false
