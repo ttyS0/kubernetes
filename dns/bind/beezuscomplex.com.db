@@ -11,5 +11,5 @@ $TTL 86400
 
                   IN  NS      ns.beezuscomplex.com.
 
-@                 IN  A       10.0.1.200
-ns                IN  A       10.0.1.208
+@                 IN  A       10.0.1.20
+ns                IN  A       10.0.1.21
