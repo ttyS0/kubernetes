@@ -60,7 +60,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - radagast
+                - bilbo
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

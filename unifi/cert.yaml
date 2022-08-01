@@ -6,7 +6,7 @@ metadata:
 spec:
   secretName: unifi-cert
   dnsNames:
-    - unifi.ttys0.net
+    - unifi.skj.dev
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer

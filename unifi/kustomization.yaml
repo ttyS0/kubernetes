@@ -6,4 +6,4 @@ resources:
 
 images:
   - name: jacobalberty/unifi
-    newTag: v7.1.66
+    newTag: v7.1.68

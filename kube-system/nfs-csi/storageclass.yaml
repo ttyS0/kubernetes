@@ -9,9 +9,6 @@ parameters:
   server: durin.skj.dev
   share: /nfs-csi
   subDir: "${pvc.metadata.namespace}-${pvc.metadata.name}"
-  # csi.storage.k8s.io/provisioner-secret is only needed for providing mountOptions in DeleteVolume
-  csi.storage.k8s.io/provisioner-secret-name: "mount-options"
-  csi.storage.k8s.io/provisioner-secret-namespace: "kube-system"
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 mountOptions:
