@@ -7,7 +7,6 @@ metadata:
     app: bind
 spec:
   type: LoadBalancer
-  loadBalancerIP: "10.0.1.208"
   ports:
     - name: bind
       port: 53
