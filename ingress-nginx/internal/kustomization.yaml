@@ -1,3 +1,5 @@
+namespace: ingress-nginx-internal
+
 resources:
   - ../base/internal
 
