@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: static
+  name: static-data
   namespace: ghost
 spec:
   accessModes:
