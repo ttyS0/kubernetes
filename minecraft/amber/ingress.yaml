@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: "nginx-internal"
   rules:
-    - host: minecraft-amber.ttys0.net
+    - host: mcamber.skj.dev
       http:
         paths:
           - path: /
@@ -20,8 +20,8 @@ spec:
                   number: 8123
   tls:
     - hosts:
-        - minecraft-amber.ttys0.net
-      secretName: minecraft-amber-ttys0-net-cert
+        - mcamber.skj.dev
+      secretName: minecraft-amber-skj-dev-cert
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -31,7 +31,7 @@ metadata:
 spec:
   ingressClassName: "nginx-external"
   rules:
-    - host: minecraft-amber.ttys0.net
+    - host: mcamber.skj.dev
       http:
         paths:
           - path: /
@@ -43,5 +43,5 @@ spec:
                   number: 8123
   tls:
     - hosts:
-        - minecraft-amber.ttys0.net
-      secretName: minecraft-amber-ttys0-net-cert
+        - mcamber.skj.dev
+      secretName: minecraft-amber-skj-dev-cert

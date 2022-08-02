@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: "nginx-internal"
   rules:
-    - host: minecraft-rebma.ttys0.net
+    - host: mcrebma.skj.dev
       http:
         paths:
           - path: /
@@ -20,8 +20,8 @@ spec:
                   number: 8123
   tls:
     - hosts:
-        - minecraft-rebma.ttys0.net
-      secretName: minecraft-rebma-ttys0-net-cert
+        - mcrebma.skj.dev
+      secretName: minecraft-rebma-skj-dev-cert
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -31,7 +31,7 @@ metadata:
 spec:
   ingressClassName: "nginx-external"
   rules:
-    - host: minecraft-rebma.ttys0.net
+    - host: mcrebma.skj.dev
       http:
         paths:
           - path: /
@@ -43,5 +43,5 @@ spec:
                   number: 8123
   tls:
     - hosts:
-        - minecraft-rebma.ttys0.net
-      secretName: minecraft-rebma-ttys0-net-cert
+        - mcrebma.skj.dev
+      secretName: minecraft-rebma-skj-dev-cert
