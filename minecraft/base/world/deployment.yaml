@@ -19,11 +19,10 @@ spec:
     spec:
       securityContext:
         runAsUser: 1100
-        fsGroup: 1100
       volumes:
         - name: world-data
           persistentVolumeClaim:
-            claimName: minecraft
+            claimName: worlds
       containers:
         - name: world
           image: ghcr.io/ttys0/spigot:latest

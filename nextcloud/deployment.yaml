@@ -56,4 +56,4 @@ spec:
       volumes:
         - name: nextcloud-data
           persistentVolumeClaim:
-            claimName: nextcloud-data
+            claimName: data
