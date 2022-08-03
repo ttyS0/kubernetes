@@ -45,7 +45,7 @@ spec:
       volumes:
         - name: mariadb
           persistentVolumeClaim:
-            claimName: mariadb-data
+            claimName: mariadb
         - name: config
           configMap:
             name: mariadb
