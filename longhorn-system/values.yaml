@@ -9,6 +9,7 @@ persistence:
 
 defaultSettings:
   defaultDataPath: /var/storage
+  backupTarget: nfs://10.0.1.15:/longhorn
 
 ingress:
   enabled: true
