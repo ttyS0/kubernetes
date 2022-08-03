@@ -44,4 +44,4 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: pg-data
+            claimName: pg
