@@ -1,0 +1,23 @@
+#helm upgrade --install longhorn longhorn/longhorn \
+# --namespace longhorn-system \
+# --version 1.3.0 \
+# --values values.yaml
+
+persistence:
+  defaultClass: false
+  defaultClassReplicaCount: 2
+
+defaultSettings:
+  defaultDataPath: /var/storage
+
+ingress:
+  enabled: true
+  ingressClassName: nginx-internal
+  host: longhorn.skj.dev
+  tls: true
+  tlsSecret: longhorn-skj-dev-cert
+  annotations:
+    kubernetes.io/tls-acme: true
+
+enablePSP: false
+
