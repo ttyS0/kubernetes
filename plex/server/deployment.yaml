@@ -49,4 +49,4 @@ spec:
             readOnly: true
         - name: plex-config
           persistentVolumeClaim:
-            claimName: plex-config
+            claimName: plex-data

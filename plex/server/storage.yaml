@@ -40,35 +40,12 @@ spec:
       storage: 100Ti
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: plex-config
-  namespace: plex
-spec:
-  capacity:
-    storage: 400Gi
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
-  local:
-    path: /mnt/nvme
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - bilbo
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: plex-config
+  name: plex-data
   namespace: plex
 spec:
-  storageClassName: local-storage
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
