@@ -29,4 +29,4 @@ spec:
       volumes:
         - name: conf
           persistentVolumeClaim:
-            claimName: tautulli
+            claimName: tautulli-data

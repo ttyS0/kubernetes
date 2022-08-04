@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: tautulli
+  name: tautulli-data
   namespace: plex
 spec:
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
