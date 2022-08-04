@@ -4,4 +4,4 @@ resources:
 
 images:
   - name: ghcr.io/ttys0/spigot
-    newTag: "1.19"
+    newTag: "1.19.1"
