@@ -497,6 +497,7 @@ spec:
         resources:
           requests:
             storage: 10Gi
+        storageClassName: longhorn
 ---
 # Source: vault/templates/server-ingress.yaml
 apiVersion: networking.k8s.io/v1

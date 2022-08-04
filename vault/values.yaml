@@ -6,6 +6,8 @@
 injector:
   enabled: true
 server:
+  dataStorage:
+    storageClass: longhorn
   ingress:
     enabled: true
     ingressClassName: "nginx-internal"
