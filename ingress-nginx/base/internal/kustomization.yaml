@@ -1,4 +1,2 @@
-namespace: ingress-nginx-internal
-
 resources:
   - internal.yaml

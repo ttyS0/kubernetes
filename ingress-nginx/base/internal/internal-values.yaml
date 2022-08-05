@@ -14,9 +14,8 @@ controller:
   metrics:
     enabled: true
     serviceMonitor:
-      enabled: false
-      additionalLabels:
-        release: "prometheus"
+      enabled: true
+      namespace: monitoring
   extraArgs:
     default-backend-service: "ghost/static"
     enable-ssl-passthrough: "true"
