@@ -1,7 +1,7 @@
 resources:
   - ../base
   - ingress.yaml
-  - secret.yaml
+  - serviceAccount.yaml
 
 patchesJson6902:
   - target:
@@ -22,7 +22,7 @@ patchesJson6902:
 
 images:
   - name: requarks/wiki
-    newTag: 2.5.285
+    newTag: 2.5.286
 
 commonLabels:
   instance: skj

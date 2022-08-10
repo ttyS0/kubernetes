@@ -1,33 +1,41 @@
 - op: replace
   path: /metadata/name
   value: videotranscoding
-- op: add
-  path: /spec/template/spec/containers/0/env
-  value:
-    - name: DB_NAME
-      valueFrom:
-        secretKeyRef:
-          key: "pgdb"
-          name: videotranscodingdb
-    - name: DB_TYPE
-      value: postgres
-    - name: DB_HOST
-      value: "postgres.db.svc.cluster.local"
-    - name: DB_PORT
-      value: "5432"
-    - name: DB_USER
-      valueFrom:
-        secretKeyRef:
-          key: "pguser"
-          name: videotranscodingdb
-    - name: DB_PASS
-      valueFrom:
-        secretKeyRef:
-          name: videotranscodingdb
-          key: "pgpass"
 - op: replace
   path: /spec/template/spec/volumes
   value:
     - name: data
       persistentVolumeClaim:
         claimName: videotranscoding
+- op: add
+  path: /spec/template/metadata/annotations
+  value:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "kube-wikijs-videotranscoding"
+    vault.hashicorp.com/agent-inject-secret-config.yml: "kube/data/wikijs/videotranscoding"
+    vault.hashicorp.com/agent-inject-template-config.yml: |
+      {{- with secret "kube/data/wikijs/videotranscoding" -}}
+      port: 3000
+      bindIP: 0.0.0.0
+      db:
+        type: {{ .Data.data.dbtype }}
+        host: '{{ .Data.data.dbhost }}'
+        port: {{ .Data.data.dbport }}'
+        user: '{{ .Data.data.dbuser }}'
+        pass: '{{ .Data.data.dbpass }}'
+        db: {{ .Data.data.dbname }}
+        storage: $(DB_FILEPATH)
+        ssl: $(DB_SSL)
+      ssl:
+        enabled: $(SSL_ACTIVE)
+        port: 3443
+        provider: letsencrypt
+        domain: $(LETSENCRYPT_DOMAIN)
+        subscriberEmail: $(LETSENCRYPT_EMAIL)
+      logLevel: $(LOG_LEVEL:info)
+      logFormat: $(LOG_FORMAT:default)
+      ha: $(HA_ACTIVE)
+      {{- end }}
+- op: add
+  path: /spec/template/spec/serviceAccountName
+  value: "wikijs-videotranscoding"
