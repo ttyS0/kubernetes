@@ -52,8 +52,13 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /var/www/html
+              name: nextcloud-base
+            - mountPath: /var/www/html/data/sean
               name: nextcloud-data
       volumes:
         - name: nextcloud-data
           persistentVolumeClaim:
             claimName: data
+        - name: nextcloud-base
+          persistentVolumeClaim:
+            claimName: base

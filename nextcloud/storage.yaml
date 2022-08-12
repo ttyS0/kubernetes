@@ -10,4 +10,16 @@ spec:
   resources:
     requests:
       storage: 10Ti
-
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: base
+  namespace: nextcloud
+spec:
+  storageClassName: longhorn
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
