@@ -22,12 +22,6 @@ spec:
       containers:
         - image: gitea/gitea:latest
           name: gitea
-          resources:
-            requests:
-              cpu: 1
-              memory: 1Gi
-            limits:
-              memory: 4Gi
           env:
             - name: RUN_MODE
               value: "prod"

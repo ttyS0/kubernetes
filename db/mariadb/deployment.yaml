@@ -21,12 +21,6 @@ spec:
       containers:
         - image: mariadb:latest
           name: mariadb
-          resources:
-            limits:
-              memory: "6Gi"
-            requests:
-              memory: "4Gi"
-              cpu: 1
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
