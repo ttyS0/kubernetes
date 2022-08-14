@@ -16,6 +16,8 @@ spec:
     spec:
       containers:
         - name: intel-gpu-plugin
+          args:
+            - "-enable-monitoring"
           env:
             - name: NODE_NAME
               valueFrom:
