@@ -29,6 +29,18 @@ spec:
                   key: pgroot
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
+            - name: PGSSLMODE
+              value: "prefer"
+            - name: PGSSLKEY
+              valueFrom:
+                secretKeyRef:
+                  key: tls.key
+                  name: pg-skj-dev-cert
+            - name: PGSSLCERT
+              valueFrom:
+                secretKeyRef:
+                  key: tls.crt
+                  name: pg-skj-dev-cert
           ports:
             - containerPort: 5432
               name: postgres
