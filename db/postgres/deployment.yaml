@@ -50,3 +50,10 @@ spec:
         - name: certs
           secret:
             secretName: pg-skj-dev-cert
+            defaultMode: 256
+            items:
+              - key: "tls.key"
+                path: "tls.key"
+                mode: 448
+              - key: "tls.crt"
+                path: "tls.crt"
