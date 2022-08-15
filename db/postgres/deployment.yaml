@@ -50,4 +50,3 @@ spec:
         - name: certs
           secret:
             secretName: pg-skj-dev-cert
-            defaultMode: 0400
