@@ -25,6 +25,10 @@ spec:
           args:
             - "-c"
             - "ssl=on"
+            - "-c"
+            - "ssl_cert_file=/certs/tls.crt"
+            - "-c"
+            - "ssl_key_file=/certs/tls.key"
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
@@ -33,12 +37,6 @@ spec:
                   key: pgroot
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
-            - name: PGSSLMODE
-              value: "prefer"
-            - name: PGSSLKEY
-              value: "/certs/tls.key"
-            - name: PGSSLCERT
-              value: "/certs/tls.crt"
           ports:
             - containerPort: 5432
               name: postgres
