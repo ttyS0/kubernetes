@@ -22,6 +22,9 @@ spec:
       containers:
         - image: postgres:latest
           name: postgres
+          args:
+            - "-c"
+            - "ssl=on"
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
