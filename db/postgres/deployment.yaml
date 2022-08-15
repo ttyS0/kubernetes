@@ -32,22 +32,22 @@ spec:
             - name: PGSSLMODE
               value: "prefer"
             - name: PGSSLKEY
-              valueFrom:
-                secretKeyRef:
-                  key: tls.key
-                  name: pg-skj-dev-cert
+              value: "/certs/tls.key"
             - name: PGSSLCERT
-              valueFrom:
-                secretKeyRef:
-                  key: tls.crt
-                  name: pg-skj-dev-cert
+              value: "/certs/tls.crt"
           ports:
             - containerPort: 5432
               name: postgres
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
+            - name: certs
+              mountPath: /certs
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: pg
+        - name: certs
+          secret:
+            secretName: pg-skj-dev-cert
+            defaultMode: 0400
