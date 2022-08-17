@@ -17,7 +17,7 @@ metadata:
   name: vault
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.20.1
+    helm.sh/chart: vault-0.21.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -29,7 +29,7 @@ metadata:
   name: vault-config
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.20.1
+    helm.sh/chart: vault-0.21.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -94,7 +94,7 @@ kind: ClusterRoleBinding
 metadata:
   name: vault-server-binding
   labels:
-    helm.sh/chart: vault-0.20.1
+    helm.sh/chart: vault-0.21.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -136,7 +136,7 @@ metadata:
   name: vault-internal
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.20.1
+    helm.sh/chart: vault-0.21.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -165,7 +165,7 @@ metadata:
   name: vault
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.20.1
+    helm.sh/chart: vault-0.21.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -229,18 +229,23 @@ spec:
       
       
       serviceAccountName: "vault-agent-injector"
-      hostNetwork: false
+      
       securityContext:
         runAsNonRoot: true
         runAsGroup: 1000
         runAsUser: 100
+        fsGroup: 1000
+      hostNetwork: false
       containers:
         - name: sidecar-injector
           
-          image: "hashicorp/vault-k8s:0.16.1"
+          image: "hashicorp/vault-k8s:0.17.0"
           imagePullPolicy: "IfNotPresent"
           securityContext:
             allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           env:
             - name: AGENT_INJECT_LISTEN
               value: :8080
@@ -251,7 +256,7 @@ spec:
             - name: AGENT_INJECT_VAULT_AUTH_PATH
               value: auth/kubernetes
             - name: AGENT_INJECT_VAULT_IMAGE
-              value: "hashicorp/vault:1.10.3"
+              value: "hashicorp/vault:1.11.2"
             - name: AGENT_INJECT_TLS_AUTO
               value: vault-agent-injector-cfg
             - name: AGENT_INJECT_TLS_AUTO_HOSTS
@@ -326,7 +331,7 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: vault-0.20.1
+        helm.sh/chart: vault-0.21.0
         app.kubernetes.io/name: vault
         app.kubernetes.io/instance: vault
         component: server
@@ -364,7 +369,7 @@ spec:
       containers:
         - name: vault
           
-          image: hashicorp/vault:1.10.3
+          image: hashicorp/vault:1.11.2
           imagePullPolicy: IfNotPresent
           command:
           - "/bin/sh"
@@ -507,7 +512,7 @@ metadata:
   name: vault
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.20.1
+    helm.sh/chart: vault-0.21.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -582,7 +587,7 @@ spec:
   
   containers:
     - name: vault-server-test
-      image: hashicorp/vault:1.10.3
+      image: hashicorp/vault:1.11.2
       imagePullPolicy: IfNotPresent
       env:
         - name: VAULT_ADDR
