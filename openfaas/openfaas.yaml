@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -20,7 +20,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -31,7 +31,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: alertmanager-config
     heritage: Helm
     release: openfaas
@@ -74,7 +74,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: prometheus-config
     heritage: Helm
     release: openfaas
@@ -102,6 +102,38 @@ data:
         scrape_interval: 10s
         static_configs:
           - targets: ['localhost:9090']
+
+      # Capture endpoints in the openfaas namespace with a scrape annotation
+      # such as the gateway-provider service.
+      - job_name: 'openfaas-endpoints'
+        kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+              - openfaas
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_service_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_service_name]
+          action: replace
+          target_label: kubernetes_name
+
+        - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+          separator: ;
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          target_label: __address__
+          replacement: $1:$2
+          action: replace
+
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        # - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_port]
+        #   action: keep
+        #   regex: true
 
       - job_name: 'kubernetes-pods'
         scrape_interval: 5s
@@ -983,7 +1015,7 @@ kind: ClusterRole
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1052,7 +1084,7 @@ metadata:
   name: openfaas-prometheus
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1074,7 +1106,7 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1098,7 +1130,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1119,7 +1151,7 @@ metadata:
   namespace: "openfaas-fn"
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1138,7 +1170,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1158,7 +1190,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: basic-auth-plugin
     heritage: Helm
     release: openfaas
@@ -1174,13 +1206,38 @@ spec:
   selector:
     app: basic-auth-plugin
 ---
+# Source: openfaas/templates/gateway-provider-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-provider
+  namespace: "openfaas"
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8081"
+  labels:
+    app: openfaas
+    chart: openfaas-10.2.2
+    component: gateway
+    heritage: Helm
+    release: openfaas
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8081
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: gateway
+---
 # Source: openfaas/templates/gateway-svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1202,7 +1259,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: nats
     heritage: Helm
     release: openfaas
@@ -1226,7 +1283,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1246,7 +1303,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1263,7 +1320,7 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "20b7bd6c6f49453bbc170a693f24ed8010df553e02a8c569589c329c71132cf2"
+        checksum/alertmanager-config: "c8cdf3e497d7f87cf29c95ea016de1bfe24ba662a7d88f3c679ef0b1bea8ed09"
     spec:
       containers:
       - name: alertmanager
@@ -1317,7 +1374,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: basic-auth-plugin
     heritage: Helm
     release: openfaas
@@ -1345,7 +1402,7 @@ spec:
             requests:
               cpu: 20m
               memory: 50Mi
-        image: ghcr.io/openfaas/basic-auth:0.21.4
+        image: ghcr.io/openfaas/basic-auth:0.23.0
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -1380,7 +1437,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1412,7 +1469,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/gateway:0.22.0
+        image: ghcr.io/openfaas/gateway:0.23.0
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -1475,7 +1532,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.15.0
+        image: ghcr.io/openfaas/faas-netes:0.15.1
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -1527,7 +1584,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: nats
     heritage: Helm
     release: openfaas
@@ -1587,7 +1644,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1604,7 +1661,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "73047fddca776c212c5e00127eba3a7efb2a3c3ebc0d1b6969ecaf18daf022ff"
+        checksum/prometheus-config: "fa0fa02184df4d3a78a9fbc30150c9ba63f1d7f57c2d22d115100cbf761c2336"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
@@ -1612,7 +1669,7 @@ spec:
         resources:
             requests:
               memory: 512Mi
-        image: prom/prometheus:v2.11.0
+        image: prom/prometheus:v2.36.2
         command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
@@ -1659,7 +1716,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.1.1
+    chart: openfaas-10.2.2
     component: queue-worker
     heritage: Helm
     release: openfaas
@@ -1687,7 +1744,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/queue-worker:0.13.0
+        image: ghcr.io/openfaas/queue-worker:0.13.1
         imagePullPolicy: IfNotPresent
         env:
         - name: faas_nats_address

@@ -3,17 +3,12 @@ kind: Ingress
 metadata:
   name: openfaas-ingress
   namespace: "openfaas"
-  labels:
-    app: openfaas
-    chart: openfaas-9.0.2
-    release: openfaas
-    heritage: Helm
   annotations:
     kubernetes.io/tls-acme: "true"
 spec:
   ingressClassName: "nginx-internal"
   rules:
-    - host: gw.skj.dev
+    - host: faas.skj.dev
       http:
         paths:
           - path: /
@@ -25,5 +20,5 @@ spec:
                   number: 8080
   tls:
     - hosts:
-        - gw.skj.dev
+        - faas.skj.dev
       secretName: openfaas-cert
