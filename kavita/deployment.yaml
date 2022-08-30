@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kavita
+  namespace: kavita
+spec:
+  selector:
+    matchLabels:
+      app: kavita
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: kavita
+    spec:
+      containers:
+        - image: kizaing/kavita:latest
+          name: kavita
+          env:
+            - name: TZ
+              value: "America/Chicago"
+          ports:
+            - containerPort: 5000
+              name: kavita
+          volumeMounts:
+            - mountPath: /media
+              name: media
+            - mountPath: /kavita/config
+              name: config
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+        - name: config
+          persistentVolumeClaim:
+            claimName: config

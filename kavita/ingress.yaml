@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kavita
+  namespace: kavita
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: books.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kavita
+                port:
+                  number: 5000
+  tls:
+    - hosts:
+        - books.skj.dev
+      secretName: books-skj-dev-cert

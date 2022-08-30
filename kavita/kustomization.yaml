@@ -1,0 +1,11 @@
+namespace: kavita
+
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: kizaing/kavita
+    newTag: "0.5.5"
