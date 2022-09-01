@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jelu
+  namespace: jelu
+  labels:
+    app: jelu
+spec:
+  ports:
+    - port: 11111
+      name: jelu
+  selector:
+    app: jelu

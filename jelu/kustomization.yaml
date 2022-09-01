@@ -1,0 +1,11 @@
+namespace: jelu
+
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: wabayang/jelu
+    newTag: 0.29.0

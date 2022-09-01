@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jelu
+  namespace: jelu
+spec:
+  selector:
+    matchLabels:
+      app: jelu
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jelu
+    spec:
+      containers:
+        - image: wabayang/jelu:latest
+          name: jelu
+          env:
+            - name: TZ
+              value: "America/Chicago"
+          ports:
+            - containerPort: 11111
+              name: jelu
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /database
+              name: database
+            - mountPath: /files/images
+              name: images
+            - mountPath: /files/imports
+              name: imports
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config
+        - name: database
+          persistentVolumeClaim:
+            claimName: database
+        - name: images
+          persistentVolumeClaim:
+            claimName: images
+        - name: imports
+          persistentVolumeClaim:
+            claimName: imports
