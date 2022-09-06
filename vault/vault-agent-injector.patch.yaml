@@ -2,4 +2,4 @@
   path: /spec/template/spec/containers/0/env/4
   value:
     name: AGENT_INJECT_VAULT_IMAGE
-    value: "hashicorp/vault:1.11.2"
+    value: "hashicorp/vault:1.11.3"
