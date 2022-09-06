@@ -4,10 +4,10 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -20,10 +20,10 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -37,10 +37,10 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -54,10 +54,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
   name: ingress-nginx-internal
@@ -130,10 +130,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
   name: ingress-nginx-internal
@@ -151,10 +151,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -256,10 +256,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -279,10 +279,10 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -305,10 +305,10 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -332,10 +332,10 @@ kind: Service
 metadata:
   annotations:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -372,10 +372,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -400,7 +400,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: controller
-          image: "registry.k8s.io/ingress-nginx/controller:v1.3.0@sha256:d1707ca76d3b044ab8a28277a2466a02100ee9f58a86af1535a3edf9323ea1b5"
+          image: "registry.k8s.io/ingress-nginx/controller:v1.3.1@sha256:54f7fe2c6c5a9db9a0ebf1131797109bb7a4d91f56b9b362bde2abd237dd1974"
           imagePullPolicy: IfNotPresent
           lifecycle: 
             preStop:
@@ -500,10 +500,10 @@ apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -520,10 +520,10 @@ metadata:
   name: ingress-nginx-internal-controller
   namespace: "monitoring"
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -547,10 +547,10 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: admission-webhook
@@ -588,10 +588,10 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: admission-webhook
@@ -605,10 +605,10 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: admission-webhook
@@ -630,10 +630,10 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: admission-webhook
@@ -656,10 +656,10 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: admission-webhook
@@ -682,10 +682,10 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: admission-webhook
@@ -708,10 +708,10 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: admission-webhook
@@ -720,10 +720,10 @@ spec:
     metadata:
       name: ingress-nginx-internal-admission-create
       labels:
-        helm.sh/chart: ingress-nginx-4.2.3
+        helm.sh/chart: ingress-nginx-4.2.5
         app.kubernetes.io/name: ingress-nginx
         app.kubernetes.io/instance: ingress-nginx-internal
-        app.kubernetes.io/version: "1.3.0"
+        app.kubernetes.io/version: "1.3.1"
         app.kubernetes.io/part-of: ingress-nginx
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: admission-webhook
@@ -763,10 +763,10 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels:
-    helm.sh/chart: ingress-nginx-4.2.3
+    helm.sh/chart: ingress-nginx-4.2.5
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/version: "1.3.1"
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: admission-webhook
@@ -775,10 +775,10 @@ spec:
     metadata:
       name: ingress-nginx-internal-admission-patch
       labels:
-        helm.sh/chart: ingress-nginx-4.2.3
+        helm.sh/chart: ingress-nginx-4.2.5
         app.kubernetes.io/name: ingress-nginx
         app.kubernetes.io/instance: ingress-nginx-internal
-        app.kubernetes.io/version: "1.3.0"
+        app.kubernetes.io/version: "1.3.1"
         app.kubernetes.io/part-of: ingress-nginx
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: admission-webhook
