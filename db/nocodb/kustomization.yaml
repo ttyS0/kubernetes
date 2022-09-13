@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: nocodb/nocodb
-    newTag: 0.96.2
+    newTag: 0.96.4
