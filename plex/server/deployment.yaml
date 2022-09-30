@@ -37,11 +37,15 @@ spec:
             - name: plex-media
               mountPath: /media
               readOnly: true
+            - name: plex-tmp
+              mountPath: /tmp
           resources:
             limits:
               gpu.intel.com/i915: 1
       volumes:
         - name: plex-transcode
+          emptyDir: {}
+        - name: plex-tmp
           emptyDir: {}
         - name: plex-media
           persistentVolumeClaim:
