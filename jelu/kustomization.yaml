@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: wabayang/jelu
-    newTag: 0.31.0
+    newTag: 0.32.0
