@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+  namespace: dns
+  labels:
+    app: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+        name: pihole
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: pihole
+          image: pihole/pihole:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: pihole-ui
+            - containerPort: 53
+              name: dns-tcp
+              protocol: TCP
+            - containerPort: 53
+              name: dns-udp
+              protocol: UDP
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: WEBPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: pihole-password
+            - name: PIHOLE_DNS_
+              value: "9.9.9.11;149.112.112.11;8.8.8.8;8.8.4.4"
+            - name: WEBTHEME
+              value: "default-auto"
+          volumeMounts:
+            - name: pihole
+              mountPath: "/etc/pihole"
+            - name: local-overrides
+              mountPath: /etc/dnsmasq.d/09-local-overrides.conf
+              subPath: 09-local-overrides.conf
+      volumes:
+        - name: pihole
+          persistentVolumeClaim:
+            claimName: pihole
+        - name: local-overrides
+          configMap:
+            defaultMode: 420
+            name: pihole-local-overrides

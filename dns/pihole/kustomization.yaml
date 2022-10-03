@@ -1,0 +1,13 @@
+namespace: dns
+
+resources:
+  - secret.yaml
+  - storage.yaml
+  - configmap.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: pihole/pihole
+    newTag: 2022.09.4
