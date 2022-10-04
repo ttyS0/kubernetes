@@ -6,6 +6,7 @@
 persistence:
   defaultClass: false
   defaultClassReplicaCount: 2
+  defaultDataLocality: best-effort
 
 defaultSettings:
   defaultDataPath: /var/storage
