@@ -1,0 +1,9 @@
+namespace: cloudflared
+
+resources:
+  - deployment.yaml
+  - configmap.yaml
+
+images:
+  - name: cloudflare/cloudflared
+    newTag: 2022.10.0-amd64
