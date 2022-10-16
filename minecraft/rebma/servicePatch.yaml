@@ -1,9 +1,0 @@
-- op: replace
-  path: /metadata/name
-  value: rebma
-- op: replace
-  path: /metadata/labels/world
-  value: rebma
-- op: replace
-  path: /spec/selector/world
-  value: rebma
