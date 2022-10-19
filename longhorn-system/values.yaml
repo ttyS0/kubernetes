@@ -1,10 +1,10 @@
 #helm upgrade --install longhorn longhorn/longhorn \
 # --namespace longhorn-system \
-# --version 1.3.1 \
+# --version 1.3.2 \
 # --values values.yaml
 
 persistence:
-  defaultClass: false
+  defaultClass: true
   defaultClassReplicaCount: 2
   defaultDataLocality: best-effort
 
