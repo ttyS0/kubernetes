@@ -7,15 +7,15 @@ resources:
 patchesStrategicMerge:
   - vault-server-test.patch.yaml
 
-patchesJson6902:
-  - target:
-      kind: Deployment
-      name: vault-agent-injector
-      version: v1
-    path: vault-agent-injector.patch.yaml
+#patchesJson6902:
+#  - target:
+#      kind: Deployment
+#      name: vault-agent-injector
+#      version: v1
+#    path: vault-agent-injector.patch.yaml
 
-images:
-  - name: hashicorp/vault
-    newTag: 1.11.4
+#images:
+#  - name: hashicorp/vault
+#    newTag: 1.11.4
 #  - name: hashicorp/vault-k8s
 #    newTag: 1.0.0
