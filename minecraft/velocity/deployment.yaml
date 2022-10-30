@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: velocity
+  namespace: minecraft
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: velocity
+  template:
+    metadata:
+      labels:
+        app: velocity
+    spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+      initContainers:
+        - image: curlimages/curl:latest
+          name: curl
+          command: ["/run.sh"]
+          workingDir: "/minecraft"
+          volumeMounts:
+            - mountPath: /run.sh
+              subPath: run.sh
+              name: init
+            - mountPath: /minecraft
+              name: data
+          env:
+            - name: VELOCITY_VERSION
+              value: "3.1.2"
+            - name: VELOCITY_BUILD
+              value: "184"
+      containers:
+        - imagePullPolicy: IfNotPresent
+          name: velocity
+          image: openjdk:18-slim
+          command: ["/run.sh"]
+          workingDir: "/minecraft"
+          ports:
+            - containerPort: 25577
+          volumeMounts:
+            - mountPath: /run.sh
+              subPath: run.sh
+              name: run
+            - mountPath: /minecraft/velocity.toml
+              subPath: velocity.toml
+              name: conf
+            - mountPath: /minecraft/forwarding.secret
+              subPath: forwarding.secret
+              name: forwarding-secret
+            - mountPath: /minecraft
+              name: data
+      volumes:
+        - name: run
+          configMap:
+            name: velocity-run
+            items:
+              - key: run.sh
+                path: run.sh
+            defaultMode: 0777
+        - name: init
+          configMap:
+            name: velocity-init
+            items:
+              - key: run.sh
+                path: run.sh
+            defaultMode: 0777
+        - name: conf
+          configMap:
+            name: velocity-conf
+            items:
+              - key: velocity.toml
+                path: velocity.toml
+        - name: forwarding-secret
+          secret:
+            secretName: forwarding-secret
+        - name: data
+          emptyDir: {}
+
+

@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main
+  namespace: minecraft
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minecraft
+      world: main
+  template:
+    metadata:
+      labels:
+        app: minecraft
+        world: main
+    spec:
+      securityContext:
+        runAsUser: 1100
+      initContainers:
+        - image: curlimages/curl:latest
+          name: init
+          command: [ "/run.sh" ]
+          workingDir: "/minecraft"
+          volumeMounts:
+            - mountPath: /run.sh
+              subPath: run.sh
+              name: minecraft-init
+            - mountPath: /data
+              name: data
+          env:
+            - name: MINECRAFT_VERSION
+              value: "1.19.2"
+      containers:
+        - imagePullPolicy: IfNotPresent
+          name: world
+          image: openjdk:18-slim
+          command: ["/run.sh"]
+          workingDir: "/minecraft"
+          ports:
+            - containerPort: 25565
+            - containerPort: 25575
+          volumeMounts:
+            - name: minecraft-run
+              mountPath: /run.sh
+              subPath: run.sh
+            - name: world
+              mountPath: /minecraft
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: world
+          persistentVolumeClaim:
+            claimName: world
+        - name: data
+          emptyDir: {}
+        - name: minecraft-init
+          configMap:
+            name: minecraft-init
+            items:
+              - key: run.sh
+                path: run.sh
+            defaultMode: 0777
+        - name: minecraft-run
+          configMap:
+            name: minecraft-run
+            items:
+              - key: run.sh
+                path: run.sh
+            defaultMode: 0777
+
+
+

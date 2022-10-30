@@ -1,0 +1,11 @@
+namespace: minecraft
+
+resources:
+  - configmap.yaml
+  - deployment.yaml
+  - service.yaml
+
+configMapGenerator:
+  - name: velocity-conf
+    files:
+      - velocity.toml
