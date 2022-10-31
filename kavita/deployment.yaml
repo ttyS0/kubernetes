@@ -35,4 +35,4 @@ spec:
             claimName: media
         - name: config
           persistentVolumeClaim:
-            claimName: config
+            claimName: data
