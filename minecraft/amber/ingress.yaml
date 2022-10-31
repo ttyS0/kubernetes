@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: map-amber
+  namespace: minecraft
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  rules:
+    - host: mc-amber.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: amber
+                port:
+                  number: 8100
+  tls:
+    - hosts:
+        - mc-amber.skj.dev
+      secretName: mc-amber-skj-dev-cert
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: map-amber-ext
+  namespace: minecraft
+spec:
+  ingressClassName: "nginx-external"
+  rules:
+    - host: mc-amber.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: amber
+                port:
+                  number: 8100
+  tls:
+    - hosts:
+        - mc-amber.skj.dev
+      secretName: mc-amber-skj-dev-cert

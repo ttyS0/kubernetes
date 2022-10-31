@@ -6,7 +6,7 @@ bind = "0.0.0.0:25577"
 
 # What should be the MOTD? This gets displayed when the player adds your server to
 # their server list. Legacy color codes and JSON are accepted.
-motd = "&#09add3A SKJ Minecraft"
+motd = "&#09add3SKJ Minecraft"
 
 # What should we display for the maximum number of players? (Velocity does not support a cap
 # on the number of players online.)
@@ -77,17 +77,16 @@ enable-player-address-logging = true
 #minigames = "127.0.0.1:30068"
 
 main = "main:25565"
+amber = "amber:25565"
 
 # In what order we should try servers when a player logs in or is kicked from a server.
 try = [
+    "amber",
     "main"
 ]
 
 [forced-hosts]
 # Configure your forced hosts here.
-"main" = [
-    "main"
-]
 #"factions.example.com" = [
 #  "factions"
 #]

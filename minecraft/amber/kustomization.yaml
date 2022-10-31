@@ -1,0 +1,8 @@
+namespace: minecraft
+
+# Depends on main world existing
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
