@@ -16,8 +16,7 @@ spec:
         app: velocity
     spec:
       securityContext:
-        runAsUser: 1000
-        fsGroup: 1000
+        runAsUser: 1100
       initContainers:
         - image: curlimages/curl:latest
           name: curl
@@ -42,6 +41,7 @@ spec:
           workingDir: "/minecraft"
           ports:
             - containerPort: 25577
+            - containerPort: 19132
           volumeMounts:
             - mountPath: /run.sh
               subPath: run.sh
@@ -79,6 +79,7 @@ spec:
           secret:
             secretName: forwarding-secret
         - name: data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: velocity
 
 
