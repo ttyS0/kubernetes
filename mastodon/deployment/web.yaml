@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app.kubernetes.io/name: mastodon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mastodon
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mastodon
+    spec:
+      serviceAccountName: mastodon
+      securityContext:
+        runAsGroup: 991
+        runAsUser: 991
+      volumes:
+        - name: mastodon
+          persistentVolumeClaim:
+            claimName: data
+      containers:
+        - name: mastodon
+          securityContext:
+            {}
+          image: "tootsuite/mastodon:latest"
+          imagePullPolicy: IfNotPresent
+          command:
+            - bundle
+            - exec
+            - puma
+            - -C
+            - config/puma.rb
+          envFrom:
+            - secretRef:
+                name: conf
+          volumeMounts:
+            - name: mastodon
+              mountPath: /opt/mastodon/public/system
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            {}

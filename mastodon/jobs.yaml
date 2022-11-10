@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: media-remove
+  namespace: mastodon
+  labels:
+    app.kubernetes.io/name: mastodon
+spec:
+  schedule: 0 0 * * 0
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: media-remove
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: mastodon
+              persistentVolumeClaim:
+                claimName: data
+          containers:
+            - name: media-remove
+              image: "tootsuite/mastodon:latest"
+              imagePullPolicy: IfNotPresent
+              command:
+                - bin/tootctl
+                - media
+                - remove
+              envFrom:
+                - secretRef:
+                    name: conf
+              volumeMounts:
+                - name: mastodon
+                  mountPath: /opt/mastodon/public/system
+

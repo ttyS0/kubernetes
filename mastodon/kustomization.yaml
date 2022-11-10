@@ -1,0 +1,12 @@
+namespace: mastodon
+
+resources:
+  - deployment/sidekiq.yaml
+  - deployment/streaming.yaml
+  - deployment/web.yaml
+  - ingress.yaml
+  - service.yaml
+
+images:
+  - name: tootsuite/mastodon
+    newTag: "v3.5.3"

@@ -1,0 +1,65 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mastodon
+  namespace: mastodon
+  labels:
+    app.kubernetes.io/name: mastodon
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  tls:
+    - hosts:
+        - "skj.social"
+      secretName: skj-social-cert
+  rules:
+    - host: "skj.social"
+      http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: web
+                port:
+                  number: 3000
+            pathType: ImplementationSpecific
+          - path: /api/v1/streaming
+            backend:
+              service:
+                name: streaming
+                port:
+                  number: 4000
+            pathType: ImplementationSpecific
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mastodon-ext
+  namespace: mastodon
+  labels:
+    app.kubernetes.io/name: mastodon
+spec:
+  ingressClassName: "nginx-external"
+  tls:
+    - hosts:
+        - "skj.social"
+      secretName: skj-social-cert
+  rules:
+    - host: "skj.social"
+      http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: web
+                port:
+                  number: 3000
+            pathType: ImplementationSpecific
+          - path: /api/v1/streaming
+            backend:
+              service:
+                name: streaming
+                port:
+                  number: 4000
+            pathType: ImplementationSpecific
