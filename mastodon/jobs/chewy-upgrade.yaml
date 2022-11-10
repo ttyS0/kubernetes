@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chewy-upgrade
+  namespace: mastodon
+  labels:
+    app.kubernetes.io/name: mastodon
+spec:
+  template:
+    metadata:
+      name: chewy-upgrade
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: mastodon
+          persistentVolumeClaim:
+            claimName: data
+      containers:
+        - name: chewy-setup
+          image: "tootsuite/mastodon:v3.5.3"
+          imagePullPolicy: IfNotPresent
+          command:
+            - bundle
+            - exec
+            - rake
+            - chewy:upgrade
+          envFrom:
+            - secretRef:
+                name: conf
+          volumeMounts:
+            - name: mastodon
+              mountPath: /opt/mastodon/public/system
