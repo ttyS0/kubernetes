@@ -6,6 +6,7 @@ resources:
   - deployment/web.yaml
   - ingress.yaml
   - service.yaml
+  - cronjob.yaml
 
 images:
   - name: tootsuite/mastodon

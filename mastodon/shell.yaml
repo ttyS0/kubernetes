@@ -1,31 +1,46 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: assets-precompile
+  name: shell
+  namespace: mastodon
   labels:
     app.kubernetes.io/name: mastodon
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mastodon
   template:
     metadata:
-      name: assets-precompile
+      labels:
+        app.kubernetes.io/name: mastodon
     spec:
-      restartPolicy: Never
+      serviceAccountName: mastodon
+      securityContext:
+        runAsGroup: 991
+        runAsUser: 991
       volumes:
         - name: mastodon
           persistentVolumeClaim:
             claimName: data
       containers:
-        - name: assets-precompile
+        - name: mastodon
+          securityContext:
+            {}
           image: "tootsuite/mastodon:v3.5.3"
           imagePullPolicy: IfNotPresent
           command:
-            - bash
+            - /bin/sh
             - -c
             - |
-              bundle exec rake assets:precompile && yarn cache clean
+              while true; do
+                sleep 10
+              done
           envFrom:
             - secretRef:
                 name: conf
           volumeMounts:
             - name: mastodon
               mountPath: /opt/mastodon/public/system
+          resources:
+            {}
