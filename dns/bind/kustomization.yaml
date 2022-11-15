@@ -15,6 +15,7 @@ configMapGenerator:
       - splashof.ink.db
       - ttys0.net.db
       - skj.dev.rr.db
+      - skj.social.db
       - named.conf
 
 images:

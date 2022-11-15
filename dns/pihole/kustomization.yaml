@@ -10,4 +10,4 @@ resources:
 
 images:
   - name: pihole/pihole
-    newTag: "2022.10"
+    newTag: "2022.11"
