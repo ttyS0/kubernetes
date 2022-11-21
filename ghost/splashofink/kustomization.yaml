@@ -26,7 +26,7 @@ patchesJson6902:
 images:
   - name: library/ghost
     #newName: git.skj.dev/sean/ghost
-    newTag: 5.22.9
+    newTag: 5.23.0
 
 commonLabels:
   app: splashofink
