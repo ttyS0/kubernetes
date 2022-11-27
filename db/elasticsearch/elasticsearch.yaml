@@ -1,0 +1,31 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch
+  namespace: db
+spec:
+  version: 8.5.0
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  nodeSets:
+    - name: default
+      count: 1
+      config:
+        node.store.allow_mmap: false
+        xpack.security.authc:
+          anonymous:
+            username: anonymous
+            roles: superuser
+            authz_exception: false
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 50Gi
+            storageClassName: longhorn

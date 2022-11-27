@@ -12,7 +12,6 @@ configMapGenerator:
       - skj.wiki.db
       - videotranscoding.wiki.db
       - stereopinions.net.db
-      - splashof.ink.db
       - ttys0.net.db
       - skj.dev.rr.db
       - skj.social.db

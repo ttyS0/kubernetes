@@ -48,18 +48,6 @@ data:
 
     server {
         listen 80;
-        server_name skj.dev;
-        root /usr/share/nginx/html/skj.dev;
-        index index.html;
-        autoindex on;
-
-        location / {
-            try_files $uri $uri/ =404;
-        }
-    }
-
-    server {
-        listen 80;
         server_name pasta.dev;
         root /usr/share/nginx/html/pasta.dev;
         index index.html;
