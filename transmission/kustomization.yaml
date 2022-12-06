@@ -1,0 +1,12 @@
+namespace: transmission
+
+resources:
+  - configuration.yaml
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: haugene/transmission-openvpn
+    newTag: "4.3.2"

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission
+  namespace: transmission
+  labels:
+    app: transmission
+spec:
+  selector:
+    app: transmission
+  ports:
+    - port: 9091
+      name: transmission
