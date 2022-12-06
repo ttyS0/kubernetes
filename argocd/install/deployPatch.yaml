@@ -11,4 +11,4 @@
           name: argocd-gpg-keys-cm
 - op: replace
   path: /spec/template/spec/containers/0/image
-  value: git.skj.dev/sean/argocd:v2.4.14
+  value: git.skj.dev/sean/argocd:v2.5.3
