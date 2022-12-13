@@ -1,6 +1,6 @@
 #helm template vault hashicorp/vault \
 #  --namespace vault \
-#  --version 0.22.1 \
+#  --version 0.23.0 \
 #  --values values.yaml > vault.yaml
 ---
 injector:
