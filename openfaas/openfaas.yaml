@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -20,7 +20,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -31,7 +31,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: alertmanager-config
     heritage: Helm
     release: openfaas
@@ -74,7 +74,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: prometheus-config
     heritage: Helm
     release: openfaas
@@ -1015,7 +1015,7 @@ kind: ClusterRole
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1084,7 +1084,7 @@ metadata:
   name: openfaas-prometheus
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1106,7 +1106,7 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1130,7 +1130,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1151,7 +1151,7 @@ metadata:
   namespace: "openfaas-fn"
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1170,7 +1170,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1190,7 +1190,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: basic-auth-plugin
     heritage: Helm
     release: openfaas
@@ -1217,7 +1217,7 @@ metadata:
     prometheus.io/port: "8081"
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1237,7 +1237,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1259,7 +1259,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: nats
     heritage: Helm
     release: openfaas
@@ -1283,7 +1283,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1303,7 +1303,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1320,11 +1320,11 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "c8cdf3e497d7f87cf29c95ea016de1bfe24ba662a7d88f3c679ef0b1bea8ed09"
+        checksum/alertmanager-config: "09b40407358d0a33559e404c602293159b4c31d52fa00dc8b06d91fbb8bdb54b"
     spec:
       containers:
       - name: alertmanager
-        image: prom/alertmanager:v0.18.0
+        image: prom/alertmanager:v0.24.0
         imagePullPolicy: IfNotPresent
         command:
           - "alertmanager"
@@ -1374,7 +1374,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: basic-auth-plugin
     heritage: Helm
     release: openfaas
@@ -1402,7 +1402,7 @@ spec:
             requests:
               cpu: 20m
               memory: 50Mi
-        image: ghcr.io/openfaas/basic-auth:0.23.0
+        image: ghcr.io/openfaas/basic-auth:0.25.3
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -1437,7 +1437,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1469,21 +1469,31 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/gateway:0.23.0
+        image: ghcr.io/openfaas/gateway:0.25.3
         imagePullPolicy: IfNotPresent
+        command:
+          - ./gateway
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
         livenessProbe:
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
           httpGet:
             path: /healthz
             port: 8080
-          timeoutSeconds: 5
         readinessProbe:
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
           httpGet:
             path: /healthz
             port: 8080
-          timeoutSeconds: 5
         env:
         - name: read_timeout
           value: "65s"
@@ -1532,7 +1542,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.15.1
+        image: ghcr.io/openfaas/faas-netes:0.16.1
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -1546,11 +1556,11 @@ spec:
         - name: function_namespace
           value: "openfaas-fn"
         - name: read_timeout
-          value: "60s"
+          value: "65s"
         - name: profiles_namespace
           value: "openfaas"
         - name: write_timeout
-          value: "60s"
+          value: "65s"
         - name: image_pull_policy
           value: "Always"
         - name: http_probe
@@ -1584,7 +1594,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: nats
     heritage: Helm
     release: openfaas
@@ -1608,7 +1618,7 @@ spec:
         resources:
             requests:
               memory: 120Mi
-        image: nats-streaming:0.22.0
+        image: nats-streaming:0.24.6
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 4222
@@ -1644,7 +1654,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1661,7 +1671,7 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "fa0fa02184df4d3a78a9fbc30150c9ba63f1d7f57c2d22d115100cbf761c2336"
+        checksum/prometheus-config: "3da497f379021c7c1a12e0d0e6ae1195d0b2646f4dc871b48ef9cc2093ba1f8d"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
@@ -1669,7 +1679,7 @@ spec:
         resources:
             requests:
               memory: 512Mi
-        image: prom/prometheus:v2.36.2
+        image: prom/prometheus:v2.38.0
         command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
@@ -1716,7 +1726,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-10.2.2
+    chart: openfaas-11.1.0
     component: queue-worker
     heritage: Helm
     release: openfaas
@@ -1755,8 +1765,6 @@ spec:
           value: "faas"
         - name: faas_gateway_address
           value: "gateway.openfaas.svc.cluster.local"
-        - name: "gateway_invoke"
-          value: "true"
         - name: faas_function_suffix
           value: ".openfaas-fn.svc.cluster.local"
         - name: ack_wait
