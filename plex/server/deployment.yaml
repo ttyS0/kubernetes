@@ -20,7 +20,7 @@ spec:
           - name: ndots
             value: "1"
       containers:
-        - image: plexinc/pms-docker:latest
+        - image: plexinc/pms-docker:plexpass
           name: plex
           env:
             - name: HOSTNAME

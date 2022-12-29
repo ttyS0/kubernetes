@@ -5,6 +5,6 @@ resources:
   - deployment.yaml
   - service.yaml
 
-images:
-  - name: plexinc/pms-docker
-    newTag: 1.30.0.6486-629d58034
+#images:
+#  - name: plexinc/pms-docker
+#    newTag: 1.30.0.6486-629d58034
