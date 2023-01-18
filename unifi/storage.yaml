@@ -1,10 +1,10 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: data
+  name: unifi
   namespace: unifi
 spec:
-  storageClassName: nfs-csi
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
