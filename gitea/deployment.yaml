@@ -62,4 +62,4 @@ spec:
       volumes:
         - name: gitea
           persistentVolumeClaim:
-            claimName: data
+            claimName: gitea
