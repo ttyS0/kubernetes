@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
+  name: mastodon
   namespace: mastodon
   labels:
     app.kubernetes.io/name: mastodon
@@ -19,12 +19,13 @@ spec:
       securityContext:
         runAsGroup: 991
         runAsUser: 991
+        fsGroup: 991
       volumes:
         - name: mastodon
           persistentVolumeClaim:
-            claimName: data
+            claimName: mastodon
       containers:
-        - name: mastodon
+        - name: web
           securityContext:
             {}
           image: "tootsuite/mastodon:latest"
@@ -55,3 +56,45 @@ spec:
               port: http
           resources:
             {}
+        - name: sidekiq
+          securityContext:
+            { }
+          image: "tootsuite/mastodon:latest"
+          imagePullPolicy: IfNotPresent
+          command:
+            - bundle
+            - exec
+            - sidekiq
+          envFrom:
+            - secretRef:
+                name: conf
+          volumeMounts:
+            - name: mastodon
+              mountPath: /opt/mastodon/public/system
+          resources:
+            { }
+        - name: streaming
+          securityContext:
+            { }
+          image: "tootsuite/mastodon:latest"
+          imagePullPolicy: IfNotPresent
+          command:
+            - node
+            - ./streaming
+          envFrom:
+            - secretRef:
+                name: conf
+          ports:
+            - name: streaming
+              containerPort: 4000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/v1/streaming/health
+              port: streaming
+          readinessProbe:
+            httpGet:
+              path: /api/v1/streaming/health
+              port: streaming
+          resources:
+            { }

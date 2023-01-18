@@ -20,14 +20,14 @@ spec:
           - path: /
             backend:
               service:
-                name: web
+                name: mastodon
                 port:
                   number: 3000
             pathType: ImplementationSpecific
           - path: /api/v1/streaming
             backend:
               service:
-                name: streaming
+                name: mastodon
                 port:
                   number: 4000
             pathType: ImplementationSpecific
@@ -52,14 +52,14 @@ spec:
           - path: /
             backend:
               service:
-                name: web
+                name: mastodon
                 port:
                   number: 3000
             pathType: ImplementationSpecific
           - path: /api/v1/streaming
             backend:
               service:
-                name: streaming
+                name: mastodon
                 port:
                   number: 4000
             pathType: ImplementationSpecific

@@ -1,12 +1,11 @@
 namespace: mastodon
 
 resources:
-  - deployment/sidekiq.yaml
-  - deployment/streaming.yaml
-  - deployment/web.yaml
+  - deployment.yaml
   - ingress.yaml
   - service.yaml
-  - cronjob.yaml
+  - storage.yaml
+  - secret.yaml
 
 images:
   - name: tootsuite/mastodon
