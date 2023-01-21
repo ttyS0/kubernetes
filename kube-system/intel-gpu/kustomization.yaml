@@ -5,4 +5,4 @@ resources:
 
 images:
   - name: intel/intel-gpu-plugin
-    newTag: 0.25.1
+    newTag: 0.26.0
