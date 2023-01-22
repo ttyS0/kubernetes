@@ -27,6 +27,8 @@ spec:
                 secretKeyRef:
                   name: mariadbroot
                   key: mariadbroot
+            - name: MARIADB_AUTO_UPGRADE
+              value: "true"
           ports:
             - containerPort: 3306
               name: mariadb
