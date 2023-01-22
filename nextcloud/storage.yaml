@@ -1,19 +1,6 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: data
-  namespace: nextcloud
-spec:
-  storageClassName: nfs-csi
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Ti
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: base
   namespace: nextcloud
 spec:
@@ -22,4 +9,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Ti
