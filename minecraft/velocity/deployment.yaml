@@ -33,7 +33,7 @@ spec:
             - name: VELOCITY_VERSION
               value: "3.1.2"
             - name: VELOCITY_BUILD
-              value: "184"
+              value: "222"
       containers:
         - imagePullPolicy: IfNotPresent
           name: velocity
