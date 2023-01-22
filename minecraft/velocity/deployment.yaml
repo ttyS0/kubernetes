@@ -17,6 +17,7 @@ spec:
     spec:
       securityContext:
         runAsUser: 1100
+        fsGroup: 1100
       initContainers:
         - image: curlimages/curl:latest
           name: curl

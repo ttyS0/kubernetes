@@ -4,7 +4,7 @@ metadata:
   name: velocity
   namespace: minecraft
 spec:
-  storageClassName: nfs-csi
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:

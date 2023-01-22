@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: world
+  name: main
   namespace: minecraft
 spec:
-  storageClassName: nfs-csi
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Gi
+      storage: 10Gi

@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: amber
+  name: world-amber
   namespace: minecraft
 spec:
-  storageClassName: nfs-csi
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Gi
+      storage: 10Gi

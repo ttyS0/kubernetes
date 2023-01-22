@@ -19,6 +19,7 @@ spec:
     spec:
       securityContext:
         runAsUser: 1100
+        fsGroup: 1100
       initContainers:
         - image: curlimages/curl:latest
           name: init
@@ -53,7 +54,7 @@ spec:
       volumes:
         - name: world
           persistentVolumeClaim:
-            claimName: world
+            claimName: main
         - name: data
           emptyDir: {}
         - name: minecraft-init
