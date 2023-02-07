@@ -1,0 +1,8 @@
+namespace: monitoring
+
+resources:
+  - kubelet.yaml
+  - kube-state-metrics.yaml
+  - longhorn.yaml
+  - node-exporter.yaml
+

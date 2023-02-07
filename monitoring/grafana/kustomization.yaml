@@ -1,0 +1,8 @@
+namespace: monitoring
+
+resources:
+  - grafana.yaml
+
+images:
+  - name: grafana/grafana
+    newTag: 9.3.6
