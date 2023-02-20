@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: kizaing/kavita
-    newTag: "0.6.1"
+    newTag: "0.7.1"
