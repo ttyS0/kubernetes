@@ -6,7 +6,6 @@
 injector:
   enabled: true
 server:
-  affinity: ""
   dataStorage:
     storageClass: longhorn
   ingress:
