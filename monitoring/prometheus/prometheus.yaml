@@ -19,6 +19,8 @@ spec:
       - key: name
         operator: In
         values:
+          - ingress-nginx-internal-controller
+          - ingress-nginx-external-controller
           - longhorn-prometheus-servicemonitor
           - kube-state-metrics
           - node-exporter

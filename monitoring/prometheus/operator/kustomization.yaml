@@ -3,6 +3,6 @@
 namespace: monitoring
 
 resources:
-  - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.62.0/bundle.yaml
+  - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.63.0/bundle.yaml
 
 
