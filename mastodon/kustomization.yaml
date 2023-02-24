@@ -9,4 +9,4 @@ resources:
 
 images:
   - name: tootsuite/mastodon
-    newTag: "v4.0.2"
+    newTag: "v4.1.0"
