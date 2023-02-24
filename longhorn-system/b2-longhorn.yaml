@@ -1,0 +1,7 @@
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: b2-longhorn
+  namespace: longhorn-system
+spec:
+  itemPath: "vaults/HomeLab/items/B2-Longhorn"

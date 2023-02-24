@@ -5,12 +5,11 @@
 
 persistence:
   defaultClass: true
-  defaultClassReplicaCount: 2
+  defaultClassReplicaCount: 3
   defaultDataLocality: best-effort
 
 defaultSettings:
   defaultDataPath: /var/storage
-  backupTarget: nfs://10.0.1.15:/longhorn
 
 ingress:
   enabled: true
