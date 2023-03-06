@@ -15,6 +15,7 @@ configMapGenerator:
       - ttys0.net.db
       - skj.dev.rr.db
       - skj.social.db
+      - projectlinusnashville.org.db
       - named.conf
 
 images:
