@@ -16,4 +16,4 @@ spec:
         app: ghost
     spec:
       securityContext:
-        runAsUser: 1000
+        fsGroup: 1000

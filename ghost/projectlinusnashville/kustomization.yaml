@@ -1,0 +1,36 @@
+namespace: ghost
+
+resources:
+- ../base
+- ingress.yaml
+- configmap.yaml
+- secret.yaml
+
+
+    #newName: git.skj.dev/sean/ghost
+images:
+- name: library/ghost
+  newTag: 5.37.0
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app: projectlinusnashville
+patches:
+- path: pvcPatch.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: ghost
+    version: v1
+- path: deployPatch.yaml
+  target:
+    kind: Deployment
+    name: ghost
+    version: v1
+- path: namePatch.yaml
+  target:
+    kind: Service
+    name: ghost
+    version: v1

@@ -1,0 +1,49 @@
+- op: replace
+  path: /metadata/name
+  value: projectlinusnashville
+- op: add
+  path: /spec/template/spec/containers
+  value:
+    - name: projectlinusnashville
+      image: library/ghost:latest
+      env:
+        - name: database__connection__user
+          valueFrom:
+            secretKeyRef:
+              name: projectlinusnashvilledb
+              key: dbuser
+        - name: database__connection__password
+          valueFrom:
+            secretKeyRef:
+              name: projectlinusnashvilledb
+              key: dbpass
+        - name: mail__options__auth__user
+          valueFrom:
+            secretKeyRef:
+              name: projectlinusnashville-mailgun
+              key: user
+        - name: mail__options__auth__pass
+          valueFrom:
+            secretKeyRef:
+              key: pass
+              name: projectlinusnashville-mailgun
+      ports:
+        - containerPort: 2368
+      volumeMounts:
+        - name: projectlinusnashville
+          mountPath: /var/lib/ghost/content
+        - name: projectlinusnashville-conf
+          mountPath: /var/lib/ghost/config.production.json
+          subPath: config.production.json
+- op: add
+  path: /spec/template/spec/volumes
+  value:
+    - name: projectlinusnashville
+      persistentVolumeClaim:
+        claimName: projectlinusnashville-data
+    - name: projectlinusnashville-conf
+      configMap:
+        name: projectlinusnashville-conf
+        items:
+          - key: production.json
+            path: config.production.json
