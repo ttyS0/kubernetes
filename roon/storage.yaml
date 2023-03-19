@@ -1,0 +1,59 @@
+# Data Volume
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: data
+  namespace: roon
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: longhorn
+
+# Library volume
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: music
+  namespace: roon
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+  storageClassName: nfs-csi
+
+# App volume
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: app
+  namespace: roon
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: longhorn
+
+# Backup volumes
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: backup
+  namespace: roon
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: nfs-csi
