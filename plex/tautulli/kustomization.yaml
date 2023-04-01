@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: tautulli/tautulli
-    newTag: v2.11.1
+    newTag: v2.12.2

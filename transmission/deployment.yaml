@@ -32,7 +32,7 @@ spec:
           image: haugene/transmission-openvpn:latest
           ports:
             - containerPort: 9091
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 10
