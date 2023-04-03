@@ -18,15 +18,15 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: music
+  name: media
   namespace: roon
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 1Ti
-  storageClassName: nfs-csi
+      storage: 200Gi
+  storageClassName: longhorn
 
 # App volume
 ---

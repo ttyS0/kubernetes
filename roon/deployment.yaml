@@ -75,7 +75,7 @@ spec:
             - mountPath: /app
               name: app
             - mountPath: /music
-              name: music
+              name: media
             - mountPath: /data
               name: data
             - mountPath: /backup
@@ -84,9 +84,9 @@ spec:
         - name: app
           persistentVolumeClaim:
             claimName: app
-        - name: music
+        - name: media
           persistentVolumeClaim:
-            claimName: music
+            claimName: media
         - name: data
           persistentVolumeClaim:
             claimName: data
