@@ -27,7 +27,7 @@ spec:
         - name: mastodon
           securityContext:
             {}
-          image: "tootsuite/mastodon:v4.1.1"
+          image: "tootsuite/mastodon:v4.1.2"
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
