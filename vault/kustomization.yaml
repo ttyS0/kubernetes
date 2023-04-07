@@ -4,8 +4,8 @@ resources:
   - vault.yaml
   - vault-unseal.yaml
 
-patchesStrategicMerge:
-  - vault-server-test.patch.yaml
+#patchesStrategicMerge:
+#  - vault-server-test.patch.yaml
 
 #patchesJson6902:
 #  - target:

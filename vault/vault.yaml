@@ -8,7 +8,7 @@ metadata:
   name: vault
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -38,7 +38,7 @@ metadata:
   name: vault
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -50,7 +50,7 @@ metadata:
   name: vault-config
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -117,7 +117,7 @@ kind: ClusterRoleBinding
 metadata:
   name: vault-server-binding
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -137,7 +137,7 @@ metadata:
   namespace: vault
   name: vault-discovery-role
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -153,7 +153,7 @@ metadata:
   name: vault-discovery-rolebinding
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -195,7 +195,7 @@ metadata:
   name: vault-active
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -225,7 +225,7 @@ metadata:
   name: vault-standby
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -254,7 +254,7 @@ metadata:
   name: vault-internal
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -284,7 +284,7 @@ metadata:
   name: vault
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -358,7 +358,7 @@ spec:
       containers:
         - name: sidecar-injector
           
-          image: "hashicorp/vault-k8s:1.1.0"
+          image: "hashicorp/vault-k8s:1.2.1"
           imagePullPolicy: "IfNotPresent"
           securityContext:
             allowPrivilegeEscalation: false
@@ -375,7 +375,7 @@ spec:
             - name: AGENT_INJECT_VAULT_AUTH_PATH
               value: auth/kubernetes
             - name: AGENT_INJECT_VAULT_IMAGE
-              value: "hashicorp/vault:1.12.1"
+              value: "hashicorp/vault:1.13.1"
             - name: AGENT_INJECT_TLS_AUTO
               value: vault-agent-injector-cfg
             - name: AGENT_INJECT_TLS_AUTO_HOSTS
@@ -424,6 +424,16 @@ spec:
             periodSeconds: 2
             successThreshold: 1
             timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+              scheme: HTTPS
+            failureThreshold: 12
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
 ---
 # Source: vault/templates/server-statefulset.yaml
 # StatefulSet to run the actual vault server cluster.
@@ -450,7 +460,7 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: vault-0.23.0
+        helm.sh/chart: vault-0.24.0
         app.kubernetes.io/name: vault
         app.kubernetes.io/instance: vault
         component: server
@@ -489,7 +499,7 @@ spec:
       containers:
         - name: vault
           
-          image: hashicorp/vault:1.12.1
+          image: hashicorp/vault:1.13.1
           imagePullPolicy: IfNotPresent
           command:
           - "/bin/sh"
@@ -626,13 +636,12 @@ spec:
 ---
 # Source: vault/templates/server-ingress.yaml
 apiVersion: networking.k8s.io/v1
-
 kind: Ingress
 metadata:
   name: vault
   namespace: vault
   labels:
-    helm.sh/chart: vault-0.23.0
+    helm.sh/chart: vault-0.24.0
     app.kubernetes.io/name: vault
     app.kubernetes.io/instance: vault
     app.kubernetes.io/managed-by: Helm
@@ -651,11 +660,8 @@ spec:
         paths:
 
           - path: /
-            
             pathType: Prefix
-            
             backend:
-              
               service:
                 name: vault-active
                 port:
@@ -707,7 +713,7 @@ spec:
   
   containers:
     - name: vault-server-test
-      image: hashicorp/vault:1.12.1
+      image: hashicorp/vault:1.13.1
       imagePullPolicy: IfNotPresent
       env:
         - name: VAULT_ADDR
