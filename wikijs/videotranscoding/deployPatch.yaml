@@ -6,7 +6,7 @@
   value:
     - name: data
       persistentVolumeClaim:
-        claimName: videotranscoding
+        claimName: videotranscoding-data
 - op: add
   path: /spec/template/metadata/annotations
   value:

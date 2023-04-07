@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: argocd-rbac-cm
-data:
-  policy.default: role:readonly
-  policy.csv: |
-    g, sean@skj.dev, role:admin
-  scopes: '[email]'
