@@ -1,6 +1,6 @@
 #helm upgrade --install cert-manager jetstack/cert-manager \
 #  --namespace cert-manager \
-#  --version 1.10.2 \
+#  --version 1.11.1 \
 #  --values values.yaml
 
 installCRDs: true
