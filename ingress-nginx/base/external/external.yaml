@@ -396,7 +396,7 @@ spec:
             - --validating-webhook-certificate=/usr/local/certificates/cert
             - --validating-webhook-key=/usr/local/certificates/key
             - --ingress-class-by-name=true
-            - --default-backend-service=ghost/static
+            - --default-backend-service=web/static
           securityContext: 
             capabilities:
               drop:

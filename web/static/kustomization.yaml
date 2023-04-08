@@ -1,0 +1,12 @@
+namespace: web
+
+resources:
+  - storage.yaml
+  - service.yaml
+  - deployment.yaml
+
+configMapGenerator:
+  - name: default
+    files:
+      - config.conf
+

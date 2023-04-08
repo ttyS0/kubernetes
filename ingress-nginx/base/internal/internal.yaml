@@ -419,7 +419,7 @@ spec:
             - --validating-webhook-certificate=/usr/local/certificates/cert
             - --validating-webhook-key=/usr/local/certificates/key
             - --ingress-class-by-name=true
-            - --default-backend-service=ghost/static
+            - --default-backend-service=web/static
             - --enable-ssl-passthrough=true
           securityContext: 
             capabilities:

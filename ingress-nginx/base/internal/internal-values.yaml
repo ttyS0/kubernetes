@@ -22,7 +22,7 @@ controller:
         matchNames:
           - "ingress-nginx-internal"
   extraArgs:
-    default-backend-service: "ghost/static"
+    default-backend-service: "web/static"
     enable-ssl-passthrough: "true"
   service:
     externalTrafficPolicy: "Local"
