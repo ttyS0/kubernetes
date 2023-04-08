@@ -1,4 +1,0 @@
-namespace: ghost
-
-resources:
-  - static.yaml
