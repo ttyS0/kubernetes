@@ -6,4 +6,4 @@ resources:
 
 images:
   - name: cloudflare/cloudflared
-    newTag: 2023.3.1
+    newTag: 2023.4.0
