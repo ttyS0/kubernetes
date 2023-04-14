@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: amber
+  name: world0
   namespace: minecraft
 spec:
   replicas: 1
@@ -10,12 +10,12 @@ spec:
   selector:
     matchLabels:
       app: minecraft
-      world: amber
+      world: world0
   template:
     metadata:
       labels:
         app: minecraft
-        world: amber
+        world: world0
     spec:
       securityContext:
         runAsUser: 1100
@@ -33,7 +33,7 @@ spec:
               name: data
           env:
             - name: MINECRAFT_VERSION
-              value: "1.19.3"
+              value: "1.19.4"
       containers:
         - imagePullPolicy: IfNotPresent
           name: world
@@ -42,19 +42,23 @@ spec:
           workingDir: "/minecraft"
           ports:
             - containerPort: 25565
-            - containerPort: 25575
           volumeMounts:
             - name: minecraft-run
               mountPath: /run.sh
               subPath: run.sh
-            - name: amber
+            - name: world
               mountPath: /minecraft
             - name: data
               mountPath: /data
+          resources:
+            requests:
+              memory: "10Gi"
+            limits:
+              memory: "15Gi"
       volumes:
-        - name: amber
+        - name: world
           persistentVolumeClaim:
-            claimName: world-amber
+            claimName: world0
         - name: data
           emptyDir: {}
         - name: minecraft-init

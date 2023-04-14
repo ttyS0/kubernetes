@@ -1,0 +1,14 @@
+namespace: minecraft
+
+resources:
+  - velocity/configmap.yaml
+  - velocity/deployment.yaml
+  - velocity/service.yaml
+  - velocity/storage.yaml
+  - world0/configmap.yaml
+  - world0/deployment.yaml
+  - world0/service.yaml
+  - world0/storage.yaml
+  - world0/ingress.yaml
+
+

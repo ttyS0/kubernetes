@@ -1,20 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: main
+  name: world0
   namespace: minecraft
   labels:
     app: minecraft
-    world: main
 spec:
   ports:
     - name: server
       port: 25565
-    - name: rcon
-      port: 25575
     - name: map
       port: 8100
   selector:
     app: minecraft
-    world: main
+    world: world0
 

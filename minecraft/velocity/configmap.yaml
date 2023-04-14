@@ -7,7 +7,7 @@ data:
   run.sh: |
     #!/bin/sh
     curl -s -o velocity.jar "https://api.papermc.io/v2/projects/velocity/versions/${VELOCITY_VERSION}-SNAPSHOT/builds/${VELOCITY_BUILD}/downloads/velocity-${VELOCITY_VERSION}-SNAPSHOT-${VELOCITY_BUILD}.jar"
-    curl -s -o plugins/Geyser-Velocity.jar "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/velocity/build/libs/Geyser-Velocity.jar"
+    #curl -s -o plugins/Geyser-Velocity.jar "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/velocity/build/libs/Geyser-Velocity.jar"
 ---
 apiVersion: v1
 kind: ConfigMap

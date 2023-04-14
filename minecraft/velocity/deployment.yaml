@@ -33,7 +33,7 @@ spec:
             - name: VELOCITY_VERSION
               value: "3.2.0"
             - name: VELOCITY_BUILD
-              value: "222"
+              value: "250"
       containers:
         - imagePullPolicy: IfNotPresent
           name: velocity
@@ -47,12 +47,6 @@ spec:
             - mountPath: /run.sh
               subPath: run.sh
               name: run
-            - mountPath: /minecraft/velocity.toml
-              subPath: velocity.toml
-              name: conf
-            - mountPath: /minecraft/forwarding.secret
-              subPath: forwarding.secret
-              name: forwarding-secret
             - mountPath: /minecraft
               name: data
       volumes:
@@ -70,12 +64,6 @@ spec:
               - key: run.sh
                 path: run.sh
             defaultMode: 0777
-        - name: conf
-          configMap:
-            name: velocity-conf
-            items:
-              - key: velocity.toml
-                path: velocity.toml
         - name: forwarding-secret
           secret:
             secretName: forwarding-secret

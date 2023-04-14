@@ -1,37 +1,37 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: map-main
+  name: map
   namespace: minecraft
   annotations:
     kubernetes.io/tls-acme: "true"
 spec:
   ingressClassName: "nginx-internal"
   rules:
-    - host: mc-main.skj.dev
+    - host: mc.skj.dev
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: main
+                name: world0
                 port:
                   number: 8100
   tls:
     - hosts:
-        - mc-main.skj.dev
-      secretName: mc-main-skj-dev-cert
+        - mc.skj.dev
+      secretName: mc-skj-dev-cert
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: map-main-ext
+  name: map-ext
   namespace: minecraft
 spec:
   ingressClassName: "nginx-external"
   rules:
-    - host: mc-main.skj.dev
+    - host: mc.skj.dev
       http:
         paths:
           - path: /
@@ -43,5 +43,5 @@ spec:
                   number: 8100
   tls:
     - hosts:
-        - mc-main.skj.dev
-      secretName: mc-main-skj-dev-cert
+        - mc.skj.dev
+      secretName: mc-skj-dev-cert
