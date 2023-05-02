@@ -1,28 +1,13 @@
 resources:
-  - ../base
+  - deployment.yaml
+  - service.yaml
   - ingress.yaml
   - serviceAccount.yaml
-
-patchesJson6902:
-  - target:
-      kind: PersistentVolumeClaim
-      name: wikijs
-      version: v1
-    path: namePatch.yaml
-  - target:
-      kind: Service
-      name: wikijs
-      version: v1
-    path: namePatch.yaml
-  - target:
-      kind: Deployment
-      name: wikijs
-      version: v1
-    path: deployPatch.yaml
+  - storage.yaml
 
 images:
   - name: requarks/wiki
-    newTag: 2.5.287
+    newTag: 2.5.298
 
 commonLabels:
   instance: skj

@@ -2,6 +2,7 @@ resources:
   - ../base
   - ingress.yaml
   - serviceAccount.yaml
+  - storage.yaml
 
 patchesJson6902:
   - target:
@@ -22,7 +23,7 @@ patchesJson6902:
 
 images:
   - name: requarks/wiki
-    newTag: 2.5.287
+    newTag: 2.5.298
 
 commonLabels:
   instance: videotranscoding

@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: skj
   namespace: wikijs
-  labels:
-    instance: skj
   annotations:
     kubernetes.io/tls-acme: "true"
 spec:
