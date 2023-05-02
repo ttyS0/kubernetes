@@ -25,7 +25,7 @@ spec:
       volumes:
         - name: mastodon
           persistentVolumeClaim:
-            claimName: mastodon
+            claimName: data
       containers:
         - name: web
           securityContext:

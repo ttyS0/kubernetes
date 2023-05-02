@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mastodon
+  name: data
   namespace: mastodon
 spec:
-  storageClassName: longhorn
+  storageClassName: longhorn-xfs
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 500Gi
+      storage: 300Gi
