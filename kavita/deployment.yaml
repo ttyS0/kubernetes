@@ -32,7 +32,7 @@ spec:
       volumes:
         - name: media
           persistentVolumeClaim:
-            claimName: books
+            claimName: media
         - name: config
           persistentVolumeClaim:
             claimName: data

@@ -14,12 +14,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: books
+  name: media
   namespace: kavita
 spec:
-  storageClassName: longhorn
+  storageClassName: nfs-csi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 700Gi
+      storage: 500Gi
