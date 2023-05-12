@@ -1,6 +1,6 @@
 #helm upgrade --install longhorn longhorn/longhorn \
 # --namespace longhorn-system \
-# --version 1.4.1 \
+# --version 1.4.2 \
 # --values values.yaml
 
 persistence:
