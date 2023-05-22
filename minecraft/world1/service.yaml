@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: world1
+  namespace: minecraft
+  labels:
+    app: minecraft
+spec:
+  ports:
+    - name: server
+      port: 25565
+    - name: map
+      port: 8100
+  selector:
+    app: minecraft
+    world: world1
+

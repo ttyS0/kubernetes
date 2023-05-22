@@ -52,9 +52,9 @@ spec:
               mountPath: /data
           resources:
             requests:
-              memory: "10Gi"
+              memory: "5Gi"
             limits:
-              memory: "15Gi"
+              memory: "10Gi"
       volumes:
         - name: world
           persistentVolumeClaim:

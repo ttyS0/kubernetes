@@ -8,5 +8,5 @@ resources:
 configMapGenerator:
   - name: default
     files:
-      - config.conf
+      - default.conf
 

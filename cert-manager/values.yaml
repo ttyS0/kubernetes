@@ -1,12 +1,11 @@
 #helm upgrade --install cert-manager jetstack/cert-manager \
 #  --namespace cert-manager \
-#  --version 1.11.2 \
+#  --version 1.12.0 \
 #  --values values.yaml
 
 installCRDs: true
-extraArgs:
-  - --dns01-recursive-nameservers=1.1.1.1:53
-  - --dns01-recursive-nameservers-only
+dns01RecursiveNameservers: "1.1.1.1:53"
+dns01RecursiveNameserversOnly: true
 ingressShim:
   defaultIssuerName: letsencrypt
   defaultIssuerKind: ClusterIssuer

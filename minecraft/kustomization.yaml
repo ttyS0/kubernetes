@@ -10,5 +10,8 @@ resources:
   - world0/service.yaml
   - world0/storage.yaml
   - world0/ingress.yaml
-
+  - world1/deployment.yaml
+  - world1/service.yaml
+  - world1/storage.yaml
+  - world1/ingress.yaml
 

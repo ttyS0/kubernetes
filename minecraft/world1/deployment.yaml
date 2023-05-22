@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: velocity
+  name: world1
   namespace: minecraft
 spec:
   replicas: 1
@@ -9,66 +9,72 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: velocity
+      app: minecraft
+      world: world1
   template:
     metadata:
       labels:
-        app: velocity
+        app: minecraft
+        world: world1
     spec:
       securityContext:
         runAsUser: 1100
         fsGroup: 1100
       initContainers:
         - image: curlimages/curl:latest
-          name: curl
-          command: ["/run.sh"]
+          name: init
+          command: [ "/run.sh" ]
           workingDir: "/minecraft"
           volumeMounts:
             - mountPath: /run.sh
               subPath: run.sh
-              name: init
-            - mountPath: /minecraft
+              name: minecraft-init
+            - mountPath: /data
               name: data
           env:
-            - name: VELOCITY_VERSION
-              value: "3.2.0"
-            - name: VELOCITY_BUILD
-              value: "256"
+            - name: MINECRAFT_VERSION
+              value: "1.19.4"
       containers:
         - imagePullPolicy: IfNotPresent
-          name: velocity
+          name: world
           image: openjdk:18-slim
           command: ["/run.sh"]
           workingDir: "/minecraft"
           ports:
-            - containerPort: 25577
-            - containerPort: 19132
+            - containerPort: 25565
           volumeMounts:
-            - mountPath: /run.sh
+            - name: minecraft-run
+              mountPath: /run.sh
               subPath: run.sh
-              name: run
-            - mountPath: /minecraft
-              name: data
+            - name: world
+              mountPath: /minecraft
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "5Gi"
+            limits:
+              memory: "10Gi"
       volumes:
-        - name: run
-          configMap:
-            name: velocity-run
-            items:
-              - key: run.sh
-                path: run.sh
-            defaultMode: 0777
-        - name: init
-          configMap:
-            name: velocity-init
-            items:
-              - key: run.sh
-                path: run.sh
-            defaultMode: 0777
-        - name: forwarding-secret
-          secret:
-            secretName: forwarding-secret
-        - name: data
+        - name: world
           persistentVolumeClaim:
-            claimName: velocity
+            claimName: world1
+        - name: data
+          emptyDir: {}
+        - name: minecraft-init
+          configMap:
+            name: minecraft-init
+            items:
+              - key: run.sh
+                path: run.sh
+            defaultMode: 0777
+        - name: minecraft-run
+          configMap:
+            name: minecraft-run
+            items:
+              - key: run.sh
+                path: run.sh
+            defaultMode: 0777
+
 
 
