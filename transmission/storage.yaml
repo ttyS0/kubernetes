@@ -4,12 +4,12 @@ metadata:
   name: media
   namespace: transmission
 spec:
-  storageClassName: nfs-csi
+  storageClassName: longhorn
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 10Ti
+      storage: 400Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
