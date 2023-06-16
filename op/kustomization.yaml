@@ -2,5 +2,4 @@ namespace: op
 
 resources:
   - crd.yaml
-  - secrets.yaml
   - connect.yaml

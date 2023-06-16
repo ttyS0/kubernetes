@@ -5,6 +5,9 @@ metadata:
   namespace: db
   labels:
     app: mysql
+  annotations:
+    operator.1password.io/item-path: "vaults/HomeLab/items/mysqlroot"
+    operator.1password.io/item-name: "mysqlroot"
 spec:
   selector:
     matchLabels:
@@ -17,7 +20,7 @@ spec:
         app: mysql
     spec:
       securityContext:
-        runAsUser: 999
+        fsGroup: 999
       containers:
         - image: mysql:latest
           name: mysql

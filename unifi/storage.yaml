@@ -4,7 +4,6 @@ metadata:
   name: unifi
   namespace: unifi
 spec:
-  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:

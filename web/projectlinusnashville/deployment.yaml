@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: projectlinusnashville
+  namespace: web
+spec:
+  selector:
+    matchLabels:
+      app: projectlinusnashville
+  replicas : 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: projectlinusnashville
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: projectlinusnashville
+          image: library/ghost:latest
+          env:
+            - name: database__connection__user
+              valueFrom:
+                secretKeyRef:
+                  name: projectlinusnashville
+                  key: dbuser
+            - name: database__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: projectlinusnashville
+                  key: dbpass
+            - name: mail__options__auth__user
+              valueFrom:
+                secretKeyRef:
+                  name: projectlinusnashville
+                  key: mailgun_user
+            - name: mail__options__auth__pass
+              valueFrom:
+                secretKeyRef:
+                  key: mailgun_pass
+                  name: projectlinusnashville
+          ports:
+            - containerPort: 2368
+          volumeMounts:
+            - name: projectlinusnashville
+              mountPath: /var/lib/ghost/content
+            - name: projectlinusnashville-conf
+              mountPath: /var/lib/ghost/config.production.json
+              subPath: config.production.json
+      volumes:
+        - name: projectlinusnashville
+          persistentVolumeClaim:
+            claimName: projectlinusnashville
+        - name: projectlinusnashville-conf
+          configMap:
+            name: projectlinusnashville-conf
+            items:
+              - key: production.json
+                path: config.production.json

@@ -1,5 +1,4 @@
 resources:
-  - secret.yaml
   - storage.yaml
   - deployment.yaml
   - service.yaml

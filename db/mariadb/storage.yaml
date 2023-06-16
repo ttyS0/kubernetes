@@ -4,9 +4,8 @@ metadata:
   name: mariadb
   namespace: db
 spec:
-  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 50Gi
+      storage: 100Gi

@@ -1,7 +1,0 @@
-apiVersion: onepassword.com/v1
-kind: OnePasswordItem
-metadata:
-  name: configuration
-  namespace: transmission
-spec:
-  itemPath: "vaults/HomeLab/items/transmission"

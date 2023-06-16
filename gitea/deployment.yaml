@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: gitea
   namespace: gitea
+  annotations:
+    operator.1password.io/item-path: "vaults/HomeLab/items/giteadb"
+    operator.1password.io/item-name: "giteadb"
 spec:
   selector:
     matchLabels:

@@ -1,6 +1,0 @@
-kind: Pod
-apiVersion: v1
-metadata:
-  name: vault-server-test
-  namespace: vault
-$patch: delete

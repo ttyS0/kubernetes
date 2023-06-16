@@ -5,6 +5,9 @@ metadata:
   namespace: nextcloud
   labels:
     app.kubernetes.io/name: nextcloud
+  annotations:
+    operator.1password.io/item-path: "vaults/HomeLab/items/nextclouddb"
+    operator.1password.io/item-name: "ncdb"
 spec:
   replicas: 1
   strategy:
@@ -46,8 +49,8 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /var/www/html
-              name: nextcloud-base
+              name: nextcloud
       volumes:
-        - name: nextcloud-base
+        - name: nextcloud
           persistentVolumeClaim:
-            claimName: base
+            claimName: nextcloud

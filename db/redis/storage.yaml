@@ -4,7 +4,6 @@ metadata:
   name: redis
   namespace: db
 spec:
-  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:

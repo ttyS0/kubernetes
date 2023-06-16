@@ -1,5 +1,4 @@
 resources:
-  - secret.yaml
   - cert.yaml
   - storage.yaml
   - deployment.yaml
@@ -7,4 +6,4 @@ resources:
 
 images:
   - name: postgres
-    newTag: "14.7"
+    newTag: "15.3"

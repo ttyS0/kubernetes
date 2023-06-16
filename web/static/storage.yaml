@@ -4,7 +4,6 @@ metadata:
   name: static
   namespace: web
 spec:
-  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:

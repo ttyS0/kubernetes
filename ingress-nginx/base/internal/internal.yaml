@@ -270,32 +270,6 @@ subjects:
     name: ingress-nginx-internal
     namespace: "ingress-nginx-internal"
 ---
-# Source: ingress-nginx/templates/controller-service-metrics.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    helm.sh/chart: ingress-nginx-4.7.0
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.8.0"
-    app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: controller
-  name: ingress-nginx-internal-controller-metrics
-  namespace: ingress-nginx-internal
-spec:
-  type: ClusterIP
-  ports:
-    - name: metrics
-      port: 10254
-      protocol: TCP
-      targetPort: metrics
-  selector:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/component: controller
----
 # Source: ingress-nginx/templates/controller-service-webhook.yaml
 apiVersion: v1
 kind: Service
@@ -467,9 +441,6 @@ spec:
             - name: https
               containerPort: 443
               protocol: TCP
-            - name: metrics
-              containerPort: 10254
-              protocol: TCP
             - name: webhook
               containerPort: 8443
               protocol: TCP
@@ -512,34 +483,6 @@ metadata:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
   controller: k8s.io/ingress-nginx-internal
----
-# Source: ingress-nginx/templates/controller-servicemonitor.yaml
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: ingress-nginx-internal-controller
-  namespace: "monitoring"
-  labels:
-    helm.sh/chart: ingress-nginx-4.7.0
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/instance: ingress-nginx-internal
-    app.kubernetes.io/version: "1.8.0"
-    app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: controller
-    name: ingress-nginx-internal-controller
-spec:
-  endpoints:
-    - port: metrics
-      interval: 30s
-  namespaceSelector: 
-    matchNames:
-    - ingress-nginx-internal
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: ingress-nginx
-      app.kubernetes.io/instance: ingress-nginx-internal
-      app.kubernetes.io/component: controller
 ---
 # Source: ingress-nginx/templates/admission-webhooks/validating-webhook.yaml
 # before changing this value, check the required kubernetes version

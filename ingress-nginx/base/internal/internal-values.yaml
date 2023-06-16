@@ -11,16 +11,16 @@ controller:
     default: true
   ingressClassByName: true
   ingressClass: nginx-internal
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      namespace: "monitoring"
-      additionalLabels:
-        name: "ingress-nginx-internal-controller"
-      namespaceSelector:
-        matchNames:
-          - "ingress-nginx-internal"
+#  metrics:
+#    enabled: true
+#    serviceMonitor:
+#      enabled: true
+#      namespace: "monitoring"
+#      additionalLabels:
+#        name: "ingress-nginx-internal-controller"
+#      namespaceSelector:
+#        matchNames:
+#          - "ingress-nginx-internal"
   extraArgs:
     default-backend-service: "web/static"
     enable-ssl-passthrough: "true"

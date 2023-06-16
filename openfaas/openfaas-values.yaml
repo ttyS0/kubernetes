@@ -1,6 +1,6 @@
 #helm template openfaas openfaas/openfaas \
 #  --namespace openfaas \
-#  --version 11.1.5 \
+#  --version 13.0.0 \
 #  --values openfaas-values.yaml > openfaas.yaml
 
 functionNamespace: openfaas-fn

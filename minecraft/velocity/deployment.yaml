@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: velocity
   namespace: minecraft
+  annotations:
+    operator.1password.io/item-path: "vaults/HomeLab/items/velocity-forwarding"
+    operator.1password.io/item-name: "forwarding-secret"
 spec:
   replicas: 1
   strategy:
@@ -28,12 +31,12 @@ spec:
               subPath: run.sh
               name: init
             - mountPath: /minecraft
-              name: data
+              name: velocity
           env:
             - name: VELOCITY_VERSION
               value: "3.2.0"
             - name: VELOCITY_BUILD
-              value: "256"
+              value: "259"
       containers:
         - imagePullPolicy: IfNotPresent
           name: velocity
@@ -48,7 +51,7 @@ spec:
               subPath: run.sh
               name: run
             - mountPath: /minecraft
-              name: data
+              name: velocity
       volumes:
         - name: run
           configMap:
@@ -67,7 +70,7 @@ spec:
         - name: forwarding-secret
           secret:
             secretName: forwarding-secret
-        - name: data
+        - name: velocity
           persistentVolumeClaim:
             claimName: velocity
 

@@ -4,7 +4,6 @@ metadata:
   name: world0
   namespace: minecraft
 spec:
-  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:

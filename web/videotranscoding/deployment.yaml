@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: videotranscoding
+  namespace: web
+  annotations:
+    operator.1password.io/item-path: "vaults/HomeLab/items/videotranscoding"
+    operator.1password.io/item-name: "videotranscoding"
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: videotranscoding
+  template:
+    metadata:
+      labels:
+        app: videotranscoding
+    spec:
+      containers:
+        - name: wikijs
+          image: requarks/wiki:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          volumeMounts:
+            - mountPath: /wiki/data
+              name: data
+          envFrom:
+            - secretRef:
+                name: videotranscoding
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: videotranscoding

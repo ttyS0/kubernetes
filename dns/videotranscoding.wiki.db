@@ -1,0 +1,15 @@
+$ORIGIN videotranscoding.wiki.
+$TTL 86400
+@	    IN      SOA	ns.videotranscoding.wiki.	sean.videotranscoding.wiki. (
+		2023061201 ; serial
+		21600      ; refresh after 6 hours
+		3600       ; retry after 1 hour
+		604800     ; expire after 1 week
+		86400 )    ; minimum TTL of 1 day
+;
+;
+
+                  IN  NS      ns.videotranscoding.wiki.
+
+@                 IN  A       10.0.1.31
+ns                IN  A       10.0.1.30

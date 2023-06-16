@@ -1,0 +1,14 @@
+namespace: web
+
+resources:
+- service.yaml
+- deployment.yaml
+- storage.yaml
+- ingress.yaml
+- configmap.yaml
+- secret.yaml
+
+images:
+- name: library/ghost
+  newTag: 5.51.1
+

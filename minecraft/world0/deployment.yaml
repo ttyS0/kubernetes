@@ -33,7 +33,7 @@ spec:
               name: data
           env:
             - name: MINECRAFT_VERSION
-              value: "1.19.4"
+              value: "1.20"
       containers:
         - imagePullPolicy: IfNotPresent
           name: world

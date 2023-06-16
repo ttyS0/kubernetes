@@ -1,0 +1,11 @@
+namespace: web
+
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: tautulli/tautulli
+    newTag: v2.12.4

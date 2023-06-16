@@ -1,0 +1,15 @@
+namespace: web
+
+resources:
+  - service.yaml
+  - ingress.yaml
+  - configmap.yaml
+  - secret.yaml
+  - storage.yaml
+  - deployment.yaml
+
+images:
+  - name: library/ghost
+    #newName: git.skj.dev/sean/ghost
+    newTag: 5.51.1
+

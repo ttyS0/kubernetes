@@ -4,9 +4,8 @@ metadata:
   name: gitea
   namespace: gitea
 spec:
-  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 250Gi
+      storage: 50Gi

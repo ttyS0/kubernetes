@@ -1,8 +1,0 @@
-namespace: kube-system
-
-resources:
-  - intel-gpu-plugin.yaml
-
-images:
-  - name: intel/intel-gpu-plugin
-    newTag: 0.26.1

@@ -1,0 +1,20 @@
+#helm template connect 1password/connect \
+#--namespace op \
+#--version 1.11.0 \
+#--set operator.create=true \
+#--values values.yaml > connect.yaml
+
+connect:
+  serviceType: ClusterIP
+
+  ingress:
+    enabled: true
+    ingressClassName: "nginx-internal"
+    annotations:
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: op.skj.dev
+    tls:
+      - secretName: op-skj-dev-cert
+        hosts:
+          - op.skj.dev

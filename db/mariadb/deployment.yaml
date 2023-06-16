@@ -17,7 +17,7 @@ spec:
         app: mariadb
     spec:
       securityContext:
-        runAsUser: 999
+        fsGroup: 999
       containers:
         - image: mariadb:latest
           name: mariadb
@@ -25,8 +25,8 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mariadbroot
-                  key: mariadbroot
+                  name: mysqlroot
+                  key: mysqlroot
             - name: MARIADB_AUTO_UPGRADE
               value: "true"
           ports:

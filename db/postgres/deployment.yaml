@@ -5,6 +5,9 @@ metadata:
   namespace: db
   labels:
     app: postgres
+  annotations:
+    operator.1password.io/item-path: "vaults/HomeLab/items/pgdata"
+    operator.1password.io/item-name: "pgdata"
 spec:
   selector:
     matchLabels:
@@ -48,7 +51,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: pg
+            claimName: postgres
         - name: certs
           secret:
             secretName: pg-skj-dev-cert

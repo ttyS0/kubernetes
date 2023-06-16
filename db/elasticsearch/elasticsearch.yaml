@@ -4,7 +4,7 @@ metadata:
   name: elasticsearch
   namespace: db
 spec:
-  version: 8.5.0
+  version: 8.8.1
   http:
     tls:
       selfSignedCertificate:
@@ -27,5 +27,4 @@ spec:
               - ReadWriteOnce
             resources:
               requests:
-                storage: 50Gi
-            storageClassName: longhorn
+                storage: 100Gi

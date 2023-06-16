@@ -1,5 +1,4 @@
 resources:
-  - secret.yaml
   - storage.yaml
   - deployment.yaml
   - service.yaml
@@ -7,4 +6,4 @@ resources:
 
 images:
   - name: library/nextcloud
-    newTag: "26.0.2-apache"
+    newTag: "27.0.0-apache"

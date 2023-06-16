@@ -1,0 +1,10 @@
+namespace: web
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: nocodb/nocodb
+    newTag: 0.108.1

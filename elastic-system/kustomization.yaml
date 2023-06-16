@@ -1,0 +1,7 @@
+namespace: elastic-system
+
+resources:
+  - crds.yaml
+  - operator.yaml
+
+

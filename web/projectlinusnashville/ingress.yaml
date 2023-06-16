@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: projectlinusnashville
+  namespace: web
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  rules:
+    - host: projectlinusnashville.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: projectlinusnashville
+                port:
+                  number: 2368
+  tls:
+    - hosts:
+        - projectlinusnashville.org
+      secretName: projectlinusnashville-org-cert
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: projectlinusnashville-ext
+#  namespace: web
+#spec:
+#  ingressClassName: "nginx-external"
+#  rules:
+#    - host: projectlinusnashville.org
+#      http:
+#        paths:
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: projectlinusnashville
+#                port:
+#                  number: 2368
+#  tls:
+#    - hosts:
+#        - projectlinusnashville.org
+#      secretName: projectlinusnashville-org-cert

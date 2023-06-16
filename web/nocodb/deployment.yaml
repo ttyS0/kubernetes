@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nocodb
+  namespace: web
+  labels:
+    app: nocodb
+  annotations:
+    operator.1password.io/item-path: "vaults/HomeLab/items/nocodb"
+    operator.1password.io/item-name: "nocodb"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nocodb
+  template:
+    metadata:
+      labels:
+        app: nocodb
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      containers:
+        - name: nocodb
+          image: nocodb/nocodb:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NC_DB
+              valueFrom:
+                secretKeyRef:
+                  key: pgconnect
+                  name: nocodb
+            - name: NC_AUTH_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: jwt_secret
+                  name: nocodb
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: "3Gi"
+            limits:
+              memory: "4Gi"

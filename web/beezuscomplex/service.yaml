@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: beezuscomplex
+  namespace: web
+  labels:
+    app: beezuscomplex
+spec:
+  ports:
+    - name: server
+      port: 80
+      targetPort: 2368
+  selector:
+    app: beezuscomplex

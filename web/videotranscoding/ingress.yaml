@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: videotranscoding
+  namespace: web
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  rules:
+    - host: "videotranscoding.wiki"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: videotranscoding
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - videotranscoding.wiki
+      secretName: videotranscoding-wiki-cert
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: videotranscoding-ext
+  namespace: web
+spec:
+  ingressClassName: "nginx-external"
+  rules:
+    - host: "videotranscoding.wiki"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: videotranscoding
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - videotranscoding.wiki
+      secretName: videotranscoding-wiki-cert

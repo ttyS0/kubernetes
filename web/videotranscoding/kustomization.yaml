@@ -1,0 +1,12 @@
+namespace: web
+
+resources:
+  - ingress.yaml
+  - deployment.yaml
+  - service.yaml
+  - storage.yaml
+
+images:
+  - name: requarks/wiki
+    newTag: 2.5.299
+

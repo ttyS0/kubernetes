@@ -1,6 +1,5 @@
 resources:
   - cert.yaml
-  - secret.yaml
   - configmap.yaml
   - storage.yaml
   - deployment.yaml
@@ -8,4 +7,4 @@ resources:
 
 images:
   - name: mariadb
-    newTag: "10.9.5"
+    newTag: "11.0.2"
