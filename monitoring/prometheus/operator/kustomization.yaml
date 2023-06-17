@@ -1,8 +1,0 @@
-# This requires the --server-side flag with kubectl
-
-namespace: monitoring
-
-resources:
-  - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.63.0/bundle.yaml
-
-

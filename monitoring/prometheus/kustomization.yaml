@@ -1,6 +1,0 @@
-namespace: monitoring
-
-resources:
-  - prometheus.yaml
-
-

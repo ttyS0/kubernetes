@@ -10,4 +10,5 @@ data:
   compute-full-forwarded-for: "true"
   enable-real-ip: "true"
   proxy-real-ip-cidr: "10.0.1.0/24"
+  forwarded-for-header: "proxy_protocol"
 
