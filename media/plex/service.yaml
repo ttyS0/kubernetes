@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex
+  namespace: media
+  labels:
+    app: plex
+spec:
+  selector:
+    app: plex
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ports:
+    - port: 32400
+      name: plex

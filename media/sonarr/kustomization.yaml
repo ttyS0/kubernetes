@@ -1,0 +1,11 @@
+namespace: media
+
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: ghcr.io/hotio/sonarr
+    newTag: release-3.0.10.1567

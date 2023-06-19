@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr-uhd
+  namespace: media
+spec:
+  selector:
+    matchLabels:
+      app: radarr-uhd
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: radarr-uhd
+    spec:
+      containers:
+        - image: ghcr.io/hotio/radarr:latest
+          name: radarr-uhd
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: PGID
+              value: '1000'
+            - name: PUID
+              value: '1000'
+            - name: UMASK
+              value: '002'
+          ports:
+            - containerPort: 7878
+              name: radarr-uhd
+          volumeMounts:
+            - mountPath: /config
+              name: radarr-uhd-config
+            - mountPath: /media/movies
+              name: movies
+            - mountPath: /downloads
+              name: downloads
+      volumes:
+        - name: radarr-uhd-config
+          persistentVolumeClaim:
+            claimName: radarr-uhd-config
+        - name: movies
+          persistentVolumeClaim:
+            claimName: movies
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: sabnzbd-downloads

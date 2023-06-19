@@ -1,0 +1,11 @@
+namespace: media
+
+resources:
+  - storage.yaml
+  - service.yaml
+  - deployment.yaml
+  - ingress.yaml
+
+images:
+  - name: ghcr.io/hotio/sabnzbd
+    newTag: release-4.0.2

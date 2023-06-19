@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sabnzbd
+  namespace: media
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: sabnzbd.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sabnzbd
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - sabnzbd.skj.dev
+      secretName: sabnzbd-skj-dev-cert

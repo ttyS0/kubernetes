@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr-uhd
+  namespace: media
+  labels:
+    app: radarr-uhd
+spec:
+  ports:
+    - port: 7878
+      name: radarr-uhd
+  selector:
+    app: radarr-uhd

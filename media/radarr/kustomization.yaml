@@ -1,0 +1,15 @@
+namespace: media
+
+resources:
+  - hd/storage.yaml
+  - hd/service.yaml
+  - hd/deployment.yaml
+  - hd/ingress.yaml
+  - uhd/storage.yaml
+  - uhd/service.yaml
+  - uhd/deployment.yaml
+  - uhd/ingress.yaml
+
+images:
+  - name: ghcr.io/hotio/radarr
+    newTag: release-4.5.2.7388

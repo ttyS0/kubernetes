@@ -4,7 +4,19 @@ metadata:
   name: openebs-zfspv
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
+allowVolumeExpansion: true
 parameters:
   fstype: "zfs"
   poolname: "tank/k3s"
+provisioner: zfs.csi.openebs.io
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: pool
+allowVolumeExpansion: true
+parameters:
+  fstype: "zfs"
+  shared: "yes"
+  poolname: "pool/k3s"
 provisioner: zfs.csi.openebs.io

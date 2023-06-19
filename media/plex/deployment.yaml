@@ -1,0 +1,73 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: plex
+  namespace: media
+spec:
+  selector:
+    matchLabels:
+      app: plex
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - image: plexinc/pms-docker:plexpass
+          name: plex
+          env:
+            - name: HOSTNAME
+              value: "TVC15"
+            - name: TZ
+              value: "America/Chicago"
+            - name: PLEX_UID
+              value: '1000'
+            - name: PLEX_GID
+              value: '1000'
+          ports:
+            - containerPort: 32400
+          volumeMounts:
+            - name: plex-data
+              mountPath: /config
+            - name: music
+              mountPath: /media/music
+            - name: movies
+              mountPath: /media/movies
+            - name: series
+              mountPath: /media/series
+            - name: books
+              mountPath: /media/books
+            - name: science
+              mountPath: /media/science
+            - name: videos
+              mountPath: /media/videos
+          resources:
+            limits:
+              gpu.intel.com/i915: 1
+      volumes:
+        - name: music
+          persistentVolumeClaim:
+            claimName: music
+        - name: movies
+          persistentVolumeClaim:
+            claimName: movies
+        - name: series
+          persistentVolumeClaim:
+            claimName: series
+        - name: books
+          persistentVolumeClaim:
+            claimName: books
+        - name: science
+          persistentVolumeClaim:
+            claimName: science
+        - name: videos
+          persistentVolumeClaim:
+            claimName: videos
+        - name: plex-data
+          persistentVolumeClaim:
+            claimName: plex-data

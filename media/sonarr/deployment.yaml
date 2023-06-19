@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  namespace: media
+spec:
+  selector:
+    matchLabels:
+      app: sonarr
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+        - image: ghcr.io/hotio/sonarr:latest
+          name: sonarr
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: PGID
+              value: '1000'
+            - name: PUID
+              value: '1000'
+            - name: UMASK
+              value: '002'
+          ports:
+            - containerPort: 8989
+              name: sonarr
+          volumeMounts:
+            - mountPath: /config
+              name: sonarr-config
+            - mountPath: /media/series
+              name: series
+            - mountPath: /downloads
+              name: downloads
+      volumes:
+        - name: sonarr-config
+          persistentVolumeClaim:
+            claimName: sonarr-config
+        - name: series
+          persistentVolumeClaim:
+            claimName: series
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: sabnzbd-downloads

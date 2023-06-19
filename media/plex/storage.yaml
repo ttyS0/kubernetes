@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-data
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: movies
+  namespace: media
+spec:
+  storageClassName: pool
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Ti
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: series
+  namespace: media
+spec:
+  storageClassName: pool
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 60Ti
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: books
+  namespace: media
+spec:
+  storageClassName: pool
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: science
+  namespace: media
+spec:
+  storageClassName: pool
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: videos
+  namespace: media
+spec:
+  storageClassName: pool
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti

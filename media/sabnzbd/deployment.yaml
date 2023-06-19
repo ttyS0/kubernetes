@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabnzbd
+  namespace: media
+spec:
+  selector:
+    matchLabels:
+      app: sabnzbd
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sabnzbd
+    spec:
+      containers:
+        - image: ghcr.io/hotio/sabnzbd:latest
+          name: sabnzbd
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: PGID
+              value: '1000'
+            - name: PUID
+              value: '1000'
+            - name: UMASK
+              value: '002'
+          ports:
+            - containerPort: 8080
+              name: sabnzbd
+          volumeMounts:
+            - mountPath: /config
+              name: sabnzbd-config
+            - mountPath: /downloads
+              name: sabnzbd-downloads
+      volumes:
+        - name: sabnzbd-config
+          persistentVolumeClaim:
+            claimName: sabnzbd-config
+        - name: sabnzbd-downloads
+          persistentVolumeClaim:
+            claimName: sabnzbd-downloads

@@ -1,0 +1,8 @@
+namespace: media
+
+resources:
+  - storage.yaml
+  - service.yaml
+  - deployment.yaml
+
+

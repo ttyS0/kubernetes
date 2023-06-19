@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sonarr
+  namespace: media
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: sonarr.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sonarr
+                port:
+                  number: 8686
+  tls:
+    - hosts:
+        - sonarr.skj.dev
+      secretName: sonarr-skj-dev-cert
+
