@@ -16,7 +16,7 @@ metadata:
   name: sabnzbd-downloads
   namespace: media
 spec:
-  storageClassName: pool
+  storageClassName: tank
   accessModes:
     - ReadWriteMany
   resources:

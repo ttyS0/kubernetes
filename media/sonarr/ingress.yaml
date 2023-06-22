@@ -16,7 +16,7 @@ spec:
               service:
                 name: sonarr
                 port:
-                  number: 8686
+                  number: 8989
   tls:
     - hosts:
         - sonarr.skj.dev

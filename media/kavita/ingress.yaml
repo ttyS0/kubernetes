@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kavita
-  namespace: kavita
+  namespace: media
   annotations:
     kubernetes.io/tls-acme: "true"
 spec:
@@ -26,7 +26,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kavita-ext
-  namespace: kavita
+  namespace: media
 spec:
   ingressClassName: nginx-external
   rules:

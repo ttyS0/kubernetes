@@ -1,4 +1,4 @@
-namespace: kavita
+namespace: media
 
 resources:
   - storage.yaml
