@@ -30,7 +30,7 @@ spec:
         - name: web
           securityContext:
             {}
-          image: "tootsuite/mastodon:latest"
+          image: "ghcr.io/mastodon/mastodon:latest"
           imagePullPolicy: IfNotPresent
           command:
             - bundle

@@ -39,6 +39,10 @@ metadata:
   namespace: mastodon
   labels:
     app.kubernetes.io/name: mastodon
+  annotations:
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options nosniff";
+      more_set_headers "Content-Security-Policy default-src 'none'; form-action 'none'";
 spec:
   ingressClassName: "nginx-external"
   tls:
