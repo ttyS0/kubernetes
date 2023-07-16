@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: teddit
+  namespace: web
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  rules:
+    - host: teddit.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: teddit
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - teddit.skj.dev
+      secretName: teddit-skj-dev-cert
+

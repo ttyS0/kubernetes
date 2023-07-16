@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teddit
+  namespace: web
+spec:
+  selector:
+    matchLabels:
+      app: teddit
+  replicas : 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: teddit
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 1.1.1.1
+        options:
+          - name: ndots
+            value: "2"
+          - name: edns0
+      containers:
+        - name: teddit
+          image: teddit/teddit:latest
+          ports:
+            - containerPort: 8080
+              name: server
+          env:
+            - name: REDIS_HOST
+              value: "10.43.240.157"
+            - name: REDIS_DB
+              value: "2"
+            - name: DOMAIN
+              value: "teddit.skj.dev"
+

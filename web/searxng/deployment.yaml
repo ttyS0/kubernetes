@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: searxng
+  namespace: web
+spec:
+  selector:
+    matchLabels:
+      app: searxng
+  replicas : 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: searxng
+    spec:
+      containers:
+        - name: searxng
+          image: searxng/searxng:latest
+          ports:
+            - containerPort: 8080
+              name: server
+          volumeMounts:
+            - name: searxng
+              mountPath: /etc/searxng
+      volumes:
+        - name: searxng
+          persistentVolumeClaim:
+            claimName: searxng
+

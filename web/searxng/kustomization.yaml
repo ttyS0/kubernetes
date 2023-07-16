@@ -1,0 +1,9 @@
+namespace: web
+
+resources:
+  - storage.yaml
+  - service.yaml
+  - deployment.yaml
+  - ingress.yaml
+
+
