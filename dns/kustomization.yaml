@@ -16,6 +16,8 @@ configMapGenerator:
       - skj.dev.rr.db
       - skj.social.db
       - projectlinusnashville.org.db
+      - shadowradio.db
+      - skj.chat.db
       - named.conf
 
 images:

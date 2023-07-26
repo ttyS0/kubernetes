@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shadowradio
+  namespace: castopod
+spec:
+  selector:
+    matchLabels:
+      app: shadowradio
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: shadowradio
+    spec:
+      securityContext:
+        fsGroup: 33
+      containers:
+        - image: castopod/castopod:latest
+          name: shadowradio
+          envFrom:
+            - secretRef:
+                name: shadowradio-conf
+          ports:
+            - containerPort: 8000
+              name: shadowradio
+          volumeMounts:
+            - mountPath: /var/www/castopod/public/media
+              name: shadowradio-media
+            - mountPath: /var/www/castopod/writable
+              name: shadowradio-writable
+      volumes:
+        - name: shadowradio-media
+          persistentVolumeClaim:
+            claimName: shadowradio-media
+        - name: shadowradio-writable
+          persistentVolumeClaim:
+            claimName: shadowradio-writable

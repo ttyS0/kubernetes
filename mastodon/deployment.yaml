@@ -61,7 +61,7 @@ spec:
         - name: sidekiq
           securityContext:
             { }
-          image: "tootsuite/mastodon:latest"
+          image: "ghcr.io/mastodon/mastodon:latest"
           imagePullPolicy: IfNotPresent
           command:
             - bundle
@@ -78,7 +78,7 @@ spec:
         - name: streaming
           securityContext:
             { }
-          image: "tootsuite/mastodon:latest"
+          image: "ghcr.io/mastodon/mastodon:latest"
           imagePullPolicy: IfNotPresent
           command:
             - node

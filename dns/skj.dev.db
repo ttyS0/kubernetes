@@ -1,7 +1,7 @@
 $ORIGIN skj.dev.
 $TTL 86400
 @	    IN      SOA	ns.skj.dev.	sean.skj.dev. (
-		2023061902 ; serial
+		2023071502 ; serial
 		21600      ; refresh after 6 hours
 		3600       ; retry after 1 hour
 		604800     ; expire after 1 week
@@ -39,6 +39,8 @@ radarr-hd         IN  CNAME   skj.dev.
 radarr-uhd        IN  CNAME   skj.dev.
 sonarr            IN  CNAME   skj.dev.
 lidarr            IN  CNAME   skj.dev.
+search            IN  CNAME   skj.dev.
+teddit            IN  CNAME   skj.dev.
 mariadb           IN  A       10.0.1.37
 mysql             IN  A       10.0.1.36
 pg                IN  A       10.0.1.35

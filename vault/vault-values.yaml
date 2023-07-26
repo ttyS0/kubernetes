@@ -1,6 +1,6 @@
 #helm upgrade --install vault hashicorp/vault \
 #  --namespace vault \
-#  --version 0.24.1 \
+#  --version 0.25.0 \
 #  --values vault-values.yaml
 ---
 injector:

@@ -9,4 +9,4 @@ resources:
 
 images:
   - name: "ghcr.io/mastodon/mastodon"
-    newTag: "v4.1.3"
+    newTag: "v4.1.5"

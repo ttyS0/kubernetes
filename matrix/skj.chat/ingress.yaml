@@ -1,0 +1,51 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: skjchat
+  namespace: matrix
+  labels:
+    app.kubernetes.io/name: skjchat
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx-internal"
+  tls:
+    - hosts:
+        - "skj.chat"
+      secretName: skj-chat-cert
+  rules:
+    - host: "skj.chat"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: skjchat
+                port:
+                  number: 8008
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: skjchat-ext
+  namespace: matrix
+  labels:
+    app.kubernetes.io/name: skjchat
+spec:
+  ingressClassName: "nginx-external"
+  tls:
+    - hosts:
+        - "skj.chat"
+      secretName: skj-chat-cert
+  rules:
+    - host: "skj.chat"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: skjchat
+                port:
+                  number: 8008

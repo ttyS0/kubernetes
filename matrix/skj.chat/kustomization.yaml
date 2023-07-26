@@ -1,0 +1,12 @@
+namespace: matrix
+
+resources:
+  - deployment.yaml
+  - ingress.yaml
+  - service.yaml
+  - storage.yaml
+
+
+images:
+  - name: "ghcr.io/matrix-org/synapse"
+    newTag: "v1.88.0"

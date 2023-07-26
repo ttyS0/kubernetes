@@ -7,4 +7,4 @@ resources:
 
 images:
   - name: nocodb/nocodb
-    newTag: 0.108.1
+    newTag: 0.109.3
