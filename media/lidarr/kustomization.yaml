@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: ghcr.io/hotio/lidarr
-    newTag: release-1.1.4.3027
+    newTag: release-1.2.6.3313
