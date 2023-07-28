@@ -1,5 +1,6 @@
 .DS_Store
 *.iml
 test/*
-stash/*
+media/stash/*
+media/whisparr/*
 .idea
