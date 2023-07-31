@@ -12,4 +12,4 @@ resources:
 
 images:
   - name: ghcr.io/hotio/radarr
-    newTag: testing-4.7.2.7686
+    newTag: testing-4.7.3.7731
