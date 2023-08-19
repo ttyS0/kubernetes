@@ -26,6 +26,18 @@ spec:
             - 'projectlinusnashville.org'
             - 'shadowrad.io'
             - 'skj.chat'
+            - 'labbing.io'
+            - 'labbing.dev'
+            - 'labbing.social'
+            - 'labbing.org'
+            - 'labbing.chat'
+            - 'labbing.fm'
+            - 'labbing.tv'
+            - 'labbing.app'
+            - 'labbing.wiki'
+            - 'homelabbing.net'
+            - 'homelabbing.dev'
+            - 'homelabbing.io'
         dns01:
           cloudflare:
             email: sean@ttys0.net
