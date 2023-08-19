@@ -7,4 +7,4 @@ resources:
 
 images:
   - name: mysql
-    newTag: "8.0.33"
+    newTag: "8.0.34"
