@@ -9,4 +9,4 @@ resources:
 
 images:
   - name: "ghcr.io/matrix-org/synapse"
-    newTag: "v1.89.0"
+    newTag: "v1.90.0"
