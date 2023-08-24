@@ -1,6 +1,6 @@
 #helm template connect 1password/connect \
 #--namespace op \
-#--version 1.12.1 \
+#--version 1.14.0 \
 #--set operator.create=true \
 #--values values.yaml > connect.yaml
 
