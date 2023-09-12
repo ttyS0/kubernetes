@@ -5,7 +5,7 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: sean@ttys0.net
+    email: sean@skj.dev
     privateKeySecretRef:
       name: letsencrypt
     solvers:
@@ -40,7 +40,7 @@ spec:
             - 'homelabbing.io'
         dns01:
           cloudflare:
-            email: sean@ttys0.net
+            email: shiny.art4037@pasta.dev
             apiKeySecretRef:
               name: cloudflare-api-key
               key: api-key
