@@ -1,6 +1,6 @@
 #helm template ingress-nginx-internal ingress-nginx/ingress-nginx \
 #--namespace ingress-nginx-internal \
-#--version 4.7.1 \
+#--version 4.8.0 \
 #--values internal-values.yaml > internal.yaml
 
 controller:

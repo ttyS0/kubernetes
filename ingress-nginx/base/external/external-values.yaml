@@ -1,6 +1,6 @@
 #helm template ingress-nginx-external ingress-nginx/ingress-nginx \
 #--namespace ingress-nginx-external \
-#--version 4.7.1 \
+#--version 4.8.0 \
 #--values external-values.yaml > external.yaml
 
 controller:
