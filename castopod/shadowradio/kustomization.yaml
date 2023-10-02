@@ -1,0 +1,12 @@
+namespace: castopod
+
+resources:
+  - storage.yaml
+  - service.yaml
+  - secret.yaml
+  - deployment.yaml
+  - ingress.yaml
+
+images:
+  - name: castopod/castopod
+    newTag: 1.5.2
