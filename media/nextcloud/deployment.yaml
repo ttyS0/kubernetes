@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nextcloud
-  namespace: nextcloud
+  namespace: media
   labels:
     app.kubernetes.io/name: nextcloud
   annotations:
@@ -49,8 +49,8 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /var/www/html
-              name: data
+              name: nextcloud
       volumes:
-        - name: data
+        - name: nextcloud
           persistentVolumeClaim:
-            claimName: data
+            claimName: nextcloud

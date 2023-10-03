@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: data
-  namespace: nextcloud
+  name: nextcloud
+  namespace: media
 spec:
   storageClassName: pool
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 2Ti
+      storage: 3Ti

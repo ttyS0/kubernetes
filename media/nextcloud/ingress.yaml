@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nextcloud
-  namespace: nextcloud
+  namespace: media
   labels:
     app.kubernetes.io/name: nextcloud
   annotations:
@@ -29,7 +29,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nextcloud-ext
-  namespace: nextcloud
+  namespace: media
   labels:
     app.kubernetes.io/name: nextcloud
   annotations:

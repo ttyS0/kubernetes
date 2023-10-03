@@ -29,12 +29,13 @@ spec:
           volumeMounts:
             - mountPath: /media
               name: media
+              readOnly: true
             - mountPath: /kavita/config
               name: config
       volumes:
         - name: media
           persistentVolumeClaim:
-            claimName: kavita-media
+            claimName: nextcloud
         - name: config
           persistentVolumeClaim:
-            claimName: kavita-config
+            claimName: kavita
