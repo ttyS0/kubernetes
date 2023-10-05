@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lidarr
+  namespace: media
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: lidarr.skj.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lidarr
+                port:
+                  number: 8686
+  tls:
+    - hosts:
+        - lidarr.skj.dev
+      secretName: lidarr-skj-dev-cert

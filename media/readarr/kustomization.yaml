@@ -1,0 +1,11 @@
+namespace: media
+
+resources:
+  - storage.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: ghcr.io/hotio/lidarr
+    newTag: release-1.2.6.3313
