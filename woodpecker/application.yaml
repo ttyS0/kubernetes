@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: woodpecker-agent
+  namespace: woodpecker
+  labels:
+    app.kubernetes.io/name: agent
+    app.kubernetes.io/instance: woodpecker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: agent
+      app.kubernetes.io/instance: woodpecker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: agent
+        app.kubernetes.io/instance: woodpecker
+    spec:
+      serviceAccountName: woodpecker-agent
+      securityContext:
+        fsGroup: 2000
+      containers:
+        - name: agent
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          image: "woodpeckerci/woodpecker-agent:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          resources:
+            {}
+          envFrom:
+            - secretRef:
+                name: woodpecker-secret
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: woodpecker-server
+  namespace: woodpecker
+  labels:
+    app.kubernetes.io/name: server
+    app.kubernetes.io/instance: woodpecker
+spec:
+  serviceName: woodpecker-server-headless
+  revisionHistoryLimit: 5
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: server
+      app.kubernetes.io/instance: woodpecker
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: server
+        app.kubernetes.io/instance: woodpecker
+    spec:
+      serviceAccountName: default
+      securityContext:
+        fsGroup: 2000
+      containers:
+        - name: server
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          image: "woodpeckerci/woodpecker-server:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+            - name: grpc
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+          resources:
+            {}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/woodpecker
+          envFrom:
+            - secretRef:
+                name: woodpecker-secret
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: tank
+        resources:
+          requests:
+            storage: 10Gi
+---

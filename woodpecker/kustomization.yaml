@@ -1,0 +1,14 @@
+namespace: woodpecker
+
+resources:
+  - rbac.yaml
+  - services.yaml
+  - application.yaml
+  - ingress.yaml
+  - secret.yaml
+
+images:
+  - name: "woodpeckerci/woodpecker-server"
+    newTag: "v1.0.2"
+  - name: "woodpeckerci/woodpecker-agent"
+    newTag: "v1.0.2"
