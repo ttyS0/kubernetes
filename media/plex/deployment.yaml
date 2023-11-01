@@ -46,6 +46,8 @@ spec:
               mountPath: /media/science
             - name: videos
               mountPath: /media/videos
+            - name: nextcloud
+              mountPath: /nextcloud
           resources:
             limits:
               gpu.intel.com/i915: 1
@@ -71,3 +73,6 @@ spec:
         - name: plex-data
           persistentVolumeClaim:
             claimName: plex-data
+        - name: nextcloud
+          persistentVolumeClaim:
+            claimName: nextcloud

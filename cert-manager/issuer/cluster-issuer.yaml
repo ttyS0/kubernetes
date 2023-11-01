@@ -38,6 +38,8 @@ spec:
             - 'homelabbing.net'
             - 'homelabbing.dev'
             - 'homelabbing.io'
+            - 'skj.fm'
+            - 'skj.zone'
         dns01:
           cloudflare:
             email: shiny.art4037@pasta.dev

@@ -7,3 +7,4 @@ data:
   custom.cnf: |
     [mysqld]
     bind-address = 0.0.0.0
+    transaction_isolation = "READ-COMMITTED"

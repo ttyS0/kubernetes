@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: library/nextcloud
-    newTag: "27.1.1-apache"
+    newTag: "27.1.3-apache"

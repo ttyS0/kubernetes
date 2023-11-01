@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: ghcr.io/hotio/sabnzbd
-    newTag: release-4.0.3
+    newTag: release-4.1.0

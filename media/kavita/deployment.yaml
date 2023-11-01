@@ -18,7 +18,7 @@ spec:
       securityContext:
         fsGroup: 1000
       containers:
-        - image: kizaing/kavita:latest
+        - image: ghcr.io/kareadita/kavita:latest
           name: kavita
           env:
             - name: TZ
@@ -27,13 +27,13 @@ spec:
             - containerPort: 5000
               name: kavita
           volumeMounts:
-            - mountPath: /media
-              name: media
+            - mountPath: /nextcloud
+              name: nextcloud
               readOnly: true
             - mountPath: /kavita/config
               name: config
       volumes:
-        - name: media
+        - name: nextcloud
           persistentVolumeClaim:
             claimName: nextcloud
         - name: config
