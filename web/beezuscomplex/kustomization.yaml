@@ -11,5 +11,5 @@ resources:
 images:
   - name: library/ghost
     #newName: git.skj.dev/sean/ghost
-    newTag: 5.55.2
+    newTag: 5.71.0
 
