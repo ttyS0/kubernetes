@@ -24,6 +24,7 @@ spec:
           - kubelet
           - ingress-nginx-internal-controller
           - ingress-nginx-external-controller
+          - gitea
   storage:
     volumeClaimTemplate:
       spec:
