@@ -39,19 +39,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: books
-  namespace: media
-spec:
-  storageClassName: pool
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Ti
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: science
   namespace: media
 spec:

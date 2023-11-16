@@ -29,6 +29,7 @@ spec:
           volumeMounts:
             - mountPath: /nextcloud
               name: nextcloud
+              subPath: "data/sean/files/Kavita"
               readOnly: true
             - mountPath: /kavita/config
               name: config
