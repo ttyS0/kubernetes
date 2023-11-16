@@ -1,0 +1,12 @@
+namespace: monitoring
+
+resources:
+  - storage.yaml
+  - service-account.yaml
+  - service.yaml
+  - ingress.yaml
+  - deployment.yaml
+
+images:
+  - name: grafana/grafana
+    newTag: 10.2.1

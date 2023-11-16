@@ -1,0 +1,4 @@
+namespace: monitoring
+
+resources:
+  - service-monitor.yaml

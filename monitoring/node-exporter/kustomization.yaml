@@ -1,0 +1,15 @@
+namespace: monitoring
+
+resources:
+  - cluster-role-binding.yaml
+  - cluster-role.yaml
+  - service-account.yaml
+  - service.yaml
+  - daemonset.yaml
+  - service-monitor.yaml
+
+images:
+  - name: quay.io/prometheus/node-exporter
+    newTag: v1.7.0
+  - name: quay.io/brancz/kube-rbac-proxy
+    newTag: v0.15.0

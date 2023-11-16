@@ -1,0 +1,13 @@
+namespace: monitoring
+
+resources:
+  - cluster-role.yaml
+  - cluster-role-binding.yaml
+  - service.yaml
+  - service-account.yaml
+  - deployment.yaml
+  - service-monitor.yaml
+
+images:
+  - name: registry.k8s.io/kube-state-metrics/kube-state-metrics
+    newTag: v2.10.1

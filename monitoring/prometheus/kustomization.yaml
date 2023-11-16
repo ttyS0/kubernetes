@@ -1,0 +1,10 @@
+namespace: monitoring
+
+resources:
+  - clusterrole.yaml
+  - role-binding.yaml
+  - service-account.yaml
+  - service.yaml
+  - prometheus.yaml
+  - ingress.yaml
+

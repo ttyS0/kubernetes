@@ -1,0 +1,35 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus-persistant
+  namespace: monitoring
+spec:
+  replicas: 1
+  retention: 7d
+  resources:
+    requests:
+      memory: 400Mi
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  serviceAccountName: prometheus
+  serviceMonitorSelector:
+    matchExpressions:
+      - key: name
+        operator: In
+        values:
+          - kube-state-metrics
+          - node-exporter
+          - kubelet
+          - ingress-nginx-internal-controller
+          - ingress-nginx-external-controller
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: morgoth-localpv
+        resources:
+          requests:
+            storage: 100Gi
