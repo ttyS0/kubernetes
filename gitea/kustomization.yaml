@@ -6,4 +6,4 @@ resources:
 
 images:
   - name: gitea/gitea
-    newTag: 1.21.0
+    newTag: 1.21.1
