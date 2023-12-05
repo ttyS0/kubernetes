@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: ghcr.io/kareadita/kavita
-    newTag: "0.7.10"
+    newTag: "0.7.11"
