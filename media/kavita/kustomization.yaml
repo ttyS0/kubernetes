@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: ghcr.io/kareadita/kavita
-    newTag: "0.7.11"
+    newTag: "nightly-0.7.11.1"
