@@ -1,0 +1,15 @@
+namespace: castopod
+
+resources:
+  - storage.yaml
+  - service.yaml
+  - secret.yaml
+  - deployment.yaml
+  - ingress.yaml
+
+images:
+  - name: castopod/castopod
+    newTag: 1.7.1
+  - name: library/redis
+    newTag: 7.2.3
+

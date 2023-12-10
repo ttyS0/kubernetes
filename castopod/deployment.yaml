@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skjfm
+  namespace: castopod
+spec:
+  selector:
+    matchLabels:
+      app: skjfm
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: skjfm
+    spec:
+      securityContext:
+        fsGroup: 33
+      containers:
+        - image: castopod/castopod:latest
+          name: skjfm
+          envFrom:
+            - secretRef:
+                name: skjfm-conf
+          ports:
+            - containerPort: 8000
+              name: skjfm
+          volumeMounts:
+            - mountPath: /var/www/castopod/public/media
+              name: skjfm-media
+            - mountPath: /var/www/castopod/writable
+              name: skjfm-writable
+      volumes:
+        - name: skjfm-media
+          persistentVolumeClaim:
+            claimName: skjfm-media
+        - name: skjfm-writable
+          persistentVolumeClaim:
+            claimName: skjfm-writable
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: castopod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+        name: redis
+    spec:
+      containers:
+        - name: redis
+          image: library/redis:latest
+          ports:
+            - name: redis
+              containerPort: 6379
+          volumeMounts:
+            - name: redis
+              mountPath: /data
+      volumes:
+        - name: redis
+          persistentVolumeClaim:
+            claimName: redis

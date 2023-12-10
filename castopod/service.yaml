@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: skjfm
+  namespace: castopod
+  labels:
+    app: skjfm
+spec:
+  ports:
+    - port: 8000
+      name: skjfm
+  selector:
+    app: skjfm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: castopod
+spec:
+  selector:
+    app: redis
+  type: ClusterIP
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
