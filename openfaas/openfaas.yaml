@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -20,7 +20,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -31,7 +31,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: alertmanager-config
     heritage: Helm
     release: openfaas
@@ -74,7 +74,7 @@ apiVersion: v1
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: prometheus-config
     heritage: Helm
     release: openfaas
@@ -975,7 +975,7 @@ kind: ClusterRole
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1036,6 +1036,18 @@ rules:
       - "get"
       - "list"
       - "watch"
+  - apiGroups:
+      - "iam.openfaas.com"
+    resources:
+      - "policies"
+      - "jwtissuers"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["create", "delete", "update"]
 ---
 # Source: openfaas/templates/prometheus-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1044,7 +1056,7 @@ metadata:
   name: openfaas-prometheus
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1066,7 +1078,7 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: faas-controller
     heritage: Helm
     release: openfaas
@@ -1090,7 +1102,7 @@ metadata:
   namespace: "openfaas"
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1111,7 +1123,7 @@ metadata:
   namespace: "openfaas-fn"
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1130,7 +1142,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1150,7 +1162,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1161,7 +1173,7 @@ spec:
   ports:
     - name: http
       port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
   selector:
     app: gateway
@@ -1172,7 +1184,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: nats
     heritage: Helm
     release: openfaas
@@ -1184,9 +1196,6 @@ spec:
     - port: 4222
       protocol: TCP
       name: tcp
-    - port: 7777
-      protocol: TCP
-      name: metrics
   selector:
     app: nats
 ---
@@ -1196,7 +1205,7 @@ kind: Service
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1216,7 +1225,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: alertmanager
     heritage: Helm
     release: openfaas
@@ -1233,11 +1242,11 @@ spec:
         app: alertmanager
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/alertmanager-config: "ff218c58a6370f302521715dc85e2b92a2b09d9ec34ef8235ac7e464565eeb38"
+        checksum/alertmanager-config: "c410082db942a378b7f2e8c25854993ed04144ed80bf55456236c4b0b10da03a"
     spec:
       containers:
       - name: alertmanager
-        image: prom/alertmanager:v0.25.0
+        image: prom/alertmanager:v0.26.0
         imagePullPolicy: IfNotPresent
         command:
           - "alertmanager"
@@ -1261,6 +1270,7 @@ spec:
             limits:
               memory: 50Mi
             requests:
+              cpu: 50m
               memory: 25Mi
         volumeMounts:
         - mountPath: /alertmanager.yml
@@ -1287,7 +1297,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: gateway
     heritage: Helm
     release: openfaas
@@ -1308,18 +1318,26 @@ spec:
     spec:
       serviceAccountName: openfaas-controller
       volumes:
+      # - name: faas-auth
+      #   projected:
+      #     sources:
+      #     - serviceAccountToken:
+      #         path: token
+      #         audience: faas-netes.openfaas
+      #         expirationSeconds: 3600
       - name: faas-netes-temp-volume
         emptyDir: {}
       - name: auth
         secret:
           secretName: basic-auth
+      # terminationGracePeriodSeconds: 1
       containers:
       - name: gateway
         resources:
             requests:
-              cpu: 50m
+              cpu: 100m
               memory: 120Mi
-        image: ghcr.io/openfaas/gateway:0.26.3
+        image: ghcr.io/openfaas/gateway:0.27.3
         imagePullPolicy: IfNotPresent
         command:
           - ./gateway
@@ -1327,8 +1345,8 @@ spec:
           readOnlyRootFilesystem: true
           runAsUser: 10001
         livenessProbe:
-          initialDelaySeconds: 0
-          periodSeconds: 10
+          initialDelaySeconds: 1
+          periodSeconds: 5
           timeoutSeconds: 5
           failureThreshold: 3
           successThreshold: 1
@@ -1336,8 +1354,8 @@ spec:
             path: /healthz
             port: 8080
         readinessProbe:
-          initialDelaySeconds: 0
-          periodSeconds: 10
+          initialDelaySeconds: 1
+          periodSeconds: 5
           timeoutSeconds: 5
           failureThreshold: 3
           successThreshold: 1
@@ -1346,11 +1364,11 @@ spec:
             port: 8080
         env:
         - name: read_timeout
-          value: "65s"
+          value: "1m05s"
         - name: write_timeout
-          value: "65s"
+          value: "1m05s"
         - name: upstream_timeout
-          value: "60s"
+          value: "1m"
         - name: functions_provider_url
           value: "http://127.0.0.1:8081/"
         - name: direct_functions
@@ -1377,7 +1395,15 @@ spec:
           value: "1024"
         - name: probe_functions
           value: "false"
+        - name: metering_default_memory 
+          value: "40Mi"
+        - name: metering 
+          value: "false"
+        - name: async
+          value: "true"
         volumeMounts:
+        # - name: faas-auth
+        #   mountPath: /var/run/secrets/faas-auth
         - name: auth
           readOnly: true
           mountPath: "/var/secrets"
@@ -1385,12 +1411,15 @@ spec:
         - name: http
           containerPort: 8080
           protocol: TCP
+        - name: gw-metrics
+          containerPort: 8082
+          protocol: TCP
       - name: faas-netes
         resources:
             requests:
-              cpu: 50m
+              cpu: 100m
               memory: 120Mi
-        image: ghcr.io/openfaas/faas-netes:0.16.8
+        image: ghcr.io/openfaas/faas-netes:0.17.4
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -1404,11 +1433,11 @@ spec:
         - name: function_namespace
           value: "openfaas-fn"
         - name: read_timeout
-          value: "65s"
+          value: "1m05s"
         - name: profiles_namespace
           value: "openfaas"
         - name: write_timeout
-          value: "65s"
+          value: "1m05s"
         - name: image_pull_policy
           value: "Always"
         - name: http_probe
@@ -1435,11 +1464,19 @@ spec:
           value: "3"
         - name: cluster_role
           value: "true"
+        - name: basic_auth
+          value: "true"
+        - name: secret_mount_path
+          value: "/var/secrets"
         volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
         - mountPath: /tmp
           name: faas-netes-temp-volume
         ports:
-        - containerPort: 8081
+        - name: provider
+          containerPort: 8081
           protocol: TCP
 ---
 # Source: openfaas/templates/nats-dep.yaml
@@ -1448,7 +1485,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: nats
     heritage: Helm
     release: openfaas
@@ -1462,8 +1499,7 @@ spec:
   template:
     metadata:
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "7777"
+        prometheus.io/scrape: "false"
       labels:
         app: nats
     spec:
@@ -1471,8 +1507,9 @@ spec:
       - name:  nats
         resources:
             requests:
+              cpu: 100m
               memory: 120Mi
-        image: nats-streaming:0.25.4
+        image: nats-streaming:0.25.6
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 4222
@@ -1483,24 +1520,6 @@ spec:
           - memory
           - --cluster_id
           - faas-cluster
-          - -m
-          - "8222"
-      - name: metrics
-        image: natsio/prometheus-nats-exporter:0.11.0
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 7777
-          protocol: TCP
-        args:
-        - -port
-        - "7777"
-        - -connz
-        - -routez
-        - -subz
-        - -varz
-        - -channelz
-        - -serverz
-        - http://localhost:8222
 ---
 # Source: openfaas/templates/prometheus-dep.yaml
 apiVersion: apps/v1
@@ -1508,7 +1527,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: prometheus
     heritage: Helm
     release: openfaas
@@ -1525,15 +1544,16 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "c1a5eedfd269cab4713aa3cd2a2adf964ef3d87177ac4595419a5f7d6b2af443"
+        checksum/prometheus-config: "1c6112771130a234aa2aff10787b6d46ab41f8adef3761b118613b1b4b7434ed"
     spec:
       serviceAccountName: openfaas-prometheus
       containers:
       - name: prometheus
         resources:
             requests:
+              cpu: 100m
               memory: 512Mi
-        image: prom/prometheus:v2.44.0
+        image: prom/prometheus:v2.48.1
         command:
           - "prometheus"
           - "--config.file=/etc/prometheus/prometheus.yml"
@@ -1580,7 +1600,7 @@ kind: Deployment
 metadata:
   labels:
     app: openfaas
-    chart: openfaas-13.0.0
+    chart: openfaas-14.2.4
     component: queue-worker
     heritage: Helm
     release: openfaas
@@ -1608,7 +1628,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-        image: ghcr.io/openfaas/queue-worker:0.13.3
+        image: ghcr.io/openfaas/queue-worker:0.14.1
         imagePullPolicy: IfNotPresent
         env:
         - name: faas_nats_address
